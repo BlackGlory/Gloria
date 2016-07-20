@@ -6,7 +6,7 @@ require! 'node-uuid': uuid
 callable =
   eval: (code) ->
     new Promise (resolve, reject) !->
-      var callable, create-call-remote, call-remote, native-fetch, self
+      var callable, bind-call-remote, call-remote, native-fetch, self
       commit = (data) !->
         resolve data
         close!
@@ -16,7 +16,7 @@ callable =
         reject message
         close!
 
-create-call-remote = (worker) ->
+bind-call-remote = (worker) ->
   (function-name, ...function-arguments) ->
     new Promise (resolve) !->
       message =
@@ -31,7 +31,7 @@ create-call-remote = (worker) ->
       worker.add-event-listener 'message', listener
       worker.post-message message
 
-call-remote = create-call-remote self
+call-remote = bind-call-remote self
 
 native-fetch = self.fetch
 

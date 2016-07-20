@@ -38,7 +38,7 @@ evalUntrusted = do ->
       window.sessionStorage[url] = JSON.stringify data
       Promise.resolve!
 
-  create-call-remote = (worker) ->
+  bind-call-remote = (worker) ->
     (function-name, ...function-arguments) ->
       new Promise (resolve) !->
         message =
@@ -56,7 +56,7 @@ evalUntrusted = do ->
   (code) ->
     new Promise (resolve, reject) ->
       eval-worker = new EvalWorker!
-      call-remote = create-call-remote eval-worker
+      call-remote = bind-call-remote eval-worker
       eval-worker.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
         if type is 'call'
           callable[function-name](...function-arguments)
