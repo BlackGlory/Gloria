@@ -1,6 +1,8 @@
 'use strict'
 
 require! 'prelude-ls': { map, join }
+require! 'worker!./worker.ls': EvalWorker
+require! 'node-uuid': uuid
 
 get-origin = (url) -> (new URL url).origin
 
@@ -25,25 +27,47 @@ chrome.web-request.on-before-send-headers.add-listener (details) ->
 , urls: ['<all_urls>']
 , ['blocking', 'requestHeaders']
 
-native-fetch = window.fetch
+evalUntrusted = do ->
+  callable =
+    getCookies: (url) ->
+      new Promise (resolve, reject) !->
+        cookies <-! chrome.cookies.get-all { url }
+        resolve join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies
 
-fetch = (url, options = headers: {}, ...args) ->
-  new Promise (resolve, reject) ->
-    chrome.cookies.get-all { url }, (cookies) ->
-      data = cookie: join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies
-      data.cookie = options.headers['Cookie'] if options.headers['Cookie']
-      data.origin = options.headers['Origin'] if options.headers['Origin']
-      data.referer = options.headers['Referer'] if options.headers['Referer']
-      options.headers['send-by'] = 'Gloria'
+    setSessionStorage: (url, data) ->
       window.sessionStorage[url] = JSON.stringify data
-      native-fetch(url, options, ...args).then resolve, reject
+      Promise.resolve!
 
-f = new Function 'window', 'fetch', '"use strict";' + '''
-return new Promise((resolve, reject) => {
-  fetch('http://www.xiami.com/song/gethqsong/sid/1769402975')
-  .then(res => res.json())
-  .then(resolve, reject)
-})
-'''
+  create-call-remote = (worker) ->
+    (function-name, ...function-arguments) ->
+      new Promise (resolve) ->
+        message =
+          id: uuid.v4!
+          type: 'call'
+          function-name: function-name
+          function-arguments: function-arguments
+        listener = ({ data: { id, type, function-result }}) ->
+          if id is message.id
+            resolve function-result
+            worker.remove-event-listener 'message', listener
+        worker.add-event-listener 'message', listener
+        console.log message
+        worker.post-message message
 
-f({}, fetch).then((x) -> console.log x)
+  (code) ->
+    eval-worker = new EvalWorker!
+    call-remote = create-call-remote eval-worker
+    eval-worker.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
+      if type is 'call'
+        callable[function-name](...function-arguments)
+        .then (result) ->
+          eval-worker.post-message id: id, type: 'return', function-result: result
+    call-remote 'eval', code
+    .then (result) ->
+      console.log 'Done.'
+
+evalUntrusted """
+fetch('http://www.xiami.com/song/gethqsong/sid/1769402975')
+.then(res => res.json())
+.then(commit, err => console.log(err))
+"""
