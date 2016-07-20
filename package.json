@@ -1,0 +1,23 @@
+{
+  "name": "gloria",
+  "version": "1.0.0",
+  "description": "A secretary in Chrome.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.blackglory.me:10022/BlackGlory/Gloria.git"
+  },
+  "author": "BlackGlory <woshenmedoubuzhidao@blackglory.me>",
+  "license": "MIT",
+  "devDependencies": {
+    "copy-webpack-plugin": "^3.0.1",
+    "livescript-loader": "^0.1.5",
+    "webpack": "^1.13.1"
+  },
+  "dependencies": {}
+}
