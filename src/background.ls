@@ -40,7 +40,7 @@ evalUntrusted = do ->
 
   create-call-remote = (worker) ->
     (function-name, ...function-arguments) ->
-      new Promise (resolve) ->
+      new Promise (resolve) !->
         message =
           id: uuid.v4!
           type: 'call'
@@ -51,23 +51,24 @@ evalUntrusted = do ->
             resolve function-result
             worker.remove-event-listener 'message', listener
         worker.add-event-listener 'message', listener
-        console.log message
         worker.post-message message
 
   (code) ->
-    eval-worker = new EvalWorker!
-    call-remote = create-call-remote eval-worker
-    eval-worker.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
-      if type is 'call'
-        callable[function-name](...function-arguments)
-        .then (result) ->
-          eval-worker.post-message id: id, type: 'return', function-result: result
-    call-remote 'eval', code
-    .then (result) ->
-      console.log 'Done.'
+    new Promise (resolve, reject) ->
+      eval-worker = new EvalWorker!
+      call-remote = create-call-remote eval-worker
+      eval-worker.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
+        if type is 'call'
+          callable[function-name](...function-arguments)
+          .then (result) ->
+            eval-worker.post-message id: id, type: 'return', function-result: result
+      call-remote 'eval', code
+      .then resolve
+      .catch reject
 
 evalUntrusted """
 fetch('http://www.xiami.com/song/gethqsong/sid/1769402975')
 .then(res => res.json())
 .then(commit, err => console.log(err))
 """
+.then (result) -> console.log result

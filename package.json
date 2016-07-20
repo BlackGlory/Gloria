@@ -21,7 +21,6 @@
     "worker-loader": "^0.7.1"
   },
   "dependencies": {
-    "co": "^4.6.0",
     "node-uuid": "^1.4.7"
   }
 }

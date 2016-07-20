@@ -1,17 +1,24 @@
+'use strict'
+
 require! 'prelude-ls': { map, join }
 require! 'node-uuid': uuid
 
-commit = (data) ->
-  console.log data
-  close!
-
 callable =
   eval: (code) ->
-    eval code
+    new Promise (resolve, reject) !->
+      var callable, create-call-remote, call-remote, native-fetch, self
+      commit = (data) !->
+        resolve data
+        close!
+      try
+        eval code
+      catch { message }
+        reject message
+        close!
 
 create-call-remote = (worker) ->
   (function-name, ...function-arguments) ->
-    new Promise (resolve) ->
+    new Promise (resolve) !->
       message =
         id: uuid.v4!
         type: 'call'
@@ -22,7 +29,6 @@ create-call-remote = (worker) ->
           resolve function-result
           worker.remove-event-listener 'message', listener
       worker.add-event-listener 'message', listener
-      console.log message
       worker.post-message message
 
 call-remote = create-call-remote self
@@ -30,13 +36,13 @@ call-remote = create-call-remote self
 native-fetch = self.fetch
 
 fetch = (url, options = headers: {}, ...args) ->
-  new Promise (resolve, reject) ->
-    cookies <- (call-remote 'getCookies', url).then
+  new Promise (resolve, reject) !->
+    cookies <-! (call-remote 'getCookies', url).then
     data = cookie: cookies
     data.cookie = options.headers['Cookie'] if options.headers['Cookie']
     data.origin = options.headers['Origin'] if options.headers['Origin']
     data.referer = options.headers['Referer'] if options.headers['Referer']
-    <- (call-remote 'setSessionStorage', url, data).then
+    <-! (call-remote 'setSessionStorage', url, data).then
     options.headers['send-by'] = 'Gloria'
     native-fetch(url, options, ...args).then resolve, reject
 
