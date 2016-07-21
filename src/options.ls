@@ -2,15 +2,11 @@
 
 require! 'vue':Vue
 require! 'keen-ui':Keen
-require! './components/GloriaTask.vue': GloriaTask
-require! './components/GloriaFab.vue': GloriaFab
+require! './components/GloriaApp.vue': GloriaApp
 
 Vue.use Keen
 
 new Vue {
-  el: '#app'
-  components: {
-    GloriaTask
-  , GloriaFab
-  }
+  el: 'body'
+  components: { GloriaApp }
 }

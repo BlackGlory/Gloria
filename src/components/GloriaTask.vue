@@ -50,7 +50,6 @@ export
     push-count:
       type: Number
       default: 0
-
 </script>
 
 <style lang="stylus">
@@ -60,9 +59,8 @@ export
   color: $md-white
   background: $md-blue
 
-.ui-switch {
-  z-index: 999;
-}
+.ui-switch
+  z-index: 1
 
 .ui-collapsible {
   margin-bottom: inherit
