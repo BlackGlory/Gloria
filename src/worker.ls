@@ -6,11 +6,11 @@ require! 'node-uuid': uuid
 callable =
   eval: (code) ->
     new Promise (resolve, reject) !->
-      var callable, bind-call-remote, call-remote, native-fetch, self
       commit = (data) !->
         resolve data
         close!
       try
+        var callable, bind-call-remote, call-remote, native-fetch, self
         eval code
       catch { message }
         reject message
