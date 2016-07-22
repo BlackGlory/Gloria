@@ -3,37 +3,47 @@
 require! '../actions/types.ls': types
 
 const actions-map =
-  (types.add-task): (state, { name, code, trigger-interval, can-notice-repeatedly }) ->
+  (types.add-task): (state, { name, code, trigger-interval, can-notice-repeatedly, trigger-count, push-count, is-enable }) ->
     [...state, {
       id: (state.reduce (max-id, x) -> (Math.max x.id, max-id), -1) + 1
       name
       code
       trigger-interval
       can-notice-repeatedly
+      trigger-count
+      push-count
+      is-enable
     }]
   (types.edit-task): (state, { id, name, code }) ->
-    state.map x ->
+    state.map (x) ->
       return x if x.id isnt id
       {
         ...x
-        name: name || x.name
-        code: code || x.code
+        name: name
+        code: code
       }
   (types.remove-task): (state, { id }) ->
-    state.filter x -> x.id isnt id
+    state.filter (x) -> x.id isnt id
   (types.set-trigger-interval): (state, { id, trigger-interval }) ->
-    state.map x ->
+    state.map (x) ->
       return x if x.id isnt id
       {
         ...x
         trigger-interval
       }
   (types.set-can-notice-repeatly): (state, { id, can-notice-repeatedly }) ->
-    state.map x ->
+    state.map (x) ->
       return x if x.id isnt id
       {
         ...x
         can-notice-repeatedly
+      }
+  (types.set-is-enable): (state, { id, is-enable }) ->
+    state.map (x) ->
+      return x if x.id isnt id
+      {
+        ...x
+        is-enable
       }
 
 module.exports = (state = [], action) ->

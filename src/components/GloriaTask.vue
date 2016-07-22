@@ -4,11 +4,11 @@
       <div slot="header">
         <div class="row middle-xs">
           <div class="col-xs">
-            <p><span>{{ name }}</span>&nbsp;<span>{{ version }}</span>&nbsp;<span>By {{ author }}</span></p>
-            <p>Triggered {{ triggerCount }} times, Pushed {{ pushCount }} Notifications.</p>
+            <p><span>{{ name }}</span><span v-if="version">&nbsp;{{ version }}</span><span v-if="author">&nbsp;By {{ author }}</span></p>
+            <p>Triggered {{ triggerCount }} times, Pushed {{ pushCount }} notifications.</p>
           </div>
           <div>
-            <ui-switch name="enable" :value.sync="true"></ui-switch>
+            <ui-switch :value.sync="isEnable"></ui-switch>
           </div>
         </div>
       </div>
@@ -24,39 +24,89 @@
         <div class="col-xs-3 end-xs">
           <!--ui-icon-button icon="cloud_download" type="flat" tooltip="Update"></ui-icon-button-->
           <!--ui-icon-button icon="star" type="flat" tooltip="Star"></ui-icon-button-->
-          <ui-icon-button icon="edit" type="flat" tooltip="Edit"></ui-icon-button>
-          <ui-icon-button icon="delete" type="flat" tooltip="Delete"></ui-icon-button>
+          <ui-icon-button @click="showEditDialog = true" icon="edit" type="flat" tooltip="Edit"></ui-icon-button>
+          <ui-icon-button @click="showDeleteConfirm = true" icon="delete" type="flat" tooltip="Delete"></ui-icon-button>
         </div>
       </div>
     </ui-collapsible>
+    <ui-modal @opened="setEditDialog" @closed="setEditDialog" :show.sync="showEditDialog" header="Editor">
+      <ui-textbox name="editableName" :value.sync="editableName" label="Task Name" type="text" placeholder="Input a task name"></ui-textbox>
+      <ui-textbox
+        label="Task Code"
+        :multi-line="true"
+        icon="code"
+        name="editableCode"
+        :value.sync="editableCode"
+        placeholder="Paste your fantastic code here"
+      ></ui-textbox>
+      <div slot="footer">
+        <ui-button @click="(editTask(), showEditDialog = false)" color="primary">Save</ui-button>
+        <ui-button @click="showEditDialog = false">Cancel</ui-button>
+      </div>
+    </ui-modal>
+    <ui-confirm
+      header="Delete task"
+      type="danger"
+      confirm-button-text="Delete"
+      confirm-button-icon="delete" deny-button-text="Cancel"
+      @confirmed="(removeTask(), showDeleteConfirm = false)"
+      @denied="showDeleteConfirm = false"
+      :show.sync="showDeleteConfirm" close-on-confirm
+    >
+    Are you sure you want to delete the task?
+    </ui-confirm>
   </div>
 </template>
 
 <script lang="livescript">
+require! '../store.ls': store
+require! '../actions/creator.ls': creator
+
 export
   name: 'gloria-task'
   data: ->
-    can-notice-repeatedly: false
-    trigger-interval: 5
+    show-delete-confirm: false
+    show-edit-dialog: false
+    editable-name: ''
+    editable-code: ''
+  methods:
+    set-edit-dialog: ->
+      @$data.editable-code = @code
+      @$data.editable-name = @name
+    edit-task: ->
+      store.dispatch creator.edit-task @id, { name: @$data.editable-name, code: @$data.editable-code }
+    remove-task: ->
+      store.dispatch creator.remove-task @id
+  watch:
+    trigger-interval: ->
+      store.dispatch creator.set-trigger-interval @id, @trigger-interval
+    can-notice-repeatedly: ->
+      store.dispatch creator.set-can-notice-repeatly @id, @can-notice-repeatedly
+    is-enable: ->
+      store.dispatch creator.set-is-enable @id, @is-enable
   props:
+    id:
+      type: Number
+    code:
+      type: String
     name:
       type: String
-      default: 'Task'
     version:
       type: String
-      default: '1.0.0'
     author:
       type: String
-      default: 'Unkonwn'
     source:
       type: String
-      default: 'Unkonwn'
     trigger-count:
       type: Number
-      default: 0
     push-count:
       type: Number
-      default: 0
+    trigger-interval:
+      type: Number
+    can-notice-repeatedly:
+      type: Boolean
+    is-enable:
+      type: Boolean
 </script>
 
 <style lang="stylus">

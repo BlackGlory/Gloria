@@ -7,16 +7,21 @@
     >
       <ui-tab icon="format_list_bulleted" header="Task">
         <div id="task-list">
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
-          <gloria-task></gloria-task>
+          <template v-for="task in tasks" track-by="id">
+            <gloria-task
+              :id="task.id"
+              :name="task.name"
+              :code="task.code"
+              :version="task.version"
+              :author="task.author"
+              :source="task.source"
+              :trigger-interval="task.triggerInterval"
+              :can-notice-repeatedly="task.canNoticeRepeatedly"
+              :trigger-count="task.triggerCount"
+              :push-count="task.pushCount"
+              :is-enable="task.isEnable"
+            ></gloria-task>
+          </template>
         </div>
         <gloria-fab type="mini" @click="showNewDialogCode = true" color="primary" icon="add"></gloria-fab>
         <ui-modal :show.sync="showNewDialogCode" header="Paste your code">
@@ -73,14 +78,13 @@ require! '../store.ls': store
 require! '../actions/creator.ls': creator
 require! './GloriaTask.vue': GloriaTask
 require! './GloriaFab.vue': GloriaFab
+
 export
   name: 'gloria-app'
   components: {
     GloriaTask
     GloriaFab
   }
-  created: ->
-    console.log @$data.tasks
   data: ->
     show-new-dialog-code: false
     show-new-dialog-name: false
@@ -105,7 +109,6 @@ export
       @$data.name = ''
       @$data.trigger-interval = 5
       @$data.can-notice-repeatedly = false
-      console.log @$data.tasks
 </script>
 
 <style lang="stylus">
