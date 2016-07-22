@@ -1,8 +1,9 @@
 <template>
   <div id="gloria-app">
     <ui-tabs
-      type="icon-and-text" fullwidth background-color="primary" text-color="white"
-      text-color-active="white" indicator-color="white"
+      type="icon-and-text"
+      fullwidth
+      raised
     >
       <ui-tab icon="format_list_bulleted" header="Task">
         <div id="task-list">
@@ -42,8 +43,8 @@
         <ui-modal :show.sync="showNewDialogConfig" header="Finally some configuration">
           <ui-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></ui-slider>
           <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
-          <ui-checkbox v-el:is-notice-again :value.sync="isNoticeAgain">Notice until an interaction</ui-checkbox>
-          <ui-tooltip :trigger="$els.isNoticeAgain" position="bottom left" content="It means that if I ignored it, notice me again."></ui-tooltip>
+          <ui-checkbox v-el:can-notice-repeatedly :value.sync="canNoticeRepeatedly">Notice until an interaction</ui-checkbox>
+          <ui-tooltip :trigger="$els.canNoticeRepeatedly" position="bottom left" content="It means that if I ignored it, notice me again."></ui-tooltip>
           <div slot="footer">
             <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">Finish</ui-button>
             <ui-button @click="switchDialog('showNewDialogConfig', 'showNewDialogName')">Back</ui-button>
@@ -68,6 +69,8 @@
 </template>
 
 <script lang="livescript">
+require! '../store.ls': store
+require! '../actions/creator.ls': creator
 require! './GloriaTask.vue': GloriaTask
 require! './GloriaFab.vue': GloriaFab
 export
@@ -76,6 +79,8 @@ export
     GloriaTask
     GloriaFab
   }
+  created: ->
+    console.log @$data.tasks
   data: ->
     show-new-dialog-code: false
     show-new-dialog-name: false
@@ -83,16 +88,24 @@ export
     code: ''
     name: ''
     trigger-interval: 5
-    is-notice-again: false
+    can-notice-repeatedly: false
+    tasks: @$select 'tasks'
   methods:
     switch-dialog: (current, next) ->
-      this.$data[current] = false
-      this.$data[next] = true
+      @$data[current] = false
+      @$data[next] = true
     create-task: ->
-      this.$data.code = ''
-      this.$data.name = ''
-      this.$data.trigger-interval = 5
-      this.$data.is-notice-again = false
+      store.dispatch creator.add-task {
+        name: @$data.name
+        code: @$data.code
+        trigger-interval: @$data.trigger-interval
+        can-notice-repeatedly: @$data.can-notice-repeatedly
+      }
+      @$data.code = ''
+      @$data.name = ''
+      @$data.trigger-interval = 5
+      @$data.can-notice-repeatedly = false
+      console.log @$data.tasks
 </script>
 
 <style lang="stylus">

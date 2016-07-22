@@ -35,8 +35,12 @@
   "dependencies": {
     "flexboxgrid": "^6.3.0",
     "keen-ui": "^0.8.8",
+    "localforage": "^1.4.2",
     "node-uuid": "^1.4.7",
     "normalize.css": "^4.2.0",
+    "redux": "^3.5.2",
+    "redux-persist": "^3.2.2",
+    "revue": "^2.2.0",
     "vue": "^1.0.26"
   }
 }
