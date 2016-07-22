@@ -112,7 +112,7 @@ export
 </script>
 
 <style lang="stylus">
-#task-list .gloria-task:not(:last-child)
+#task-list .gloria-task
   margin-bottom: 8px
 
 .ui-tabs-body

@@ -3,6 +3,10 @@
 require! 'prelude-ls': { map, join }
 require! 'worker!./worker.ls': EvalWorker
 require! 'node-uuid': uuid
+require! 'redux': { create-store }
+require! 'redux-persist': { persist-store, auto-rehydrate }
+require! 'browser-redux-sync': { configure-sync, sync }
+require! './reducers/index.ls': reducers
 
 get-origin = (url) -> (new URL url).origin
 
@@ -66,9 +70,18 @@ evalUntrusted = do ->
       .then resolve
       .catch reject
 
+const store = create-store reducers, undefined, auto-rehydrate!
+persistor = persist-store store, configure-sync!, ->
+  unsubscribe = store.subscribe ->
+    console.log store.getState!
+  console.log store.getState!
+sync persistor
+
+/*
 evalUntrusted """
 fetch('http://www.xiami.com/song/gethqsong/sid/1769402975')
 .then(res => res.json())
 .then(commit, err => console.log(err))
 """
 .then (result) -> console.log result
+*/

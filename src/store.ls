@@ -4,10 +4,11 @@ require! 'vue': Vue
 require! 'redux': { create-store }
 require! 'revue': Revue
 require! 'redux-persist': { persist-store, auto-rehydrate }
-require! 'localForage': local-forage
+require! 'browser-redux-sync': { configure-sync, sync }
 require! './reducers/index.ls': reducers
 
 const redux-store = create-store reducers, undefined, auto-rehydrate!
-persist-store redux-store, { storage: local-forage }
+persistor = persist-store redux-store, configure-sync!
+sync persistor
 const store = new Revue Vue, redux-store
 module.exports = store

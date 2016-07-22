@@ -33,6 +33,7 @@
     "worker-loader": "^0.7.1"
   },
   "dependencies": {
+    "browser-redux-sync": "git://github.com/BlackGlory/browser-redux-sync.git",
     "flexboxgrid": "^6.3.0",
     "keen-ui": "^0.8.8",
     "localforage": "^1.4.2",

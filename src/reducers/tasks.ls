@@ -45,6 +45,20 @@ const actions-map =
         ...x
         is-enable
       }
+  (types.increase-trigger-count): (state, { id }) ->
+    state.map (x) ->
+      return x if x.id isnt id
+      {
+        ...x
+        trigger-count: x.trigger-count + 1
+      }
+  (types.increase-push-count): (state, { id }) ->
+    state.map (x) ->
+      return x if x.id isnt id
+      {
+        ...x
+        push-count: x.push-count + 1
+      }
 
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]
