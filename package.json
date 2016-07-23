@@ -33,15 +33,17 @@
     "worker-loader": "^0.7.1"
   },
   "dependencies": {
-    "browser-redux-sync": "git://github.com/BlackGlory/browser-redux-sync.git",
+    "browser-redux-sync": "^1.0.0",
+    "deep-diff": "^0.3.4",
     "flexboxgrid": "^6.3.0",
     "keen-ui": "^0.8.8",
-    "localforage": "^1.4.2",
+    "later": "^1.2.0",
     "node-uuid": "^1.4.7",
     "normalize.css": "^4.2.0",
     "redux": "^3.5.2",
     "redux-persist": "^3.2.2",
     "revue": "^2.2.0",
+    "rx": "^4.1.0",
     "vue": "^1.0.26"
   }
 }

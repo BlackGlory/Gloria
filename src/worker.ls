@@ -1,6 +1,5 @@
 'use strict'
 
-require! 'prelude-ls': { map, join }
 require! 'node-uuid': uuid
 
 callable =
@@ -12,8 +11,8 @@ callable =
       try
         var callable, bind-call-remote, call-remote, native-fetch, self
         eval code
-      catch { message }
-        reject message
+      catch { message, stack }
+        reject { message, stack }
         close!
 
 bind-call-remote = (worker) ->
@@ -26,7 +25,9 @@ bind-call-remote = (worker) ->
         function-arguments: function-arguments
       listener = ({ data: { id, type, function-result }}) ->
         if id is message.id
-          resolve function-result
+          switch type
+          | 'return' => resolve function-result
+          | 'error' => reject error
           worker.remove-event-listener 'message', listener
       worker.add-event-listener 'message', listener
       worker.post-message message
@@ -51,3 +52,5 @@ self.add-event-listener 'message', ({ data: { id, type, function-name, function-
     callable[function-name](...function-arguments)
     .then (result) ->
       self.post-message id: id, type: 'return', function-result: result
+    .catch (error) ->
+      self.post-message id: id, type: 'error', error: error

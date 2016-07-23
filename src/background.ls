@@ -1,12 +1,15 @@
 'use strict'
 
-require! 'prelude-ls': { map, join }
+require! 'prelude-ls': { map, join, each, filter }
 require! 'worker!./worker.ls': EvalWorker
 require! 'node-uuid': uuid
 require! 'redux': { create-store }
 require! 'redux-persist': { persist-store, auto-rehydrate }
 require! 'browser-redux-sync': { configure-sync, sync }
 require! './reducers/index.ls': reducers
+require! 'rx': Rx
+require! 'deep-diff': { diff }
+require! 'later': later
 
 get-origin = (url) -> (new URL url).origin
 
@@ -31,28 +34,30 @@ chrome.web-request.on-before-send-headers.add-listener (details) ->
 , urls: ['<all_urls>']
 , ['blocking', 'requestHeaders']
 
-evalUntrusted = do ->
+eval-untrusted = do ->
   callable =
-    getCookies: (url) ->
+    get-cookies: (url) ->
       new Promise (resolve, reject) !->
         cookies <-! chrome.cookies.get-all { url }
         resolve join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies
 
-    setSessionStorage: (url, data) ->
+    set-session-storage: (url, data) ->
       window.sessionStorage[url] = JSON.stringify data
       Promise.resolve!
 
   bind-call-remote = (worker) ->
     (function-name, ...function-arguments) ->
-      new Promise (resolve) !->
+      new Promise (resolve, reject) !->
         message =
           id: uuid.v4!
           type: 'call'
           function-name: function-name
           function-arguments: function-arguments
-        listener = ({ data: { id, type, function-result }}) ->
+        listener = ({ data: { id, type, function-result, error }}) ->
           if id is message.id
-            resolve function-result
+            switch type
+            | 'return' => resolve function-result
+            | 'error' => reject error
             worker.remove-event-listener 'message', listener
         worker.add-event-listener 'message', listener
         worker.post-message message
@@ -66,22 +71,34 @@ evalUntrusted = do ->
           callable[function-name](...function-arguments)
           .then (result) ->
             eval-worker.post-message id: id, type: 'return', function-result: result
+          .catch (error) ->
+            eval-worker.post-message id: id, type: 'error', error: error
       call-remote 'eval', code
       .then resolve
       .catch reject
 
-const store = create-store reducers, undefined, auto-rehydrate!
-persistor = persist-store store, configure-sync!, ->
-  unsubscribe = store.subscribe ->
-    console.log store.getState!
-  console.log store.getState!
+const redux-store = create-store reducers, tasks: [], auto-rehydrate!
+persistor = persist-store redux-store, configure-sync!, ->
+  state = redux-store.get-state!
+  source = Rx.Observable.create (observer) ->
+    dispose = redux-store.subscribe -> observer.on-next redux-store.get-state!
+    dispose
+  source.subscribe do
+    ((new-state) ->
+      differences = diff state, new-state
+      console.log differences
+      state := new-state
+    )
+    ((err) -> console.log "Error: #{err}")
+  ((task) ->
+    console.log task
+    sched = later.parse.recur().every(task.trigger-interval).minute()
+    timer = later.set-interval (->
+      eval-untrusted task.code
+      .then (result) ->
+        console.log result
+      .catch (err) ->
+        console.log err
+    ), sched
+  ) `each` filter (.is-enable), state.tasks
 sync persistor
-
-/*
-evalUntrusted """
-fetch('http://www.xiami.com/song/gethqsong/sid/1769402975')
-.then(res => res.json())
-.then(commit, err => console.log(err))
-"""
-.then (result) -> console.log result
-*/
