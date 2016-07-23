@@ -1,6 +1,6 @@
 'use strict'
 
-const types =
+const tasks =
   add-task: Symbol!
   edit-task: Symbol!
   remove-task: Symbol!
@@ -9,5 +9,13 @@ const types =
   set-is-enable: Symbol!
   increase-trigger-count: Symbol!
   increase-push-count: Symbol!
+
+const notifications =
+  add-notification: Symbol!
+
+const types = {
+  ...tasks
+  ...notifications
+}
 
 module.exports = types

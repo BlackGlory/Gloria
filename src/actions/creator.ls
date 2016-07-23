@@ -2,6 +2,8 @@
 
 require! './types.ls': types
 
+# tasks
+
 export add-task = ({ name, code, trigger-interval, can-notice-repeatedly }) ->
   {
     type: types.add-task
@@ -34,3 +36,8 @@ export increase-trigger-count = (id) ->
 
 export increase-push-count = (id) ->
   { type: types.increase-push-count, id }
+
+# notifications
+
+export add-notification = (options) ->
+  { type: types.add-notification, options }
