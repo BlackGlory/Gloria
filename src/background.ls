@@ -13,6 +13,8 @@ require! 'later': later
 require! './actions/creator.ls': creator
 
 const notification-clicked-handlers = []
+const timer-dict = {}
+const worker-terminate-dict = {}
 
 get-origin = (url) -> (new URL url).origin
 
@@ -76,19 +78,19 @@ eval-untrusted = do ->
         worker.post-message message
 
   (code) ->
-    new Promise (resolve, reject) ->
-      eval-worker = new EvalWorker!
-      call-remote = bind-call-remote eval-worker
-      eval-worker.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
-        if type is 'call'
-          callable[function-name](...function-arguments)
-          .then (result) ->
-            eval-worker.post-message id: id, type: 'return', function-result: result
-          .catch (error) ->
-            eval-worker.post-message id: id, type: 'error', error: error
-      call-remote 'eval', code
-      .then resolve
-      .catch reject
+    eval-worker = new EvalWorker!
+    call-remote = bind-call-remote eval-worker
+    eval-worker.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
+      if type is 'call'
+        callable[function-name](...function-arguments)
+        .then (result) ->
+          eval-worker.post-message id: id, type: 'return', function-result: result
+        .catch (error) ->
+          eval-worker.post-message id: id, type: 'error', error: error
+    {
+      promise: call-remote 'eval', code
+      terminate: -> eval-worker.terminate!
+    }
 
 create-notification-options = (task, data) ->
   redux-store.dispatch creator.increase-push-count task.id
@@ -98,7 +100,7 @@ create-notification-options = (task, data) ->
     app-icon-mask-url: data.app-icon-mask-url
     title: data.title ? ''
     message: data.message ? ''
-    context-message: data.context-message ? "By #{task.name}"
+    context-message: "By #{task.name}"
     event-time: data.event-time # unreliable
     require-interaction: task.need-interaction ? false # default
     image-url: undefined
@@ -114,7 +116,33 @@ create-notification-options = (task, data) ->
   | otherwise => \something
   options
 
-timer-dict = {}
+terminate-worker = ({ id }) !->
+  if worker-terminate-dict[id]
+    worker-terminate-dict[id]!
+  delete worker-terminate-dict[id]
+
+create-task-timer = (task) ->
+  sched = later.parse.recur().every(task.trigger-interval).minute()
+  later.set-interval (!->
+    { promise, terminate } = eval-untrusted task.code
+    worker-terminate-dict[task.id] = terminate
+    promise
+    .then (data-list) ->
+      redux-store.dispatch creator.increase-trigger-count task.id
+      if not data-list?
+        return
+      if not is-type 'Array' data-list
+        data-list = [data-list]
+      each ((data) !->
+        options = create-notification-options task, data
+        notification-id <-! chrome.notifications.create options
+        if data.url
+          notification-clicked-handlers[notification-id] = -> chrome.tabs.create url: data.url
+        redux-store.dispatch creator.add-notification options
+      ), data-list
+    .catch (err) ->
+      console.log err
+  ), sched
 
 const redux-store = create-store reducers, { tasks: [], notifications: [] }, auto-rehydrate!
 persistor = persist-store redux-store, configure-sync!, ->
@@ -122,36 +150,32 @@ persistor = persist-store redux-store, configure-sync!, ->
   source = Rx.Observable.create (observer) ->
     dispose = redux-store.subscribe ->
       observer.on-next redux-store.get-state!tasks
-      console.log redux-store.get-state!notifications
     dispose
   source.subscribe do
     ((new-tasks) ->
       differences = diff tasks, new-tasks
       if differences
-        console.log differences
+        ((x) ->
+          new-task = new-tasks[x.path[0]]
+          old-task = tasks[x.path[0]]
+          switch x.kind
+          case 'E' # Edited
+            task = new-task
+            timer-dict[task.id].clear!
+            terminate-worker task
+            timer-dict[task.id] = create-task-timer task
+          case 'D' # Deleted
+            task = old-task
+            timer-dict[task.id].clear!
+            terminate-worker task
+            delete timer-dict[task.id]
+          case 'N' # New
+            task = new-task
+            timer-dict[task.id] = create-task-timer task
+        ) `each` differences
         tasks := new-tasks
     ),
     ((err) -> console.log "Error: #{err}")
-  ((task) ->
-    sched = later.parse.recur().every(task.trigger-interval).minute()
-    timer-dict[task.id] = later.set-interval (!->
-      eval-untrusted task.code
-      .then (data-list) ->
-        redux-store.dispatch creator.increase-trigger-count task.id
-        if not data-list?
-          return
-        if not is-type 'Array' data-list
-          data-list = [data-list]
-        each ((data) !->
-          console.log data
-          options = create-notification-options task, data
-          notification-id <-! chrome.notifications.create options
-          if data.url
-            notification-clicked-handlers[notification-id] = -> chrome.tabs.create url: data.url
-          redux-store.dispatch creator.add-notification options
-        ), data-list
-      .catch (err) ->
-        console.log err
-    ), sched
+  ((task) -> timer-dict[task.id] = create-task-timer task
   ) `each` filter (.is-enable), tasks
 sync persistor

@@ -16,7 +16,7 @@
               :author="task.author"
               :source="task.source"
               :trigger-interval="task.triggerInterval"
-              :need-interaction="task.needinteraction"
+              :need-interaction="task.needInteraction"
               :trigger-count="task.triggerCount"
               :push-count="task.pushCount"
               :is-enable="task.isEnable"
@@ -48,7 +48,7 @@
         <ui-modal :show.sync="showNewDialogConfig" header="Finally some configuration">
           <ui-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></ui-slider>
           <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
-          <ui-checkbox v-el:need-interaction :value.sync="needinteraction">Notice need an interaction</ui-checkbox>
+          <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
           <div slot="footer">
             <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">Finish</ui-button>
             <ui-button @click="switchDialog('showNewDialogConfig', 'showNewDialogName')">Back</ui-button>

@@ -16,7 +16,7 @@
         <div class="col-xs">
           <ui-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></ui-slider>
           <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
-          <ui-checkbox v-el:need-interaction :value.sync="needinteraction">Notice need an interaction</ui-checkbox>
+          <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
           <!--p>Source: {{ source }}</p-->
           <!--p>Something tips here.</p-->
         </div>
