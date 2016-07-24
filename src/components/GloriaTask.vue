@@ -16,8 +16,7 @@
         <div class="col-xs">
           <ui-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></ui-slider>
           <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
-          <ui-checkbox v-el:can-notice-repeatedly :value.sync="canNoticeRepeatedly">Notice until an interaction</ui-checkbox>
-          <ui-tooltip :trigger="$els.canNoticeRepeatedly" position="bottom left" content="It means that if I ignored it, notice me again."></ui-tooltip>
+          <ui-checkbox v-el:need-interaction :value.sync="needinteraction">Notice need an interaction</ui-checkbox>
           <!--p>Source: {{ source }}</p-->
           <!--p>Something tips here.</p-->
         </div>
@@ -80,8 +79,8 @@ export
   watch:
     trigger-interval: ->
       store.dispatch creator.set-trigger-interval @id, @trigger-interval
-    can-notice-repeatedly: ->
-      store.dispatch creator.set-can-notice-repeatly @id, @can-notice-repeatedly
+    need-interaction: ->
+      store.dispatch creator.set-need-interaction @id, @need-interaction
     is-enable: ->
       store.dispatch creator.set-is-enable @id, @is-enable
   props:
@@ -103,7 +102,7 @@ export
       type: Number
     trigger-interval:
       type: Number
-    can-notice-repeatedly:
+    need-interaction:
       type: Boolean
     is-enable:
       type: Boolean

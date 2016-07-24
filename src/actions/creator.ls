@@ -4,13 +4,13 @@ require! './types.ls': types
 
 # tasks
 
-export add-task = ({ name, code, trigger-interval, can-notice-repeatedly }) ->
+export add-task = ({ name, code, trigger-interval, need-interaction }) ->
   {
     type: types.add-task
     name
     code
     trigger-interval
-    can-notice-repeatedly
+    need-interaction
     trigger-count: 0
     push-count: 0
     is-enable: true
@@ -25,8 +25,8 @@ export remove-task = (id) ->
 export set-trigger-interval = (id, trigger-interval) ->
   { type: types.set-trigger-interval, id, trigger-interval }
 
-export set-can-notice-repeatly = (id, can-notice-repeatedly) ->
-  { type: types.set-can-notice-repeatly, id, can-notice-repeatedly }
+export set-need-interaction = (id, need-interaction) ->
+  { type: types.set-need-interaction, id, need-interaction }
 
 export set-is-enable = (id, is-enable) ->
   { type: types.set-is-enable, id, is-enable }
@@ -37,7 +37,13 @@ export increase-trigger-count = (id) ->
 export increase-push-count = (id) ->
   { type: types.increase-push-count, id }
 
+export clear-all-tasks = ->
+  { type: types.clear-all-tasks }
+
 # notifications
 
 export add-notification = (options) ->
   { type: types.add-notification, options }
+
+export clear-all-notifications = ->
+  { type: types.clear-all-notifications }

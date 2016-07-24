@@ -16,7 +16,7 @@
               :author="task.author"
               :source="task.source"
               :trigger-interval="task.triggerInterval"
-              :can-notice-repeatedly="task.canNoticeRepeatedly"
+              :need-interaction="task.needinteraction"
               :trigger-count="task.triggerCount"
               :push-count="task.pushCount"
               :is-enable="task.isEnable"
@@ -48,8 +48,7 @@
         <ui-modal :show.sync="showNewDialogConfig" header="Finally some configuration">
           <ui-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></ui-slider>
           <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
-          <ui-checkbox v-el:can-notice-repeatedly :value.sync="canNoticeRepeatedly">Notice until an interaction</ui-checkbox>
-          <ui-tooltip :trigger="$els.canNoticeRepeatedly" position="bottom left" content="It means that if I ignored it, notice me again."></ui-tooltip>
+          <ui-checkbox v-el:need-interaction :value.sync="needinteraction">Notice need an interaction</ui-checkbox>
           <div slot="footer">
             <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">Finish</ui-button>
             <ui-button @click="switchDialog('showNewDialogConfig', 'showNewDialogName')">Back</ui-button>
@@ -57,17 +56,42 @@
         </ui-modal>
       </ui-tab>
       <ui-tab icon="history" header="History">
-        Coming soon
+        <div id="notification-list">
+          <template v-for="notification in notifications" track-by="id">
+            <gloria-notification
+              :options="notification.options"
+            ></gloria-notification>
+          </template>
+        </div>
       </ui-tab>
       <ui-tab icon="explore" header="Explore">
         Coming soon
       </ui-tab>
       <ui-tab icon="settings" header="Setting">
-        <p>Thanks for Open Source World:</p>
-        <p><a href="http://livescript.net/" target="_blank">LiveScript</a></p>
-        <p><a href="https://vuejs.org/" target="_blank">Vue.js</a></p>
-        <p><a href="https://github.com/JosephusPaye/Keen-UI" target="_blank">Keen UI</a></p>
-        <p><a href="https://webpack.github.io/" target="_blank">webpack</a></p>
+        <ui-button @click="showClearHistoryConfirm = true">Clear history</ui-button>
+        <ui-confirm
+          header="Clear history"
+          type="danger"
+          confirm-button-text="Clear"
+          confirm-button-icon="delete" deny-button-text="Cancel"
+          @confirmed="(clearHistory(), showClearHistoryConfirm = false)"
+          @denied="showClearHistoryConfirm = false"
+          :show.sync="showClearHistoryConfirm" close-on-confirm
+        >
+        Are you sure you want to clear history?
+        </ui-confirm>
+        <ui-button @click="showClearTasksConfirm = true">Clear tasks</ui-button>
+        <ui-confirm
+          header="Clear tasks"
+          type="danger"
+          confirm-button-text="Clear"
+          confirm-button-icon="delete" deny-button-text="Cancel"
+          @confirmed="(clearTasks(), showClearTasksConfirm = false)"
+          @denied="showClearTasksConfirm = false"
+          :show.sync="showClearTasksConfirm" close-on-confirm
+        >
+        Are you sure you want to clear tasks?
+        </ui-confirm>
       </ui-tab>
     </ui-tabs>
   </div>
@@ -78,22 +102,27 @@ require! '../store.ls': store
 require! '../actions/creator.ls': creator
 require! './GloriaTask.vue': GloriaTask
 require! './GloriaFab.vue': GloriaFab
+require! './GloriaNotification.vue': GloriaNotification
 
 export
   name: 'gloria-app'
   components: {
     GloriaTask
     GloriaFab
+    GloriaNotification
   }
   data: ->
     show-new-dialog-code: false
     show-new-dialog-name: false
     show-new-dialog-config: false
+    show-clear-history-confirm: false
+    show-clear-tasks-confirm: false
     code: ''
     name: ''
     trigger-interval: 5
-    can-notice-repeatedly: false
+    need-interaction: false
     tasks: @$select 'tasks'
+    notifications: @$select 'notifications'
   methods:
     switch-dialog: (current, next) ->
       @$data[current] = false
@@ -103,12 +132,16 @@ export
         name: @$data.name
         code: @$data.code
         trigger-interval: @$data.trigger-interval
-        can-notice-repeatedly: @$data.can-notice-repeatedly
+        need-interaction: @$data.need-interaction
       }
       @$data.code = ''
       @$data.name = ''
       @$data.trigger-interval = 5
-      @$data.can-notice-repeatedly = false
+      @$data.need-interaction = false
+    clear-history: ->
+      store.dispatch creator.clear-all-notifications!
+    clear-tasks: ->
+      store.dispatch creator.clear-all-tasks!
 </script>
 
 <style lang="stylus">

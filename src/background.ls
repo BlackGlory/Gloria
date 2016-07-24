@@ -100,7 +100,7 @@ create-notification-options = (task, data) ->
     message: data.message ? ''
     context-message: data.context-message ? "By #{task.name}"
     event-time: data.event-time # unreliable
-    require-interaction: data.require-interaction ? false # default
+    require-interaction: task.need-interaction ? false # default
     image-url: undefined
     items: undefined
     progress: undefined
@@ -120,7 +120,9 @@ const redux-store = create-store reducers, { tasks: [], notifications: [] }, aut
 persistor = persist-store redux-store, configure-sync!, ->
   tasks = redux-store.get-state!tasks
   source = Rx.Observable.create (observer) ->
-    dispose = redux-store.subscribe -> observer.on-next redux-store.get-state!tasks
+    dispose = redux-store.subscribe ->
+      observer.on-next redux-store.get-state!tasks
+      console.log redux-store.get-state!notifications
     dispose
   source.subscribe do
     ((new-tasks) ->
