@@ -92,6 +92,18 @@
         >
         Are you sure you want to clear tasks?
         </ui-confirm>
+        <ui-button @click="showClearStagesConfirm = true">Clear stages</ui-button>
+        <ui-confirm
+          header="Clear stages"
+          type="danger"
+          confirm-button-text="Clear"
+          confirm-button-icon="delete" deny-button-text="Cancel"
+          @confirmed="(clearStages(), showClearStagesConfirm = false)"
+          @denied="showClearStagesConfirm = false"
+          :show.sync="showClearStagesConfirm" close-on-confirm
+        >
+        Are you sure you want to clear stages?
+        </ui-confirm>
         <ui-textbox
           label="Test Code"
           :multi-line="true"
@@ -127,6 +139,7 @@ export
     show-new-dialog-config: false
     show-clear-history-confirm: false
     show-clear-tasks-confirm: false
+    show-clear-stages-confirm: false
     code: ''
     name: ''
     trigger-interval: 5
@@ -154,6 +167,8 @@ export
       store.dispatch creator.clear-all-notifications!
     clear-tasks: ->
       store.dispatch creator.clear-all-tasks!
+    clear-stages: ->
+      store.dispatch creator.clear-all-stages!
     eval-test: ->
       chrome.runtime.send-message @$data.test-code, ({ err, result }) ->
         if err

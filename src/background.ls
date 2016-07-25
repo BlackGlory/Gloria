@@ -1,6 +1,6 @@
 'use strict'
 
-require! 'prelude-ls': { map, join, each, filter, is-type }
+require! 'prelude-ls': { map, join, each, filter, is-type, empty }
 require! 'worker!./worker.ls': EvalWorker
 require! 'node-uuid': uuid
 require! 'redux': { create-store }
@@ -156,11 +156,12 @@ create-task-timer = (task) ->
     worker-terminate-dict[task.id] = terminate
     promise
     .then (data-list) ->
-      if not data-list?
+      if (not data-list) or (is-type 'Undefined' data-list) or ((is-type 'Array' data-list) and empty data-list)
         return
       if not is-type 'Array' data-list
         data-list = [data-list]
-      redux-store.dispatch creator.commit-to-stage data-list
+      redux-store.dispatch creator.increase-push-count task.id
+      redux-store.dispatch creator.commit-to-stage task.id, data-list
     .catch (err) ->
       console.log err
     redux-store.dispatch creator.increase-trigger-count task.id
@@ -168,6 +169,30 @@ create-task-timer = (task) ->
 
 const redux-store = create-store reducers, { tasks: [], notifications: [], stages: [] }, auto-rehydrate!
 persistor = persist-store redux-store, configure-sync!, ->
+  stages = redux-store.get-state!stages
+  stages-source = Rx.Observable.create (observer) ->
+    redux-store.subscribe ->
+      observer.on-next redux-store.get-state!stages
+  stages-source.subscribe do
+    ((new-stages) ->
+      differences = diff stages, new-stages
+      if differences
+        stages := new-stages
+        each (({ id, stage }) ->
+          task = tasks.find (.id is id)
+          each ((data) ->
+            options = create-notification-options task, data
+            notification-id <-! chrome.notifications.create options
+            if data.url
+              notification-clicked-handlers[notification-id] = ->
+                chrome.tabs.create url: data.url
+            redux-store.dispatch creator.add-notification options
+          ), filter (.unread), stage
+          set-timeout (-> redux-store.dispatch creator.mark-stage-read id), 0
+        ), new-stages
+    ),
+    ((err) -> console.log "Error: #{err}")
+
   tasks = redux-store.get-state!tasks
   tasks-source = Rx.Observable.create (observer) ->
     redux-store.subscribe ->
@@ -181,6 +206,7 @@ persistor = persist-store redux-store, configure-sync!, ->
         true
       differences = diff tasks, new-tasks
       if differences
+        tasks := new-tasks
         each ((x) ->
           switch x.kind
           case 'A' # Array
@@ -202,27 +228,7 @@ persistor = persist-store redux-store, configure-sync!, ->
             if task.is-enable
               timer-dict[task.id] = create-task-timer task
         ), filter razor, differences
-        tasks := new-tasks
     ),
     ((err) -> console.log "Error: #{err}")
   ((task) -> timer-dict[task.id] = create-task-timer task) `each` filter (.is-enable), tasks
-  stages-source = Rx.Observable.create (observer) ->
-    redux-store.subscribe ->
-      observer.on-next redux-store.get-state!stages
-  stages-source.subscribe do
-    ((new-stages) ->
-      (({ id, stage }) ->
-        task = tasks.find (.id is id)
-        each (data ->
-          redux-store.dispatch creator.increase-push-count id
-          options = create-notification-options task, data
-          notification-id <-! chrome.notifications.create options
-          if data.url
-            notification-clicked-handlers[notification-id] = -> chrome.tabs.create url: data.url
-          redux-store.dispatch creator.add-notification options
-          redux-store.dispatch creator.mark-stage-read id
-        ) filter (.unread) stage
-      ) `each` new-stages
-    ),
-    ((err) -> console.log "Error: #{err}")
 sync persistor

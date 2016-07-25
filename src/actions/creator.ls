@@ -56,8 +56,8 @@ export commit-to-stage = (id, next-stage) ->
 export clear-stage = (id) ->
   { type: types.clear-stage, id }
 
-export clear-all-stage = ->
-  { type: types.clear-all-stage }
+export clear-all-stages = ->
+  { type: types.clear-all-stages }
 
 export mark-stage-read = (id) ->
   { type: types.mark-stage-read, id }

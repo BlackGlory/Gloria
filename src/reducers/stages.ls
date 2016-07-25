@@ -1,36 +1,52 @@
 'use strict'
 
-require! 'prelude-ls': { sort-by, reverse, take, map }
+require! 'prelude-ls': { sort-by, reverse, take, map, lists-to-obj, obj-to-lists, last }
 require! '../actions/types.ls': types
 
 const actions-map =
   (types.commit-to-stage): (state, { id, next-stage }) ->
-    state.map (x) ->
-      return x if x.id isnt id
-      stage-obj = lists-to-obj (map (.message) x.stage), x.stage
-      for v of next-stage
-        stage[v.message] = {
-          ...v
-          unread: not stage[v.message]
-          updated-at: Date.now!
+    if (state.find (x) -> x.id is id)
+      state.map (x) ->
+        return x if x.id isnt id
+        stage-obj = lists-to-obj (map (.message), x.stage), x.stage
+        for v of next-stage
+          stage-obj[v.message] = {
+            ...v
+            unread: not stage-obj[v.message]
+            updated-at: Date.now!
+          }
+        stage-arr = sort-by (.updated-at), last obj-to-lists stage-obj
+        if stage-arr.length > 30
+          stage-arr = take 30 reverse stage-arr
+        {
+          id
+          stage: stage-arr
         }
-      stage-arr = sort-by (.updated-at) stage
-      if stage-arr.length > 30
-        stage-arr = take 30 reverse stage-arr
-      {
+    else
+      [...state, {
         id
-        stage: stage-arr
-      }
+        stage: next-stage.map (x) ->
+          {
+            ...x
+            unread: false
+            updated-at: Date.now!
+          }
+      }]
 
   (types.clear-stage): (state, { id }) ->
     state.filter (x) -> x.id isnt id
-  (types.clear-all-stagas): -> []
+  (types.clear-all-stages): -> []
   (types.mark-stage-read): (state, { id }) ->
     state.map (x) ->
       return x if x.id isnt id
       {
         id
-        stage: x.stage.map (v) -> { ...v, unread: false }
+        stage: x.stage.map (v) ->
+          {
+            ...v
+            unread: false
+            updated-at: Date.now!
+          }
       }
 
 module.exports = (state = [], action) ->
