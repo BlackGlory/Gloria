@@ -92,6 +92,16 @@
         >
         Are you sure you want to clear tasks?
         </ui-confirm>
+        <ui-textbox
+          label="Test Code"
+          :multi-line="true"
+          icon="code"
+          name="code"
+          :value.sync="testCode"
+          placeholder="Paste your test code here"
+        ></ui-textbox>
+        <ui-button @click="evalTest">Test</ui-button>
+        <div>{{ testResult }}</div>
       </ui-tab>
     </ui-tabs>
   </div>
@@ -123,6 +133,8 @@ export
     need-interaction: false
     tasks: @$select 'tasks'
     notifications: @$select 'notifications'
+    test-code: ''
+    test-result: ''
   methods:
     switch-dialog: (current, next) ->
       @$data[current] = false
@@ -142,6 +154,13 @@ export
       store.dispatch creator.clear-all-notifications!
     clear-tasks: ->
       store.dispatch creator.clear-all-tasks!
+    eval-test: ->
+      chrome.runtime.send-message @$data.test-code, ({ err, result }) ->
+        if err
+          console.log err, runtime.last-error
+          @$data.test-result = err.message
+        else
+          @$data.test-result = result
 </script>
 
 <style lang="stylus">

@@ -2,8 +2,28 @@
 
 require! 'node-uuid': uuid
 
+native-fetch = self.fetch
+
+fetch = (url, options = headers: {}, ...args) ->
+  new Promise (resolve, reject) !->
+    cookies <-! (call-remote 'getCookies', url).then
+    data = cookie: cookies
+    data.cookie = options.headers['Cookie'] if options.headers['Cookie']
+    data.origin = options.headers['Origin'] if options.headers['Origin']
+    data.referer = options.headers['Referer'] if options.headers['Referer']
+    <-! (call-remote 'setSessionStorage', url, data).then
+    options.headers['send-by'] = 'Gloria'
+    native-fetch(url, options, ...args).then resolve, reject
+
 callable =
   eval: (code) ->
+    import-scripts = (url) ->
+      new Promise (resolve, reject) !->
+        call-remote 'importScripts', url
+        .then (script) ->
+          window = self
+          resolve eval.call(window, script)
+        .catch reject
     new Promise (resolve, reject) !->
       commit = (data) !->
         resolve data
@@ -33,19 +53,6 @@ bind-call-remote = (worker) ->
       worker.post-message message
 
 call-remote = bind-call-remote self
-
-native-fetch = self.fetch
-
-fetch = (url, options = headers: {}, ...args) ->
-  new Promise (resolve, reject) !->
-    cookies <-! (call-remote 'getCookies', url).then
-    data = cookie: cookies
-    data.cookie = options.headers['Cookie'] if options.headers['Cookie']
-    data.origin = options.headers['Origin'] if options.headers['Origin']
-    data.referer = options.headers['Referer'] if options.headers['Referer']
-    <-! (call-remote 'setSessionStorage', url, data).then
-    options.headers['send-by'] = 'Gloria'
-    native-fetch(url, options, ...args).then resolve, reject
 
 self.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
   if type is 'call'
