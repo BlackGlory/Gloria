@@ -1,6 +1,8 @@
 <template>
   <div class="gloria-notification">
-    {{ options.title }} {{ options.message }}
+    <ui-alert :dismissible="false" hide-icon>
+      {{ options.title }} {{ options.message }} {{ options.contextMessage }}
+    </ui-alert>
   </div>
 </template>
 

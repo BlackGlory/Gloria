@@ -86,7 +86,8 @@ eval-untrusted = do ->
         fetch url
         .then (.text!)
         .then (resolve)
-        .catch reject
+        .catch ({ message, stack }) ->
+          reject error: { message, stack }
 
   bind-call-remote = (worker) ->
     (function-name, ...function-arguments) ->
@@ -155,7 +156,6 @@ create-task-timer = (task) ->
     worker-terminate-dict[task.id] = terminate
     promise
     .then (data-list) ->
-      redux-store.dispatch creator.increase-trigger-count task.id
       if not data-list?
         return
       if not is-type 'Array' data-list
@@ -170,6 +170,7 @@ create-task-timer = (task) ->
       ), data-list
     .catch (err) ->
       console.log err
+    redux-store.dispatch creator.increase-trigger-count task.id
   ), sched
 
 const redux-store = create-store reducers, { tasks: [], notifications: [] }, auto-rehydrate!
@@ -181,7 +182,7 @@ persistor = persist-store redux-store, configure-sync!, ->
     dispose
   razor = (x) ->
     if x.path
-      if x.path[1] in <[triggerCount push-count]>
+      if x.path[1] in <[triggerCount pushCount]>
         return false
     true
   source.subscribe do
@@ -191,24 +192,23 @@ persistor = persist-store redux-store, configure-sync!, ->
         each ((x) ->
           switch x.kind
           case 'A' # Array
-            ((x) ->
+            let x = x.item
               switch x.kind
               case 'N' # New
-                task = rhs
+                task = x.rhs
                 if task.is-enable
                   timer-dict[task.id] = create-task-timer task
-            ) `each` x.item
+              case 'D' # Deleted
+                task = x.lhs
+                timer-dict[task.id].clear!
+                terminate-worker task
+                delete timer-dict[task.id]
           case 'E' # Edited
             task = new-tasks[x.path[0]]
             timer-dict[task.id].clear!
             terminate-worker task
             if task.is-enable
               timer-dict[task.id] = create-task-timer task
-          case 'D' # Deleted
-            task = tasks[x.path[0]]
-            timer-dict[task.id].clear!
-            terminate-worker task
-            delete timer-dict[task.id]
         ), filter razor, differences
         tasks := new-tasks
     ),

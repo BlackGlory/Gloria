@@ -37,7 +37,7 @@ callable =
 
 bind-call-remote = (worker) ->
   (function-name, ...function-arguments) ->
-    new Promise (resolve) !->
+    new Promise (resolve, reject) !->
       message =
         id: uuid.v4!
         type: 'call'
