@@ -9,7 +9,7 @@ const actions-map =
       state.map (x) ->
         return x if x.id isnt id
         stage-obj = lists-to-obj (map (.message), x.stage), x.stage
-        for v of next-stage
+        for k, v of next-stage
           stage-obj[v.message] = {
             ...v
             unread: not stage-obj[v.message]
