@@ -15,9 +15,16 @@ const notifications =
   add-notification: Symbol!
   clear-all-notifications: Symbol!
 
+const stages =
+  commit-to-stage: Symbol!
+  clear-stage: Symbol!
+  clear-all-stages: Symbol!
+  mark-stage-read: Symbol!
+
 const types = {
   ...tasks
   ...notifications
+  ...stages
 }
 
 module.exports = types

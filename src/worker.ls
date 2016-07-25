@@ -43,7 +43,7 @@ bind-call-remote = (worker) ->
         type: 'call'
         function-name: function-name
         function-arguments: function-arguments
-      listener = ({ data: { id, type, function-result }}) ->
+      listener = ({ data: { id, type, function-result, error }}) ->
         if id is message.id
           switch type
           | 'return' => resolve function-result

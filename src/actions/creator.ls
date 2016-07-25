@@ -47,3 +47,17 @@ export add-notification = (options) ->
 
 export clear-all-notifications = ->
   { type: types.clear-all-notifications }
+
+# stages
+
+export commit-to-stage = (id, next-stage) ->
+  { type: types.commit-to-stage, id, next-stage }
+
+export clear-stage = (id) ->
+  { type: types.clear-stage, id }
+
+export clear-all-stage = ->
+  { type: types.clear-all-stage }
+
+export mark-stage-read = (id) ->
+  { type: types.mark-stage-read, id }
