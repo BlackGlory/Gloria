@@ -3,33 +3,52 @@
 require! 'prelude-ls': { sort-by, reverse, take, map, lists-to-obj, obj-to-lists, last }
 require! '../actions/types.ls': types
 
+const LIMITED = 30
+
 const actions-map =
   (types.commit-to-stage): (state, { id, next-stage }) ->
-    if (state.find (x) -> x.id is id)
+    if state.find ((x) -> x.id is id)
       state.map (x) ->
         return x if x.id isnt id
-        stage-obj = lists-to-obj (map (.message), x.stage), x.stage
+        generate-key = (x) -> x.title + x.message
+        stage-obj = lists-to-obj (map generate-key), x.stage
         for k, v of next-stage
-          stage-obj[v.message] = {
-            ...v
-            unread: not stage-obj[v.message]
-            updated-at: Date.now!
-          }
-        stage-arr = sort-by (.updated-at), last obj-to-lists stage-obj
-        if stage-arr.length > 30
-          stage-arr = take 30 reverse stage-arr
+          key = generate-key v
+          if stage-obj[key]
+            stage-obj[key] = {
+              ...stage-obj[key]
+              ...v
+              unread: false
+              updated-at: Date.now!
+            }
+          else
+            stage-obj[key] = {
+              updated-at: Date.now!
+              ...stage-obj[key]
+              ...v
+              unread: true
+              created-at: Date.now!
+            }
+        stage-arr = sort-by (.created-at), last obj-to-lists stage-obj
+        if stage-arr.length > LIMITED
+          stage-arr = take LIMITED, reverse stage-arr
         {
           id
           stage: stage-arr
         }
     else
+      if next-stage.length > LIMITED
+        next-stage = take LIMITED, reverse sort-by ((x) ->
+          if x.updated-at then x.updated-at
+        ), next-stage
       [...state, {
         id
         stage: next-stage.map (x) ->
           {
+            updated-at: Date.now!
             ...x
             unread: false
-            updated-at: Date.now!
+            created-at: Date.now!
           }
       }]
 

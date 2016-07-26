@@ -5,6 +5,8 @@
 </template>
 
 <script lang="livescript">
+'use strict'
+
 require! 'keen-ui/lib/UiFab': UiFab
 
 export

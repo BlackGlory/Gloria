@@ -41,6 +41,7 @@
     "node-uuid": "^1.4.7",
     "normalize.css": "^4.2.0",
     "redux": "^3.5.2",
+    "redux-batched-actions": "^0.1.2",
     "redux-persist": "^3.2.2",
     "revue": "^2.2.0",
     "rx": "^4.1.0",

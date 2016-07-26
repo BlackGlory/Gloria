@@ -58,6 +58,8 @@
 </template>
 
 <script lang="livescript">
+'use strict'
+
 require! '../store.ls': store
 require! '../actions/creator.ls': creator
 

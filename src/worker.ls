@@ -2,62 +2,67 @@
 
 require! 'node-uuid': uuid
 
-native-fetch = self.fetch
-
-fetch = (url, options = headers: {}, ...args) ->
-  new Promise (resolve, reject) !->
-    cookies <-! (call-remote 'getCookies', url).then
-    data = cookie: cookies
-    data.cookie = options.headers['Cookie'] if options.headers['Cookie']
-    data.origin = options.headers['Origin'] if options.headers['Origin']
-    data.referer = options.headers['Referer'] if options.headers['Referer']
-    <-! (call-remote 'setSessionStorage', url, data).then
-    options.headers['send-by'] = 'Gloria'
-    native-fetch(url, options, ...args).then resolve, reject
-
 callable =
   eval: (code) ->
-    import-scripts = (url) ->
+    function call-remote function-name, ...function-arguments
+      new Promise (resolve, reject) !->
+        message =
+          id: uuid.v4!
+          type: 'call'
+          function-name: function-name
+          function-arguments: function-arguments
+
+        listener = ({ data: { id, type, function-result, error }}) ->
+          if id is message.id
+            switch type
+            | 'return' => resolve function-result
+            | 'error' => reject error
+
+            self.remove-event-listener 'message', listener
+
+        self.add-event-listener 'message', listener
+        self.post-message message
+
+    function fetch url, options = headers: {}, ...args
+      new Promise (resolve, reject) !->
+        call-remote 'getCookies', url
+        .then (cookies) ->
+          data = cookie: cookies
+          data.cookie = options.headers['Cookie'] if options.headers['Cookie']
+          data.origin = options.headers['Origin'] if options.headers['Origin']
+          data.referer = options.headers['Referer'] if options.headers['Referer']
+          data
+        .then (data) !->
+          call-remote 'setSessionStorage', url, data
+        .then !->
+          options.headers['send-by'] = 'Gloria'
+          self.fetch url, options, ...args
+          .then resolve, reject
+        .catch reject
+
+    function import-scripts url
       new Promise (resolve, reject) !->
         call-remote 'importScripts', url
-        .then (script) ->
+        .then (script) !->
           window = self
-          resolve eval.call(window, script)
+          resolve eval.call window, script
         .catch reject
+
     new Promise (resolve, reject) !->
       commit = (data) !->
         resolve data
-        close!
+        self.close!
+
       try
-        var callable, bind-call-remote, call-remote, native-fetch, self
-        eval code
+        do ->
+          var callable, bind-call-remote, call-remote,  self, close
+          eval code
       catch { message, stack }
         reject { message, stack }
-        close!
-
-bind-call-remote = (worker) ->
-  (function-name, ...function-arguments) ->
-    new Promise (resolve, reject) !->
-      message =
-        id: uuid.v4!
-        type: 'call'
-        function-name: function-name
-        function-arguments: function-arguments
-      listener = ({ data: { id, type, function-result, error }}) ->
-        if id is message.id
-          switch type
-          | 'return' => resolve function-result
-          | 'error' => reject error
-          worker.remove-event-listener 'message', listener
-      worker.add-event-listener 'message', listener
-      worker.post-message message
-
-call-remote = bind-call-remote self
+        self.close!
 
 self.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
   if type is 'call'
     callable[function-name](...function-arguments)
-    .then (result) ->
-      self.post-message id: id, type: 'return', function-result: result
-    .catch (error) ->
-      self.post-message id: id, type: 'error', error: error
+    .then (result) -> self.post-message id: id, type: 'return', function-result: result
+    .catch (error) -> self.post-message id: id, type: 'error', error: error

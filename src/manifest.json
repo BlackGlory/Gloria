@@ -17,6 +17,7 @@
   , "storage"
   , "notifications"
   , "tabs"
+  , "alarms"
   , "webRequest"
   , "webRequestBlocking"
   , "<all_urls>"
