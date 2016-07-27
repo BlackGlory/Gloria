@@ -22,7 +22,7 @@ class NavigableNotificationsManager
     delete @targets["#{id}"]
 
   add: (options) ->
-    id <- chrome.notifications.create do ~>
+    id <~ chrome.notifications.create do ~>
       result = {}
 
       for k, v of options
@@ -32,6 +32,6 @@ class NavigableNotificationsManager
       result
 
     if options.url
-      add-handler id, options.url
+      @add-target id, options.url
 
 module.exports = NavigableNotificationsManager

@@ -24,9 +24,10 @@ class IntervalAlarmsManager
 
   update: (name, period-in-minutes) ->
     chrome.alarms.clear "#{name}", (was-cleared) ->
-      if was-cleared
-        chrome.alarms.create "#{name}", { period-in-minutes }
-      else
-        throw new Error "chrome.alrams.clear(#{name}) cannot work!"
+      unless was-cleared
+        chrome.alarms.get "#{name}", (alarm-info) ->
+          console.log alarm-info
+        # throw new Error "chrome.alrams.clear(#{name}) cannot work!"
+      chrome.alarms.create "#{name}", { period-in-minutes }
 
 module.exports = IntervalAlarmsManager

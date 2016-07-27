@@ -12,7 +12,7 @@ fetch('https://cowlevel.net/user/notify/check?is_detail=1')
           , url: `https://cowlevel.net/question/${x.question.id}#answer-${x.answer.id}`
           }
         }
-        if (x.action === 'reply_comment') {
+        if (x.action === 'reply_comment' || x.action === 'reply_answer') {
           return {
             title: `${x.publisher_user.name} 回复了您`
           , message: x.comment.content

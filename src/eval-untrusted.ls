@@ -79,7 +79,6 @@ export function eval-untrusted code
             x
           .then resolve
           .catch ({ message, stack }) ->
-            window.session-storage.remove-item name
             reject error: { message, stack }
 
   eval-worker = new EvalWorker!
