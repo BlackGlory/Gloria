@@ -14,6 +14,7 @@ const actions-map =
       push-count
       is-enable
     }]
+
   (types.edit-task): (state, { id, name, code }) ->
     state.map (x) ->
       return x if x.id isnt id
@@ -22,8 +23,10 @@ const actions-map =
         name: name
         code: code
       }
+
   (types.remove-task): (state, { id }) ->
     state.filter (x) -> x.id isnt id
+
   (types.set-trigger-interval): (state, { id, trigger-interval }) ->
     state.map (x) ->
       return x if x.id isnt id
@@ -31,6 +34,7 @@ const actions-map =
         ...x
         trigger-interval
       }
+
   (types.set-need-interaction): (state, { id, need-interaction }) ->
     state.map (x) ->
       return x if x.id isnt id
@@ -38,6 +42,7 @@ const actions-map =
         ...x
         need-interaction
       }
+
   (types.set-is-enable): (state, { id, is-enable }) ->
     state.map (x) ->
       return x if x.id isnt id
@@ -45,6 +50,7 @@ const actions-map =
         ...x
         is-enable
       }
+
   (types.increase-trigger-count): (state, { id }) ->
     state.map (x) ->
       return x if x.id isnt id
@@ -52,6 +58,7 @@ const actions-map =
         ...x
         trigger-count: x.trigger-count + 1
       }
+
   (types.increase-push-count): (state, { id }) ->
     state.map (x) ->
       return x if x.id isnt id
@@ -59,6 +66,7 @@ const actions-map =
         ...x
         push-count: x.push-count + 1
       }
+      
   (types.clear-all-tasks): -> []
 
 module.exports = (state = [], action) ->

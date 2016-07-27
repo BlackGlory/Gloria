@@ -3,7 +3,7 @@ class IntervalAlarmsManager
     @jobs = {}
 
     chrome.alarms.on-alarm.add-listener ({ name }) ~>
-      @jobs[name]!
+      @jobs[name]?!
 
   add-job: (name, job) ->
     @jobs["#{name}"] = job
@@ -16,7 +16,7 @@ class IntervalAlarmsManager
     chrome.alarms.create "#{name}", { period-in-minutes }
 
   remove: (name, callback) ->
-    chrome.alarms.clear "#{name}", (was-cleared) ->
+    chrome.alarms.clear "#{name}", (was-cleared) ~>
       if was-cleared
         @remove-job "#{name}"
 
@@ -27,6 +27,6 @@ class IntervalAlarmsManager
       if was-cleared
         chrome.alarms.create "#{name}", { period-in-minutes }
       else
-        throw new Error "chrome.alrams.clear cannot work! task.id is #{task.id}"
+        throw new Error "chrome.alrams.clear(#{name}) cannot work!"
 
 module.exports = IntervalAlarmsManager

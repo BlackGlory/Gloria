@@ -9,6 +9,7 @@ const actions-map =
     if result.length >= 50
       result = result[0 til 50]
     result
+    
   (types.clear-all-notifications): -> []
 
 module.exports = (state = [], action) ->

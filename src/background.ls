@@ -103,7 +103,7 @@ function sync-stages redux-store
 
   function stop-lazy
     if not empty lazy-actions
-      redux-store.dispatch lazy-actions
+      redux-store.dispatch batch-actions lazy-actions
       lazy-actions := []
 
   function change-handler new-stages
@@ -113,7 +113,7 @@ function sync-stages redux-store
       stages := new-stages
 
       if not empty differences.filter razor
-        console.log differences
+        console.log stages, differences
         each (({ id, stage }) ->
           task = redux-store.get-state!tasks.find (.id is id)
           each ((data) ->
@@ -158,7 +158,7 @@ function sync-tasks redux-store
 
   function stop-lazy
     if not empty lazy-actions
-      redux-store.dispatch lazy-actions
+      redux-store.dispatch batch-actions lazy-actions
       lazy-actions := []
 
   function change-handler new-tasks

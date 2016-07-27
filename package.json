@@ -36,6 +36,7 @@
     "browser-redux-sync": "^1.0.0",
     "deep-diff": "^0.3.4",
     "flexboxgrid": "^6.3.0",
+    "jshashes": "^1.0.5",
     "keen-ui": "^0.8.8",
     "later": "^1.2.0",
     "node-uuid": "^1.4.7",

@@ -1,25 +1,25 @@
 'use strict'
 
 const tasks =
-  add-task: Symbol!
-  edit-task: Symbol!
-  remove-task: Symbol!
-  set-trigger-interval: Symbol!
-  set-need-interaction: Symbol!
-  set-is-enable: Symbol!
-  increase-trigger-count: Symbol!
-  increase-push-count: Symbol!
-  clear-all-tasks: Symbol!
+  add-task: Symbol \add-task
+  edit-task: Symbol \edit-task
+  remove-task: Symbol \remove-task
+  set-trigger-interval: Symbol \set-trigger-interval
+  set-need-interaction: Symbol \set-need-interaction
+  set-is-enable: Symbol \set-is-enable
+  increase-trigger-count: Symbol \increase-trigger-count
+  increase-push-count: Symbol \increase-push-count
+  clear-all-tasks: Symbol \clear-all-tasks
 
 const notifications =
-  add-notification: Symbol!
-  clear-all-notifications: Symbol!
+  add-notification: Symbol \add-notification
+  clear-all-notifications: Symbol \clear-all-notifications
 
 const stages =
-  commit-to-stage: Symbol!
-  clear-stage: Symbol!
-  clear-all-stages: Symbol!
-  mark-stage-read: Symbol!
+  commit-to-stage: Symbol \commit-to-stage
+  clear-stage: Symbol \clear-stage
+  clear-all-stages: Symbol \clear-all-stages
+  mark-stage-read: Symbol \mark-stage-read
 
 const types = {
   ...tasks
