@@ -9,7 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@git.blackglory.me:10022/BlackGlory/Gloria.git"
+    "url": "https://github.com/BlackGlory/Gloria.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BlackGlory/Gloria/issues"
   },
   "author": "BlackGlory <woshenmedoubuzhidao@blackglory.me>",
   "license": "MIT",
