@@ -12,12 +12,12 @@
       <ui-tab icon="history" header="History">
         <gloria-notification-list :notifications="notifications"></gloria-notification-list>
       </ui-tab>
-      <ui-tab icon="explore" header="Explore">
+      <!--ui-tab icon="explore" header="Explore">
         <gloria-explore></gloria-explore>
       </ui-tab>
       <ui-tab icon="settings" header="Setting">
         <gloria-debug></gloria-debug>
-      </ui-tab>
+      </ui-tab-->
     </ui-tabs>
   </div>
 </template>
