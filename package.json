@@ -1,8 +1,7 @@
 {
   "name": "gloria",
-  "version": "1.0.0",
-  "description": "A secretary in Chrome.",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "build": "webpack",
     "dev": "webpack -w",

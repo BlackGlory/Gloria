@@ -23,7 +23,7 @@
       </div>
     </ui-modal>
     <ui-modal :show.sync="showNewDialogConfig" header="Finally some configuration">
-      <ui-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></ui-slider>
+      <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
       <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
       <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
       <div slot="footer">
@@ -40,11 +40,13 @@
 require! '../store.ls': store
 require! '../actions/creator.ls': creator
 require! './GloriaFab.vue': GloriaFab
+require! './GloriaSlider.vue': GloriaSlider
 
 export
   name: 'gloria-task-creator'
   components: {
     GloriaFab
+    GloriaSlider
   }
   data: ->
     show-new-dialog-code: false

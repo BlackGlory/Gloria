@@ -46,6 +46,7 @@ create-notification = (options) ->
   notifications-manager.add options
 
 chrome.runtime.on-message.add-listener (message, sender, send-response) ->
+  console.log sender
   eval-untrusted message
   .then (result) ->
     send-response { result }

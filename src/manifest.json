@@ -1,8 +1,12 @@
 {
-  "version": "1.0.0"
+  "version": "0.0.1"
 , "name": "Gloria"
 , "manifest_version": 2
-, "description": "A secretary in Chrome."
+, "description": "A programmable website notifications aggregator in Chrome."
+, "browser_action": {
+    "default_title": "Gloria options"
+  , "default_popup": "options.html"
+  }
 , "background": {
     "scripts": ["background.js"]
   , "persistent": true

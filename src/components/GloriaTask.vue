@@ -14,7 +14,7 @@
       </div>
       <div class="row middle-xs">
         <div class="col-xs">
-          <ui-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></ui-slider>
+          <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
           <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
           <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
           <!--p>Source: {{ source }}</p-->
@@ -62,9 +62,13 @@
 
 require! '../store.ls': store
 require! '../actions/creator.ls': creator
+require! './GloriaSlider.vue': GloriaSlider
 
 export
   name: 'gloria-task'
+  components: {
+    GloriaSlider
+  }
   data: ->
     show-delete-confirm: false
     show-edit-dialog: false
