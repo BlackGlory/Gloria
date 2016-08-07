@@ -6,8 +6,9 @@ Promise.all([
   let $ = cheerio.load(msg)
     , notifications = []
   $('.zm-noti7-content-item').each((i, el) => {
-    notifications.push({
-      message: $(el).text()
+    let notification = {
+      iconUrl: $(el).find('img.zm-item-img-avatar').attr('src')
+    , message: `${$(el).find('.author-link').text()} 关注了您`
     , url: ((base, href) => {
         if (!href.startsWith('http')) {
           if (href.startsWith('/')) {
@@ -17,8 +18,9 @@ Promise.all([
           }
         }
         return href
-      })('http://www.zhihu.com', $(el).find('a').attr('href'))
-    })
+      })('http://www.zhihu.com', $(el).find('a.author-link').attr('href'))
+    }
+    notifications.push(notification)
   })
   commit(notifications)
 })

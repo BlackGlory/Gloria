@@ -1,6 +1,6 @@
 <template>
   <div class="gloria-debug">
-    <ui-button @click="showClearHistoryConfirm = true">Clear history</ui-button>
+    <!--ui-button @click="showClearHistoryConfirm = true">Clear history</ui-button>
     <ui-confirm
       header="Clear history"
       type="danger"
@@ -35,7 +35,7 @@
       :show.sync="showClearStagesConfirm" close-on-confirm
     >
     Are you sure you want to clear stages?
-    </ui-confirm>
+  </ui-confirm-->
     <ui-textbox
       label="Test Code"
       :multi-line="true"
@@ -71,7 +71,7 @@ export
     clear-stages: ->
       store.dispatch creator.clear-all-stages!
     eval-test: ->
-      chrome.runtime.send-message @$data.test-code, ({ err, result }) ->
+      chrome.runtime.send-message @$data.test-code, ({ err, result }) ~>
         if err
           console.log err, runtime.last-error
           @$data.test-result = err.message

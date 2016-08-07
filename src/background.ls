@@ -46,16 +46,16 @@ create-notification = (options) ->
   notifications-manager.add options
 
 chrome.runtime.on-message-external.add-listener (message, sender, send-response) ->
-  redux-store.dispatch creator.add-task {
-    name: message.name
-    code: message.code
-    trigger-interval: 5
-    need-interaction: false
-  }
-  send-response!
+  if message.type is 'install'
+    redux-store.dispatch creator.add-task {
+      name: message.name
+      code: message.code
+      trigger-interval: 5
+      need-interaction: false
+    }
+    send-response!
 
 chrome.runtime.on-message.add-listener (message, sender, send-response) ->
-  console.log sender
   eval-untrusted message
   .then (result) ->
     send-response { result }
@@ -67,6 +67,7 @@ chrome.runtime.on-message.add-listener (message, sender, send-response) ->
     if not is-type 'Array' data-list
       data-list = [data-list]
 
+    console.log data-list
     each ((data) !-> create-notification create-notification-options { name: 'Test' }, data), data-list
   .catch (err) ->
     console.log err
@@ -77,8 +78,8 @@ function create-notification-options task, data
     title: ''
     message: ''
     icon-url: 'assets/images/icon-128.png'
-    ...data
     type: 'basic'
+    ...data
     context-message: "By #{task.name} #{new Date!to-locale-time-string { hour: '2-digit', minute: '2-digit' }}"
     require-interaction: task.need-interaction ? false # default
     image-url: undefined
@@ -93,7 +94,11 @@ function create-notification-options task, data
   | data.image-url => options <<< type: 'image', image-url: data.image-url
   | data.items => options <<< type: 'list', items: data.items
   | data.progress => options <<< type: 'progress', progress: data.progress
-  | otherwise => \something
+
+  options.icon-url = 'assets/images/icon-128.png' unless options.icon-url?
+  options.message = '' unless options.message?
+  options.title = '' unless options.title?
+  options.type = 'basic' unless options.type?
 
   options
 

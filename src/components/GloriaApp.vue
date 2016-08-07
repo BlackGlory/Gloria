@@ -14,10 +14,10 @@
       </ui-tab>
       <!--ui-tab icon="explore" header="Explore">
         <gloria-explore></gloria-explore>
-      </ui-tab>
-      <ui-tab icon="settings" header="Setting">
-        <gloria-debug></gloria-debug>
       </ui-tab-->
+      <ui-tab icon="settings" header="Advanced">
+        <gloria-debug></gloria-debug>
+      </ui-tab>
     </ui-tabs>
   </div>
 </template>

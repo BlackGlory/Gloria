@@ -5,6 +5,7 @@ fetch('http://api.bilibili.com/x/feed/pull?ps=10&type=0&pn=1')
     return {
       title: feed.addition.title
     , message: feed.addition.description
+    , iconUrl: feed.source.avatar
     , imageUrl: feed.addition.pic
     , url: feed.addition.link
     }
