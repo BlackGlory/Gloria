@@ -24,6 +24,7 @@ export
 </script>
 
 <style lang="stylus">
-.pointer
-  cursor: pointer
+.gloria-notification
+  .pointer
+    cursor: pointer
 </style>

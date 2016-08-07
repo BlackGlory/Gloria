@@ -122,26 +122,26 @@ export
   // background: $md-blue-600
   background: $md-grey-300
 
-.ui-switch
-  z-index: 1
+  .ui-switch
+    z-index: 1
 
-.ui-collapsible {
-  margin-bottom: inherit
-}
+  .ui-collapsible {
+    margin-bottom: inherit
+  }
 
-.ui-collapsible-header
-  // color: $md-white
-  // background: $md-blue
-  height: auto
+  .ui-collapsible-header
+    // color: $md-white
+    // background: $md-blue
+    height: auto
 
-  &:hover:not(.disabled)
-  body[modality="keyboard"] &:focus
-    // background-color: $md-blue-400
+    &:hover:not(.disabled)
+    body[modality="keyboard"] &:focus
+      // background-color: $md-blue-400
 
-.ui-collapsible-header-content
-  width: 100%
+  .ui-collapsible-header-content
+    width: 100%
 
-.ui-collapsible-body
-  border: inherit
-  width: auto
+  .ui-collapsible-body
+    border: inherit
+    width: auto
 </style>

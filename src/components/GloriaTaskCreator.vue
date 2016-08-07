@@ -74,9 +74,10 @@ export
 </script>
 
 <style lang="stylus">
-.ui-textbox-textarea
-  min-height: 200px
+.gloria-task-creator
+  .ui-textbox-textarea
+    min-height: 200px
 
-.gloria-fab
-  z-index: 1
+  .gloria-fab
+    z-index: 1
 </style>

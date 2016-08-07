@@ -35,6 +35,7 @@ export
 </script>
 
 <style lang="stylus">
-.gloria-task-list .gloria-task
-  margin-bottom: 8px
+.gloria-task-list
+  .gloria-task
+    margin-bottom: 8px
 </style>
