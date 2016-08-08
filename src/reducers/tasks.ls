@@ -3,7 +3,7 @@
 require! '../actions/types.ls': types
 
 const actions-map =
-  (types.add-task): (state, { name, code, trigger-interval, need-interaction, trigger-count, push-count, is-enable }) ->
+  (types.add-task): (state, { name, code, trigger-interval, need-interaction, trigger-count, push-count, is-enable, origin }) ->
     [...state, {
       id: (state.reduce (max-id, x) -> (Math.max x.id, max-id), -1) + 1
       name
@@ -13,6 +13,7 @@ const actions-map =
       trigger-count
       push-count
       is-enable
+      origin
     }]
 
   (types.edit-task): (state, { id, name, code }) ->
@@ -26,6 +27,9 @@ const actions-map =
 
   (types.remove-task): (state, { id }) ->
     state.filter (x) -> x.id isnt id
+
+  (types.remove-task-by-origin): (state, { origin }) ->
+    state.filter (x) -> x.origin isnt origin
 
   (types.set-trigger-interval): (state, { id, trigger-interval }) ->
     state.map (x) ->
@@ -66,7 +70,7 @@ const actions-map =
         ...x
         push-count: x.push-count + 1
       }
-      
+
   (types.clear-all-tasks): -> []
 
 module.exports = (state = [], action) ->

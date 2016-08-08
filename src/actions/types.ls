@@ -4,6 +4,7 @@ const tasks =
   add-task: Symbol \add-task
   edit-task: Symbol \edit-task
   remove-task: Symbol \remove-task
+  remove-task-by-origin: Symbol \remove-task-by-origin
   set-trigger-interval: Symbol \set-trigger-interval
   set-need-interaction: Symbol \set-need-interaction
   set-is-enable: Symbol \set-is-enable

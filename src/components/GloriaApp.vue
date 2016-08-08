@@ -12,9 +12,6 @@
       <ui-tab icon="history" header="History">
         <gloria-notification-list :notifications="notifications"></gloria-notification-list>
       </ui-tab>
-      <!--ui-tab icon="explore" header="Explore">
-        <gloria-explore></gloria-explore>
-      </ui-tab-->
       <ui-tab icon="settings" header="Advanced">
         <gloria-debug></gloria-debug>
       </ui-tab>
@@ -32,7 +29,6 @@ require! './GloriaDebug.vue': GloriaDebug
 require! './GloriaTaskList.vue': GloriaTaskList
 require! './GloriaTaskCreator.vue': GloriaTaskCreator
 require! './GloriaNotificationList.vue': GloriaNotificationList
-require! './GloriaExplore.vue': GloriaExplore
 
 export
   name: 'gloria-app'
@@ -41,7 +37,6 @@ export
     GloriaTaskList
     GloriaTaskCreator
     GloriaNotificationList
-    GloriaExplore
   }
   data: ->
     tasks: @$select 'tasks'

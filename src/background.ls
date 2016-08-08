@@ -45,15 +45,37 @@ remove-task-timer = (task) ->
 create-notification = (options) ->
   notifications-manager.add options
 
+chrome.runtime.on-installed.add-listener (details) ->
+  this-version = chrome.runtime.get-manifest!.version
+  if details.reason is 'install'
+    chrome.notifications.create do
+      title: "Hello world!"
+      message: "Gloria #{this-version} Installed"
+      icon-url: 'assets/images/icon-128.png'
+      type: 'basic'
+  else if details.reason is 'update' and details.previous-version isnt this-version
+    chrome.notifications.create do
+      title: "Excited!"
+      message: "Gloria updated from #{details.previous-version} to #{this-version}!"
+      icon-url: 'assets/images/icon-128.png'
+      type: 'basic'
+
 chrome.runtime.on-message-external.add-listener (message, sender, send-response) ->
   if message.type is 'install'
-    redux-store.dispatch creator.add-task {
+    redux-store.dispatch creator.add-task do
       name: message.name
       code: message.code
       trigger-interval: 5
       need-interaction: false
-    }
-    send-response!
+      origin: message.origin
+    send-response true
+  else if message.type is 'is-exist'
+    task = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
+    send-response !!task
+  else if message.type is 'uninstall'
+    redux-store.dispatch creator.remove-task-by-origin message.origin
+    send-response true
+  true
 
 chrome.runtime.on-message.add-listener (message, sender, send-response) ->
   eval-untrusted message
@@ -72,6 +94,7 @@ chrome.runtime.on-message.add-listener (message, sender, send-response) ->
   .catch (err) ->
     console.log err
     send-response { err }
+  true
 
 function create-notification-options task, data
   options = {

@@ -4,7 +4,7 @@ require! './types.ls': types
 
 # tasks
 
-export add-task = ({ name, code, trigger-interval, need-interaction }) ->
+export add-task = ({ name, code, trigger-interval, need-interaction, origin = '' }) ->
   {
     type: types.add-task
     name
@@ -14,6 +14,7 @@ export add-task = ({ name, code, trigger-interval, need-interaction }) ->
     trigger-count: 0
     push-count: 0
     is-enable: true
+    origin
   }
 
 export edit-task = (id, { name, code }) ->
@@ -21,6 +22,9 @@ export edit-task = (id, { name, code }) ->
 
 export remove-task = (id) ->
   { type: types.remove-task, id }
+
+export remove-task-by-origin = (origin) ->
+  { type: types.remove-task-by-origin, origin }
 
 export set-trigger-interval = (id, trigger-interval) ->
   { type: types.set-trigger-interval, id, trigger-interval }

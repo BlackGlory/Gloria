@@ -1,8 +1,20 @@
 <template>
   <div class="gloria-notification">
-    <ui-alert :dismissible="false" hide-icon @click="open" style="" :class="options.url ? 'pointer' : ''">
-      {{ options.title }} {{ options.message }} {{ options.contextMessage }}
-    </ui-alert>
+    <div @click="open">
+      <div class="columns">
+        <div class="column icon-url">
+          <img :src="options.iconUrl" />
+        </div>
+        <div class="column">
+          <p class="title">{{ options.title }}</p>
+          <p class="message">{{ options.message }}</p>
+          <p class="context-message">{{ options.contextMessage }}</p>
+        </div>
+      </div>
+      <div class="image-url" v-if="options.type === 'image'">
+        <img :src="options.imageUrl" />
+      </div>
+    </div>
   </div>
 </template>
 
