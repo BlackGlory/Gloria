@@ -78,7 +78,6 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
   else if message.type is 'uninstall'
     redux-store.dispatch creator.remove-task-by-origin message.origin
     send-response true
-  true
 
 chrome.runtime.on-message.add-listener (message, sender, send-response) ->
   eval-untrusted message
