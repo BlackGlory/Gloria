@@ -71,7 +71,10 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
     send-response true
   else if message.type is 'is-exist'
     task = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
-    send-response !!task
+    if task.length > 0
+      send-response true
+    else
+      send-response false
   else if message.type is 'uninstall'
     redux-store.dispatch creator.remove-task-by-origin message.origin
     send-response true

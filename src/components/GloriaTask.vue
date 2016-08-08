@@ -4,7 +4,7 @@
       <div slot="header">
         <div class="row middle-xs">
           <div class="col-xs">
-            <p><span>{{ name }}</span><span v-if="version">&nbsp;{{ version }}</span><span v-if="author">&nbsp;By {{ author }}</span></p>
+            <p><span>{{ name }}</span>
             <p>Triggered {{ triggerCount }} times, Pushed {{ pushCount }} notifications.</p>
           </div>
           <div>
@@ -17,12 +17,9 @@
           <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
           <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
           <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
-          <!--p>Source: {{ source }}</p-->
-          <!--p>Something tips here.</p-->
+          <p v-show="origin">Source: <a :href="origin" target="_blank">{{ origin }}</a></p>
         </div>
         <div class="col-xs-3 end-xs">
-          <!--ui-icon-button icon="cloud_download" type="flat" tooltip="Update"></ui-icon-button-->
-          <!--ui-icon-button icon="star" type="flat" tooltip="Star"></ui-icon-button-->
           <ui-icon-button @click="showEditDialog = true" icon="edit" type="flat" tooltip="Edit"></ui-icon-button>
           <ui-icon-button @click="showDeleteConfirm = true" icon="delete" type="flat" tooltip="Delete"></ui-icon-button>
         </div>
@@ -96,10 +93,6 @@ export
       type: String
     name:
       type: String
-    version:
-      type: String
-    author:
-      type: String
     source:
       type: String
     trigger-count:
@@ -112,6 +105,8 @@ export
       type: Boolean
     is-enable:
       type: Boolean
+    origin:
+      type: String
 </script>
 
 <style lang="stylus">
