@@ -46,8 +46,7 @@ export
 <style lang="stylus">
 .gloria-app
   .ui-tabs-body
-    padding-top: 8px
-    padding-bottom: 8px
+    padding: 8px
     height: calc(100vh - 72px - 16px)
     overflow-y: auto
 </style>

@@ -10,5 +10,5 @@ require! './reducers/index.ls': reducers
 const redux-store = create-store reducers, { tasks: [], notifications: [], stages: [] }, auto-rehydrate!
 persistor = persist-store redux-store, configure-sync!
 sync persistor
-const store = new Revue Vue, redux-store
+const { store } = new Revue Vue, redux-store
 module.exports = store

@@ -27,10 +27,7 @@ create-task-timer = (task) ->
       if not is-type 'Array' data-list
         data-list = [data-list]
 
-      redux-store.dispatch batch-actions [
-        creator.increase-push-count task.id
-        creator.commit-to-stage task.id, data-list.filter (x) -> !!x
-      ]
+      redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
     .catch (err) ->
       console.log err
 
@@ -91,7 +88,6 @@ chrome.runtime.on-message.add-listener (message, sender, send-response) ->
     if not is-type 'Array' data-list
       data-list = [data-list]
 
-    console.log data-list
     each ((data) !-> create-notification create-notification-options { name: 'Test' }, data), data-list
   .catch (err) ->
     console.log err
@@ -159,6 +155,7 @@ function sync-stages redux-store
             options = create-notification-options task, data
             create-notification options
             lazy-actions.push creator.add-notification options
+            lazy-actions.push creator.increase-push-count id
           ), filter (.unread), stage
           lazy-actions.push creator.mark-stage-read id
         ), new-stages

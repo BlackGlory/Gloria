@@ -1,5 +1,5 @@
 <template>
-  <div class="row gloria-task">
+  <div class="gloria-task">
     <ui-collapsible :hide-icon="true">
       <div slot="header">
         <div class="row middle-xs">
@@ -110,7 +110,7 @@ export
 </script>
 
 <style lang="stylus">
-@import '../../node_modules/keen-ui/src/styles/md-colors'
+@import '~keen-ui/src/styles/md-colors'
 
 .gloria-task
   // color: $md-white

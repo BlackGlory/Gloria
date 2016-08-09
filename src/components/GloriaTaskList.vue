@@ -35,6 +35,6 @@ export
 
 <style lang="stylus">
 .gloria-task-list
-  .gloria-task
+  .gloria-task:not(:last-child)
     margin-bottom: 8px
 </style>

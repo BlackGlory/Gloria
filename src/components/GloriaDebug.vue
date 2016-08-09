@@ -109,10 +109,14 @@ export
 </script>
 
 <style lang="stylus">
-.ui-textbox-textarea
-  min-height: 200px
+.gloria-debug
+  .ui-textbox-textarea
+    min-height: 200px
 
-.snackbar-item
-  width: 100%
-  margin: 8px
+  .ui-collapsible-body
+    width: auto
+
+  .snackbar-item
+    width: 100%
+    margin: 8px
 </style>
