@@ -49,7 +49,7 @@ callable =
         .catch reject
 
     new Promise (resolve, reject) !->
-      commit = (data) !->
+      function commit data
         resolve data
         self.close!
 

@@ -18,18 +18,8 @@ class IntervalAlarmsManager
     chrome.alarms.create "#{name}", { period-in-minutes }
 
   remove: (name, callback) ->
-    chrome.alarms.clear "#{name}", (was-cleared) ~>
-      if was-cleared
-        @remove-job "#{name}"
-
-      callback? was-cleared
-
-  update: (name, period-in-minutes) ->
-    chrome.alarms.clear "#{name}", (was-cleared) ->
-      unless was-cleared
-        chrome.alarms.get "#{name}", (alarm-info) ->
-          console.log alarm-info
-        # throw new Error "chrome.alrams.clear(#{name}) cannot work!"
-      chrome.alarms.create "#{name}", { period-in-minutes }
+    chrome.alarms.clear "#{name}", ~>
+      @remove-job "#{name}"
+      callback?!
 
 module.exports = IntervalAlarmsManager

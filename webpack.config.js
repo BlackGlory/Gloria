@@ -18,6 +18,7 @@ module.exports = {
       , { from: './node_modules/keen-ui/dist/keen-ui.css' }
       , { from: './node_modules/flexboxgrid/dist/flexboxgrid.css' }
       , { from: './node_modules/normalize.css/normalize.css' }
+      , { from: './node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff2' }
       ]
     , { ignore: ['*.ls', '*.vue'] })
   ]

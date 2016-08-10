@@ -17,29 +17,31 @@ require! './NavigableNotificationsManager.ls': NavigableNotificationsManager
 alarms-manager = new IntervalAlarmsManager!
 notifications-manager = new NavigableNotificationsManager!
 
-create-task-timer = (task) ->
+function create-task-timer task
   alarms-manager.add task.id, task.trigger-interval, ->
     eval-untrusted task.code
     .then (data-list) ->
+      console.log data-list
       if (not data-list) or (is-type 'Undefined' data-list) or ((is-type 'Array' data-list) and empty data-list)
         return
 
       if not is-type 'Array' data-list
         data-list = [data-list]
-
+      console.log data-list
       redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
     .catch (err) ->
       console.log err
 
     redux-store.dispatch creator.increase-trigger-count task.id
 
-reset-task-timer = (task) ->
-  alarms-manager.update task.id, task.trigger-interval
+function reset-task-timer task
+  alarms-manager.remove task.id, ->
+    create-task-timer task
 
-remove-task-timer = (task) ->
+function remove-task-timer task
   alarms-manager.remove task.id
 
-create-notification = (options) ->
+function create-notification options
   notifications-manager.add options
 
 chrome.runtime.on-installed.add-listener (details) ->
