@@ -5,7 +5,7 @@
         <div class="row middle-xs">
           <div class="col-xs">
             <p><span>{{ name }}</span>
-            <p>Triggered {{ triggerCount }} times, Pushed {{ pushCount }} notifications.</p>
+            <p>Triggered {{ triggerCount }} {{ triggerCount > 1 ? 'times' : 'time' }}, Pushed {{ pushCount }} {{ pushCount > 1 ? 'notifications' : 'notification' }}</p>
           </div>
           <div>
             <ui-switch :value.sync="isEnable"></ui-switch>
@@ -15,7 +15,7 @@
       <div class="row middle-xs">
         <div class="col-xs">
           <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
-          <p>This task will trigger once every {{ triggerInterval }} min(s).</p>
+          <p>Task {{ name }} will trigger every {{ triggerInterval }} {{ triggerInterval > 1 ? 'minutes' : 'minute' }}.</p>
           <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
           <p v-show="origin">Source: <a :href="origin" target="_blank">{{ origin }}</a></p>
         </div>

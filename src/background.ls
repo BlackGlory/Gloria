@@ -18,7 +18,7 @@ alarms-manager = new IntervalAlarmsManager!
 notifications-manager = new NavigableNotificationsManager!
 
 function create-task-timer task
-  alarms-manager.add task.id, task.trigger-interval, ->
+  function run
     eval-untrusted task.code
     .then (data-list) ->
       console.log data-list
@@ -31,8 +31,10 @@ function create-task-timer task
       redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
     .catch (err) ->
       console.log err
-
     redux-store.dispatch creator.increase-trigger-count task.id
+  
+  alarms-manager.add task.id, task.trigger-interval, run
+  run!
 
 function reset-task-timer task
   alarms-manager.remove task.id, ->
