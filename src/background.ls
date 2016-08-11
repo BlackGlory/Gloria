@@ -19,20 +19,18 @@ notifications-manager = new NavigableNotificationsManager!
 
 function create-task-timer task
   function run
+    redux-store.dispatch creator.increase-trigger-count task.id
     eval-untrusted task.code
     .then (data-list) ->
-      console.log data-list
       if (not data-list) or (is-type 'Undefined' data-list) or ((is-type 'Array' data-list) and empty data-list)
         return
 
       if not is-type 'Array' data-list
         data-list = [data-list]
-      console.log data-list
       redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
     .catch (err) ->
       console.log err
-    redux-store.dispatch creator.increase-trigger-count task.id
-  
+
   alarms-manager.add task.id, task.trigger-interval, run
   run!
 
@@ -116,7 +114,7 @@ function create-notification-options task, data
   }
 
   switch
-  | data.image-url => options <<< type: 'image', image-url: data.image-url
+  | data.image-url => options <<< type: 'image', image-url: data.image-url.to-string!
   | data.items => options <<< type: 'list', items: data.items
   | data.progress => options <<< type: 'progress', progress: data.progress
 
@@ -124,6 +122,10 @@ function create-notification-options task, data
   options.message = '' unless options.message?
   options.title = '' unless options.title?
   options.type = 'basic' unless options.type?
+
+  options.title = options.title.to-string!
+  options.message = options.message.to-string!
+  options.icon-url = options.icon-url.to-string!
 
   options
 

@@ -1,11 +1,12 @@
 'use strict'
 
+require! 'node-uuid': uuid
 require! '../actions/types.ls': types
 
 const actions-map =
   (types.add-task): (state, { name, code, trigger-interval, need-interaction, trigger-count, push-count, is-enable, origin }) ->
     [...state, {
-      id: (state.reduce (max-id, x) -> (Math.max x.id, max-id), -1) + 1
+      id: uuid.v4!
       name
       code
       trigger-interval

@@ -88,7 +88,7 @@ export
       store.dispatch creator.set-is-enable @id, @is-enable
   props:
     id:
-      type: Number
+      type: String
     code:
       type: String
     name:
