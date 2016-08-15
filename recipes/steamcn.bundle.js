@@ -1,5 +1,5 @@
 Promise.all([
-  importScripts('http://cdn.blackglory.me/cheerio-bundle.js')
+  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
 , fetch('http://steamcn.com/forum.php?mod=forumdisplay&fid=271&filter=author&orderby=dateline').then(res => res.arrayBuffer())
 ])
 .then(([cheerio, html]) => {

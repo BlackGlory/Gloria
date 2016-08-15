@@ -1,5 +1,5 @@
 Promise.all([
-  importScripts('http://cdn.blackglory.me/cheerio-bundle.js')
+  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
 , fetch('https://github.com/').then(res => res.text())
 ])
 .then(([cheerio, html]) => {

@@ -1,5 +1,5 @@
 Promise.all([
-  importScripts('http://cdn.blackglory.me/cheerio-bundle.js')
+  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
 , fetch('https://www.zhihu.com/noti7/stack/follow?limit=10').then(res => res.json())
 ])
 .then(([cheerio, { msg }]) => {
