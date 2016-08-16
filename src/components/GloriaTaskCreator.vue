@@ -24,7 +24,7 @@
     </ui-modal>
     <ui-modal :show.sync="showNewDialogConfig" header="Finally some configuration" :backdrop-dismissible="false">
       <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
-      <p>Task {{ name }} will trigger every {{ triggerInterval }} {{ triggerInterval > 1 ? 'minutes' : 'minute' }}.</p>
+      <p>Task {{ name }} will trigger every {{ triggerInterval }} {{ triggerInterval | pluralize 'minute' }}.</p>
       <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
       <div slot="footer">
         <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">Finish</ui-button>

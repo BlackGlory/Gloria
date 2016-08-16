@@ -55,7 +55,7 @@ callable =
 
       try
         do ->
-          var callable, bind-call-remote, call-remote,  self, close
+          var callable, bind-call-remote, call-remote, self, close
           eval code
       catch { message, stack }
         reject { message, stack }

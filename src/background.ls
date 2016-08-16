@@ -78,23 +78,30 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
     redux-store.dispatch creator.remove-task-by-origin message.origin
     send-response true
 
-chrome.runtime.on-message.add-listener (message, sender, send-response) ->
-  eval-untrusted message
-  .then (result) ->
-    send-response { result }
-    result
-  .then (data-list) ->
-    if not data-list?
-      return
+chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response) !->
+  switch type
+  | 'test-code' =>
+    eval-untrusted message
+    .then (result) ->
+      console.log result
+      send-response { result }
+      result
+    .then (data-list) ->
+      if not data-list?
+        return
 
-    if not is-type 'Array' data-list
-      data-list = [data-list]
+      if not is-type 'Array' data-list
+        data-list = [data-list]
 
-    each ((data) !-> create-notification create-notification-options { name: 'Test' }, data), data-list
-  .catch (err) ->
-    console.log err
-    send-response { err }
-  true
+      each ((data) !-> create-notification create-notification-options { name: 'Test' }, data), data-list
+    .catch (err) ->
+      console.log err
+      send-response { err }
+    return true
+  | 'clear-caches' =>
+    for key in window.session-storage
+      if key.startsWith 'importScripts.cache'
+        window.session-storage.remove-item key
 
 function create-notification-options task, data
   options = {

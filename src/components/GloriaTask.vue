@@ -5,7 +5,7 @@
         <div class="row middle-xs">
           <div class="col-xs">
             <p><span>{{ name }}</span>
-            <p>Triggered {{ triggerCount }} {{ triggerCount > 1 ? 'times' : 'time' }}, Pushed {{ pushCount }} {{ pushCount > 1 ? 'notifications' : 'notification' }}</p>
+            <p>Triggered {{ triggerCount }} {{ triggerCount | pluralize 'time' }}, Pushed {{ pushCount }} {{ pushCount | pluralize 'notification' }}</p>
           </div>
           <div>
             <ui-switch :value.sync="isEnable"></ui-switch>
@@ -15,7 +15,7 @@
       <div class="row middle-xs">
         <div class="col-xs">
           <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
-          <p>Task {{ name }} will trigger every {{ triggerInterval }} {{ triggerInterval > 1 ? 'minutes' : 'minute' }}.</p>
+          <p>Task {{ name }} will trigger every {{ triggerInterval }} {{ triggerInterval | pluralize 'minute' }}.</p>
           <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
           <p v-show="origin">Source: <a :href="origin" target="_blank">{{ origin }}</a></p>
         </div>
@@ -79,6 +79,7 @@ export
       store.dispatch creator.edit-task @id, { name: @$data.editable-name, code: @$data.editable-code }
     remove-task: ->
       store.dispatch creator.remove-task @id
+      store.dispatch creator.clear-stage @id
   watch:
     trigger-interval: ->
       store.dispatch creator.set-trigger-interval @id, @trigger-interval
