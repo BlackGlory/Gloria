@@ -18,7 +18,7 @@ fetch('https://cowlevel.net/user/notify/check?is_detail=1')
           , message: x.comment.content
           , iconUrl: x.publisher_user.avatar
           , updateAt: x.update_time
-          , url: `https://cowlevel.net/game/${x.post.url_slug}`
+          , url: `https://cowlevel.net/game/${x.question.id}`
           }
         }
       })
@@ -41,10 +41,10 @@ fetch('https://cowlevel.net/user/notify/check?is_detail=1')
         if (x.action === 'vote_comment') {
           return {
             title: `${x.publisher_user.name} 赞同了`
-          , message: `您在 ${x.post.title} 的评价`
+          , message: `您在 ${x.question.title} 的评价`
           , iconUrl: x.publisher_user.avatar
           , updateAt: x.update_time
-          , url: `https://cowlevel.net/game/${x.post.url_slug}/review/${x.comment.id}`
+          , url: `https://cowlevel.net/game/${x.question.id}/review/${x.comment.id}`
           }
         }
       })
