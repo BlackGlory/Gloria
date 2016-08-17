@@ -21,7 +21,7 @@ export update-task = (id, { name, code }) ->
   { type: types.update-task, id, name, code }
 
 export update-task-by-origin = (origin, { code }) ->
-  { type: types.update-task-by-origin, code }
+  { type: types.update-task-by-origin, origin, code }
 
 export remove-task = (id) ->
   { type: types.remove-task, id }
