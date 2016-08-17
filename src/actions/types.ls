@@ -2,7 +2,8 @@
 
 const tasks =
   add-task: Symbol \add-task
-  edit-task: Symbol \edit-task
+  update-task: Symbol \update-task
+  update-task-by-origin: Symbol \update-task-by-origin
   remove-task: Symbol \remove-task
   remove-task-by-origin: Symbol \remove-task-by-origin
   set-trigger-interval: Symbol \set-trigger-interval

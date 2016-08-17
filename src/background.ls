@@ -49,19 +49,20 @@ chrome.runtime.on-installed.add-listener (details) ->
   this-version = chrome.runtime.get-manifest!.version
   if details.reason is 'install'
     chrome.notifications.create do
-      title: "Hello world!"
+      title: 'Hello world!'
       message: "Gloria #{this-version} Installed"
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
   else if details.reason is 'update' and details.previous-version isnt this-version
     chrome.notifications.create do
-      title: "Excited!"
+      title: 'Excited!'
       message: "Gloria updated from #{details.previous-version} to #{this-version}!"
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
 
 chrome.runtime.on-message-external.add-listener (message, sender, send-response) ->
-  if message.type is 'install'
+  switch message.type
+  | 'install' =>
     redux-store.dispatch creator.add-task do
       name: message.name
       code: message.code
@@ -69,14 +70,25 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
       need-interaction: false
       origin: message.origin
     send-response true
-  else if message.type is 'is-exist'
+    chrome.notifications.create do
+      title: 'Excited!'
+      message: "New task #{message.name} installed"
+      icon-url: 'assets/images/icon-128.png'
+      type: 'basic'
+  | 'is-exist' =>
     task = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
     if task.length > 0
-      send-response true
+      if task[0].code is message.code
+        send-response true
+      else
+        send-response 'diff'
     else
       send-response false
-  else if message.type is 'uninstall'
+  | 'uninstall' =>
     redux-store.dispatch creator.remove-task-by-origin message.origin
+    send-response true
+  | 'update' =>
+    redux-store.dispatch creator.update-task-by-origin message.origin, message
     send-response true
 
 chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response) !->

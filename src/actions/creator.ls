@@ -17,8 +17,11 @@ export add-task = ({ name, code, trigger-interval, need-interaction, origin = ''
     origin
   }
 
-export edit-task = (id, { name, code }) ->
-  { type: types.edit-task, id, name, code }
+export update-task = (id, { name, code }) ->
+  { type: types.update-task, id, name, code }
+
+export update-task-by-origin = (origin, { code }) ->
+  { type: types.update-task-by-origin, code }
 
 export remove-task = (id) ->
   { type: types.remove-task, id }

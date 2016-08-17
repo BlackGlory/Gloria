@@ -75,8 +75,8 @@ export
     set-edit-dialog: ->
       @$data.editable-code = @code
       @$data.editable-name = @name
-    edit-task: ->
-      store.dispatch creator.edit-task @id, { name: @$data.editable-name, code: @$data.editable-code }
+    update-task: ->
+      store.dispatch creator.update-task @id, { name: @$data.editable-name, code: @$data.editable-code }
     remove-task: ->
       store.dispatch creator.remove-task @id
       store.dispatch creator.clear-stage @id

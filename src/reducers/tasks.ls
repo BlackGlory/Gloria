@@ -17,13 +17,21 @@ const actions-map =
       origin
     }]
 
-  (types.edit-task): (state, { id, name, code }) ->
+  (types.update-task): (state, { id, name, code }) ->
     state.map (x) ->
       return x if x.id isnt id
       {
         ...x
-        name: name
-        code: code
+        name
+        code
+      }
+
+  (types.update-task-by-origin): (state, { origin, code }) ->
+    state.map (x) ->
+      return x if x.origin isnt origin
+      {
+        ...x
+        code
       }
 
   (types.remove-task): (state, { id }) ->
