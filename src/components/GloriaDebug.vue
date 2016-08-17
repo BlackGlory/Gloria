@@ -2,6 +2,23 @@
   <div class="gloria-debug">
 
     <section>
+      <header>Import and Export</header>
+      <article>
+        <input
+          v-el:import-file-chooser
+          type="file"
+          multiple
+          accept=".json"
+          style="display: none"
+          @change="handleFileChoose"
+        />
+        <ui-button @click="importTasks">Import Tasks</ui-button>
+        <a v-el:downloader download="tasks.json" style="display: none"></a>
+        <ui-button @click="exportTasks">Export Tasks</ui-button>
+      </article>
+    </section>
+
+    <section>
       <header>Task code test</header>
       <article>
         <ui-textbox
@@ -114,7 +131,9 @@
     <section>
       <header>Inside</header>
       <article class="inside">
-        {{{ state | json | n2br | nbsp }}}
+        <ui-button @click="startObserveStateChange" v-show="!unsubscribe">Start observe state change</ui-button>
+        <ui-button @click="stopObserveStateChange" v-show="unsubscribe">Stop observe state change</ui-button>
+        <div>{{{ state | json | n2br | nbsp }}}</div>
       </article>
     </section>
   </div>
@@ -137,10 +156,45 @@ export
     test-result: ''
     test-error: ''
     state: {}
-  ready: ->
-    store.subscribe ~>
-      @$data.state = store.get-state!
+    unsubscribe: null
   methods:
+    handle-file-choose: ->
+      chooser = @$els.import-file-chooser
+      Array
+      .from(chooser.files)
+      .for-each (file) ->
+        reader = new FileReader!
+        reader.onload = (evt) ->
+          new-tasks = []
+          try
+            new-tasks = JSON.parse evt.target.result
+            console.log new-tasks
+          catch e
+            console.error e.message
+          store.dispatch creator.merge-tasks new-tasks
+          chooser.value = ''
+
+        reader.readAsText file
+    import-tasks: ->
+      console.log @$els
+      @$els.import-file-chooser.click!
+    export-tasks: ->
+      tasks = store.getState!.tasks.map (task) ->
+        new-task = { ...task }
+        new-task
+      blob = new Blob [JSON.stringify(tasks, null, 2)], { type: 'application/json' }
+      downloader = @$els.downloader
+      downloader.href = URL.create-objectURL blob
+      downloader.click!
+      URL.revoke-objectURL blob
+    start-observe-state-change: ->
+      unless @$data.unsubscribe
+        @$data.unsubscribe = store.subscribe ~>
+          @$data.state = store.get-state!
+    stop-observe-state-change: ->
+      if @$data.unsubscribe
+        @$data.unsubscribe!
+        @$data.unsubscribe = null
     clear-history: ->
       store.dispatch creator.clear-all-notifications!
     clear-tasks: ->

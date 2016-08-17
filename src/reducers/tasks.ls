@@ -74,6 +74,9 @@ const actions-map =
 
   (types.clear-all-tasks): -> []
 
+  (types.merge-tasks): (state, { new-tasks }) ->
+    [...state, ...new-tasks]
+
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]
   if reduce-fn then reduce-fn state, action else state

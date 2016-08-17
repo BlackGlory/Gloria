@@ -11,6 +11,7 @@ const tasks =
   increase-trigger-count: Symbol \increase-trigger-count
   increase-push-count: Symbol \increase-push-count
   clear-all-tasks: Symbol \clear-all-tasks
+  merge-tasks: Symbol \merge-tasks
 
 const notifications =
   add-notification: Symbol \add-notification

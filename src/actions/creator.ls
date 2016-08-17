@@ -44,6 +44,9 @@ export increase-push-count = (id) ->
 export clear-all-tasks = ->
   { type: types.clear-all-tasks }
 
+export merge-tasks = (new-tasks)->
+  { type: types.merge-tasks, new-tasks }
+
 # notifications
 
 export add-notification = (options) ->

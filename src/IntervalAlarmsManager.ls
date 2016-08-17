@@ -3,7 +3,10 @@ class IntervalAlarmsManager
     @jobs = {}
 
     chrome.alarms.on-alarm.add-listener ({ name }) ~>
-      @jobs[name]?!
+      try
+        @jobs[name]?!
+      catch e
+        console.error e
 
   add-job: (name, job) ->
     @jobs["#{name}"] = job

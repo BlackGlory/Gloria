@@ -1,5 +1,6 @@
 'use strict'
 
+require! './rollbar.ls': Rollbar
 require! 'prelude-ls': { map, join, each, filter, is-type, empty, last, first }
 require! 'redux': { create-store }
 require! 'redux-persist': { persist-store, auto-rehydrate }
@@ -164,13 +165,15 @@ function sync-stages redux-store
       if not empty differences.filter razor
         each (({ id, stage }) ->
           task = redux-store.get-state!tasks.find (.id is id)
-          each ((data) ->
-            options = create-notification-options task, data
-            create-notification options
-            lazy-actions.push creator.add-notification options
-            lazy-actions.push creator.increase-push-count id
-          ), filter (.unread), stage
-          lazy-actions.push creator.mark-stage-read id
+
+          if task
+            each ((data) ->
+              options = create-notification-options task, data
+              create-notification options
+              lazy-actions.push creator.add-notification options
+              lazy-actions.push creator.increase-push-count id
+            ), filter (.unread), stage
+            lazy-actions.push creator.mark-stage-read id
         ), new-stages
 
         stop-lazy!
