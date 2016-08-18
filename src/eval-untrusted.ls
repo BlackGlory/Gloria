@@ -8,7 +8,8 @@ function get-origin url
   (new URL url).origin
 
 export function inflated-request-headers details
-  if window.sessionStorage[details.url]
+  name = "request.inflate.#{details.url}"
+  if window.session-storage[name]
     is-send-by-gloria = false
     cookie-index = false
     origin-index = false
@@ -22,12 +23,12 @@ export function inflated-request-headers details
       | 'Referer' => referer-index = i
 
     if is-send-by-gloria
-      data = JSON.parse window.session-storage[details.url]
+      data = JSON.parse window.session-storage[name]
       details.request-headers.push name: 'Cookie', value: data.cookie ? '' unless cookie-index
       details.request-headers.push name: 'Origin', value: data.origin ? get-origin details.url unless origin-index
       details.request-headers.push name: 'Referer', value: data.referer ? details.url unless referer-index
 
-  requestHeaders: details.requestHeaders
+  request-headers: details.request-headers
 
 export function bind-call-remote worker
   (function-name, ...function-arguments) ->
@@ -55,12 +56,12 @@ export function eval-untrusted code
         cookies <-! chrome.cookies.get-all { url }
         resolve join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies
 
-    set-session-storage: (url, data) ->
-      window.sessionStorage[url] = JSON.stringify data
-      Promise.resolve!
+    set-session-storage: (name, data) ->
+      window.session-storage[name] = JSON.stringify data
+      Promise.resolve window.session-storage[name]
 
     import-scripts: (url) ->
-      name = "importScripts.cache.#{url}"
+      name = "import-scripts.cache.#{url}"
       cache = window.session-storage[name]
 
       if cache

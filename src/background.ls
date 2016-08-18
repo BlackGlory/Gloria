@@ -43,6 +43,8 @@ function remove-task-timer task
   alarms-manager.remove task.id
 
 function create-notification options
+  window.session-storage["request.image.#{options.icon-url}"] = JSON.stringify referer: options.icon-url
+  window.session-storage["request.image.#{options.image-url}"] = JSON.stringify referer: options.image-url
   notifications-manager.add options
 
 chrome.runtime.on-installed.add-listener (details) ->
@@ -113,7 +115,7 @@ chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response
     return true
   | 'clear-caches' =>
     for key in window.session-storage
-      if key.startsWith 'importScripts.cache'
+      if key.startsWith 'import-cripts.cache.'
         window.session-storage.remove-item key
 
 function create-notification-options task, data
@@ -181,6 +183,8 @@ function sync-stages redux-store
           if task
             each ((data) ->
               options = create-notification-options task, data
+              image-url
+              icon-url
               create-notification options
               lazy-actions.push creator.add-notification options
               lazy-actions.push creator.increase-push-count id
@@ -246,6 +250,24 @@ function sync-tasks redux-store
   each ((task) -> create-task-timer task), filter (.is-enable), tasks
 
 chrome.web-request.on-before-send-headers.add-listener inflated-request-headers
+, urls: ['<all_urls>']
+, ['blocking', 'requestHeaders']
+
+chrome.web-request.on-before-send-headers.add-listener (details) ->
+  name = "request.image.#{details.url}"
+
+  if window.session-storage[name] and details.type is 'image' and details.frame-id is 0 and details.parent-frame-id is -1 and details.tab-id is -1
+    referer-index = false
+
+    for i, header of details.request-headers
+      if header.name is 'Referer'
+        referer-index = i
+
+    data = JSON.parse window.session-storage[name]
+    details.request-headers.push name: 'Referer', value: data.referer ? details.url unless referer-index
+
+  request-headers: details.request-headers
+
 , urls: ['<all_urls>']
 , ['blocking', 'requestHeaders']
 

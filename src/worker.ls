@@ -33,7 +33,7 @@ callable =
           data.referer = options.headers['Referer'] if options.headers['Referer']
           data
         .then (data) !->
-          call-remote 'setSessionStorage', url, data
+          call-remote 'setSessionStorage', "request.inflate.#{url}", data
         .then !->
           options.headers['send-by'] = 'Gloria'
           self.fetch url, options, ...args
