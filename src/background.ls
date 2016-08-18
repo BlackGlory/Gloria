@@ -51,14 +51,14 @@ chrome.runtime.on-installed.add-listener (details) ->
   this-version = chrome.runtime.get-manifest!.version
   if details.reason is 'install'
     chrome.notifications.create do
-      title: 'Hello world!'
-      message: "Gloria #{this-version} Installed"
+      title: chrome.i18n.get-message 'ExtensionInstalledTitle'
+      message: chrome.i18n.get-message 'ExtensionInstalledMessage', this-version
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
   else if details.reason is 'update' and details.previous-version isnt this-version
     chrome.notifications.create do
-      title: 'Excited!'
-      message: "Gloria updated from #{details.previous-version} to #{this-version}!"
+      title: chrome.i18n.get-message 'ExtensionUpdatedTitle'
+      message: chrome.i18n.get-message 'ExtensionUpdatedMessage', [details.previous-version, this-version]
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
 
@@ -73,8 +73,8 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
       origin: message.origin
     send-response true
     chrome.notifications.create do
-      title: 'Excited!'
-      message: "New task #{message.name} installed"
+      title: chrome.i18n.get-message 'TaskInstalledTitle'
+      message: chrome.i18n.get-message 'TaskInstalledMessage', message.name
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
   | 'is-exist' =>
@@ -125,7 +125,7 @@ function create-notification-options task, data
     icon-url: 'assets/images/icon-128.png'
     type: 'basic'
     ...data
-    context-message: "By #{task.name} #{new Date!to-locale-time-string { hour: '2-digit', minute: '2-digit' }}"
+    context-message: chrome.i18n.get-message 'NotificationContextMessage', [task.name, new Date!to-locale-time-string { hour: '2-digit', minute: '2-digit' }]
     require-interaction: task.need-interaction ? false # default
     image-url: undefined
     items: undefined

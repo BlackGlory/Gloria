@@ -1,0 +1,124 @@
+{
+  "AppDesc": { "message": "Chrome 上的可编程网站通知聚合器." }
+, "ActionTitle": { "message": "Gloria 选项" }
+, "ExtensionInstalledTitle": { "message": "你好世界!" }
+, "ExtensionInstalledMessage": {
+    "message": "Gloria $this_version$ 安装完毕."
+  , "placeholders": {
+      "this_version": { "content": "$1" }
+    }
+  }
+, "ExtensionUpdatedTitle": { "message": "一颗赛艇!" }
+, "ExtensionUpdatedMessage": {
+    "message": "Gloria 已经从 $previous_version$ 升级至 $this_version$!"
+  , "placeholders": {
+      "previous_version": { "content": "$1" }
+    , "this_version": { "content": "$2" }
+    }
+  }
+, "TaskInstalledTitle": { "message": "一颗赛艇!" }
+, "TaskInstalledMessage": {
+    "message": "新的任务 $task_name$ 安装完毕."
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    }
+  }
+, "NotificationContextMessage": {
+    "message": "由 $task_name$ 在 $time$ 推送"
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    , "time": { "content": "$2" }
+    }
+  }
+, "History": { "message": "历史记录" }
+, "Advanced": { "message": "高级" }
+, "Task": { "message": "任务" }
+, "ImportAndExport": { "message": "导入和导出" }
+, "ImportTasks": { "message": "导入任务" }
+, "ExportTasks": { "message": "导出任务" }
+, "TaskCodeTest": { "message": "测试任务代码" }
+, "TestCode": { "message": "测试代码" }
+, "PasteYourTestCodeHere": { "message": "在此处粘贴测试代码" }
+, "Test": { "message": "测试" }
+, "Clear": { "message": "清除" }
+, "ClearHistory": { "message": "清除历史记录" }
+, "ClearHistorySnackbar": { "message": "清除 Gloria 的所有历史记录." }
+, "ClearHistoryConfirm": {"message": "确定要清除所有历史记录吗?"}
+, "Cancel": { "message": "取消" }
+, "ClearTasks": { "message": "清除任务" }
+, "ClearTasksSnackbar": { "message": "清除 Gloria 的所有任务." }
+, "ClearTasksConfirm": { "message": "确定要清除所有任务吗?" }
+, "ClearStages": { "message": "清除 Stages" }
+, "ClearStagesSnackbar": { "message": "清除 Gloria 的所有 Stages(一个用于缓存通知的内部组件)." }
+, "ClearStagesConfirm": { "message": "确定要清除所有 Stages 吗?" }
+, "ClearCaches": { "message": "清除 Caches" }
+, "ClearCachesSnackbar": { "message": "清除 Goria 的所有 Caches(一个用于缓存网络请求的内部组件)." }
+, "ClearCachesConfirm": { "message": "确定要清除所有 Caches 吗?" }
+, "Inside": { "message": "内部状态" }
+, "StartObserveStateChange": { "message": "开始观察内部状态变化" }
+, "StopObserveStateChange": { "message": "停止观察内部状态变化" }
+, "Source": { "message": "来源" }
+, "Edit": { "message": "编辑" }
+, "TriggerInterval": { "message": "触发间隔(分钟)" }
+, "Delete": { "message": "删除" }
+, "Editor": { "message": "编辑器" }
+, "TaskName": { "message": "任务名称" }
+, "InputTaskName": { "message": "输入一个任务名称" }
+, "TaskCode": { "message": "任务代码" }
+, "PasteYourFantasticCodeHere": { "message": "在此处粘贴超棒的任务代码" }
+, "Save": { "message": "保存" }
+, "DeleteTask": { "message": "删除任务" }
+, "DeleteTaskConfirm": { "message": "确定要删除这个任务?" }
+, "PasteYourCode": { "message": "粘贴代码"}
+, "Next": { "message": "下一步" }
+, "GiveItName": { "message": "起个好名字吧" }
+, "Back": { "message": "返回" }
+, "FinalConfiguration": { "message": "还差一点点配置" }
+, "InteractionRequired": { "message": "弹出的通知需要用户交互" }
+, "Finish": { "message": "完成" }
+, "Error": { "message": "错误" }
+, "NameAndCodeRequired": { "message": "任务名称和代码不能为空." }
+, "TriggerCount": {
+    "message": "触发 $count$"
+  , "placeholders": {
+      "count": { "content": "$1" }
+    }
+  }
+, "PushCount": {
+    "message": "推送 $count$"
+  , "placeholders": {
+      "count": { "content": "$1" }
+    }
+  }
+, "NounsTime": {
+    "message": "次"
+  , "description": "singular"
+  }
+, "NounsTimes": {
+    "message": "次"
+  , "description": "plural"
+  }
+, "NounsNotification": {
+    "message": "个通知"
+  , "description": "singular"
+  }
+, "NounsNotifications": {
+    "message": "个通知"
+  , "description": "plural"
+  }
+, "TaskIntervalDescription": {
+    "message": "任务 $task_name$ 的触发间隔是 $trigger_interval$"
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    , "trigger_interval": { "content": "$2" }
+    }
+  }
+, "NounsMinute": {
+    "message": "分钟"
+  , "description": "singular"
+  }
+, "NounsMinutes": {
+    "message": "分钟"
+  , "description": "plural"
+  }
+}

@@ -5,14 +5,14 @@
       fullwidth
       raised
     >
-      <ui-tab icon="format_list_bulleted" header="Task">
+      <ui-tab icon="format_list_bulleted" :header="'Task' | i18n">
         <gloria-task-list :tasks="tasks"></gloria-task-list>
         <gloria-task-creator></gloria-task-creator>
       </ui-tab>
-      <ui-tab icon="history" header="History">
+      <ui-tab icon="history" :header="'History' | i18n">
         <gloria-notification-list :notifications="notifications"></gloria-notification-list>
       </ui-tab>
-      <ui-tab icon="settings" header="Advanced">
+      <ui-tab icon="settings" :header="'Advanced' | i18n">
         <gloria-debug></gloria-debug>
       </ui-tab>
     </ui-tabs>

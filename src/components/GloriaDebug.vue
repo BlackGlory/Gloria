@@ -2,7 +2,7 @@
   <div class="gloria-debug">
 
     <section>
-      <header>Import and Export</header>
+      <header>{{ 'ImportAndExport' | i18n }}</header>
       <article>
         <input
           v-el:import-file-chooser
@@ -12,24 +12,24 @@
           style="display: none"
           @change="handleFileChoose"
         />
-        <ui-button @click="importTasks">Import Tasks</ui-button>
+        <ui-button @click="importTasks">{{ 'ImportTasks' | i18n }}</ui-button>
         <a v-el:downloader download="tasks.json" style="display: none"></a>
-        <ui-button @click="exportTasks">Export Tasks</ui-button>
+        <ui-button @click="exportTasks">{{ 'ExportTasks' | i18n }}</ui-button>
       </article>
     </section>
 
     <section>
-      <header>Task code test</header>
+      <header>{{ 'TaskCodeTest' | i18n }}</header>
       <article>
         <ui-textbox
-          label="Test Code"
+          :label="'TestCode' | i18n"
           :multi-line="true"
           icon="code"
           name="code"
           :value.sync="testCode"
-          placeholder="Paste your test code here"
+          :placeholder="'PasteYourTestCodeHere' | i18n"
         ></ui-textbox>
-        <ui-button @click="evalTest">Test</ui-button>
+        <ui-button @click="evalTest">{{ 'Test' | i18n }}</ui-button>
         <ui-alert
             :dismissible="false"
             v-show="testError"
@@ -44,95 +44,119 @@
     </section>
 
     <section>
-      <header>Clear</header>
+      <header>{{ 'Clear' | i18n }}</header>
       <article>
         <section class="snackbar-item">
           <ui-snackbar
-            show persistent @action-clicked="showClearHistoryConfirm = true" action="Clear history" action-color="danger"
+            show
+            persistent
+            @action-clicked="showClearHistoryConfirm = true"
+            action="Clear history"
+            action-color="danger"
           >
-            This will clear all Gloria notifications history.
+            {{ 'ClearHistorySnackbar' | i18n }}
           </ui-snackbar>
 
           <ui-confirm
-            header="Clear history"
+            :header="'ClearHistory' | i18n"
             type="danger"
-            confirm-button-text="Clear"
-            confirm-button-icon="delete" deny-button-text="Cancel"
+            confirm-button-icon="delete"
+            :confirm-button-text="'Clear' | i18n"
+            :deny-button-text="'Cancel' | i18n"
             @confirmed="(clearHistory(), showClearHistoryConfirm = false)"
             @denied="showClearHistoryConfirm = false"
-            :show.sync="showClearHistoryConfirm" close-on-confirm
+            :show.sync="showClearHistoryConfirm"
+            close-on-confirm
           >
-          Are you sure you want to clear history?
+            {{ 'ClearHistoryConfirm' | i18n }}
           </ui-confirm>
         </section>
 
         <section class="snackbar-item">
           <ui-snackbar
-            show persistent @action-clicked="showClearTasksConfirm = true" action="Clear tasks" action-color="danger"
+            show
+            persistent
+            @action-clicked="showClearTasksConfirm = true"
+            :action="'ClearTasks' | i18n"
+            action-color="danger"
           >
-            This will clear all Gloria tasks.
+            {{ 'ClearTasksSnackbar' | i18n }}
           </ui-snackbar>
 
           <ui-confirm
-            header="Clear tasks"
+            :header="'ClearTasks' | i18n"
             type="danger"
-            confirm-button-text="Clear"
-            confirm-button-icon="delete" deny-button-text="Cancel"
+            :confirm-button-text="'Clear' | i18n"
+            :deny-button-text="'Cancel' | i18n"
+            confirm-button-icon="delete"
             @confirmed="(clearTasks(), showClearTasksConfirm = false)"
             @denied="showClearTasksConfirm = false"
-            :show.sync="showClearTasksConfirm" close-on-confirm
+            :show.sync="showClearTasksConfirm"
+            close-on-confirm
           >
-          Are you sure you want to clear tasks?
+            {{ 'ClearTasksConfirm' | i18n }}
           </ui-confirm>
         </section>
 
         <section class="snackbar-item">
           <ui-snackbar
-            show persistent @action-clicked="showClearStagesConfirm = true" action="Clear stages" action-color="danger"
+            show
+            persistent
+            @action-clicked="showClearStagesConfirm = true"
+            :action="'ClearStages' | i18n"
+            action-color="danger"
           >
-            This will clear all Gloria stages(an internal component to cache notifications).
+            {{ 'ClearStagesSnackbar' | i18n }}
           </ui-snackbar>
 
           <ui-confirm
-            header="Clear stages"
+            :header="'ClearStages' | i18n"
             type="danger"
-            confirm-button-text="Clear"
-            confirm-button-icon="delete" deny-button-text="Cancel"
+            :confirm-button-text="'Clear' | i18n"
+            :deny-button-text="'Cancel' | i18n"
+            confirm-button-icon="delete"
             @confirmed="(clearStages(), showClearStagesConfirm = false)"
             @denied="showClearStagesConfirm = false"
-            :show.sync="showClearStagesConfirm" close-on-confirm
+            :show.sync="showClearStagesConfirm"
+            close-on-confirm
           >
-          Are you sure you want to clear stages?
+            {{ 'ClearStagesConfirm' | i18n }}
           </ui-confirm>
         </section>
 
         <section class="snackbar-item">
           <ui-snackbar
-            show persistent @action-clicked="showClearCachesConfirm = true" action="Clear caches" action-color="danger"
+            show
+            persistent
+            @action-clicked="showClearCachesConfirm = true"
+            :action="'ClearCaches' | i18n"
+            action-color="danger"
           >
-            This will clear all Gloria caches(an internal component to cache network requests).
+            {{ 'ClearCachesSnackbar' | i18n }}
           </ui-snackbar>
 
           <ui-confirm
-            header="Clear caches"
+            :header="'ClearCaches' | i18n"
             type="danger"
-            confirm-button-text="Clear"
-            confirm-button-icon="delete" deny-button-text="Cancel"
+            :confirm-button-text="'Clear' | i18n"
+            :deny-button-text="'Cancel' | i18n"
+            confirm-button-icon="delete"
             @confirmed="(clearCaches(), showClearCachesConfirm = false)"
             @denied="showClearCachesConfirm = false"
-            :show.sync="showClearCachesConfirm" close-on-confirm
+            :show.sync="showClearCachesConfirm"
+            close-on-confirm
           >
-          Are you sure you want to clear caches?
+            {{ 'ClearCachesConfirm' | i18n }}
           </ui-confirm>
         </section>
       </article>
     </section>
 
     <section>
-      <header>Inside</header>
+      <header>{{ 'Inside' | i18n }}</header>
       <article class="inside">
-        <ui-button @click="startObserveStateChange" v-show="!unsubscribe">Start observe state change</ui-button>
-        <ui-button @click="stopObserveStateChange" v-show="unsubscribe">Stop observe state change</ui-button>
+        <ui-button @click="startObserveStateChange" v-show="!unsubscribe">{{ 'StartObserveStateChange' | i18n }}</ui-button>
+        <ui-button @click="stopObserveStateChange" v-show="unsubscribe">{{ 'StopObserveStateChange' | i18n }}</ui-button>
         <div>{{{ state | json | n2br | nbsp }}}</div>
       </article>
     </section>

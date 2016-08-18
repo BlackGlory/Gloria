@@ -5,7 +5,7 @@
         <div class="row middle-xs">
           <div class="col-xs">
             <p><span>{{ name }}</span>
-            <p>Triggered {{ triggerCount }} {{ triggerCount | pluralize 'time' }}, Pushed {{ pushCount }} {{ pushCount | pluralize 'notification' }}</p>
+            <p>{{ 'TriggerCount' | i18n triggerCount }} {{ triggerCount | pluralize 'NounsTime' | i18n }}, {{ 'PushCount' | i18n pushCount }} {{ pushCount | pluralize 'NounsNotification' | i18n }}</p>
           </div>
           <div>
             <ui-switch :value.sync="isEnable"></ui-switch>
@@ -14,42 +14,44 @@
       </div>
       <div class="row middle-xs">
         <div class="col-xs">
-          <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
-          <p>Task {{ name }} will trigger every {{ triggerInterval }} {{ triggerInterval | pluralize 'minute' }}.</p>
-          <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
-          <p v-show="origin">Source: <a :href="origin" target="_blank">{{ origin }}</a></p>
+          <gloria-slider :value.sync="triggerInterval" :label="'TriggerInterval' | i18n" icon="event"></gloria-slider>
+          <p>{{ 'TaskIntervalDescription' | i18n name triggerInterval }} {{ triggerCount | pluralize 'NounsMinute' | i18n }}.</p>
+          <ui-checkbox v-el:need-interaction :value.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
+          <p v-show="origin">{{ 'Source' | i18n }}: <a :href="origin" target="_blank">{{ origin }}</a></p>
         </div>
         <div class="col-xs-3 end-xs">
-          <ui-icon-button @click="showEditDialog = true" icon="edit" type="flat" tooltip="Edit"></ui-icon-button>
-          <ui-icon-button @click="showDeleteConfirm = true" icon="delete" type="flat" tooltip="Delete"></ui-icon-button>
+          <ui-icon-button @click="showEditDialog = true" icon="edit" type="flat" :tooltip="'Edit' | i18n"></ui-icon-button>
+          <ui-icon-button @click="showDeleteConfirm = true" icon="delete" type="flat" :tooltip="'Delete' | i18n"></ui-icon-button>
         </div>
       </div>
     </ui-collapsible>
-    <ui-modal @opened="setEditDialog" @closed="setEditDialog" :show.sync="showEditDialog" header="Editor">
-      <ui-textbox name="editableName" :value.sync="editableName" label="Task Name" type="text" placeholder="Input a task name"></ui-textbox>
+    <ui-modal @opened="setEditDialog" @closed="setEditDialog" :show.sync="showEditDialog" :header="'Editor' | i18n">
+      <ui-textbox name="editableName" :value.sync="editableName" :label="'TaskName' | i18n" type="text" :placeholder="'InputTaskName' | i18n"></ui-textbox>
       <ui-textbox
-        label="Task Code"
+        :label="'TaskCode' | i18n"
         :multi-line="true"
         icon="code"
         name="editableCode"
         :value.sync="editableCode"
-        placeholder="Paste your fantastic code here"
+        :placeholder="'PasteYourFantasticCodeHere' | i18n"
       ></ui-textbox>
       <div slot="footer">
-        <ui-button @click="(editTask(), showEditDialog = false)" color="primary">Save</ui-button>
-        <ui-button @click="showEditDialog = false">Cancel</ui-button>
+        <ui-button @click="(updateTask(), showEditDialog = false)" color="primary">{{ 'Save' | i18n }}</ui-button>
+        <ui-button @click="showEditDialog = false">{{ 'Cancel' | i18n }}</ui-button>
       </div>
     </ui-modal>
     <ui-confirm
-      header="Delete task"
+      :header="'DeleteTask' | i18n"
       type="danger"
-      confirm-button-text="Delete"
-      confirm-button-icon="delete" deny-button-text="Cancel"
+      :confirm-button-text="'Delete' | i18n"
+      :deny-button-text="'Cancel' | i18n"
+      confirm-button-icon="delete"
       @confirmed="(removeTask(), showDeleteConfirm = false)"
       @denied="showDeleteConfirm = false"
-      :show.sync="showDeleteConfirm" close-on-confirm
+      :show.sync="showDeleteConfirm"
+      close-on-confirm
     >
-    Are you sure you want to delete the task?
+      {{ 'DeleteTaskConfirm' | i18n }}
     </ui-confirm>
   </div>
 </template>
@@ -114,8 +116,6 @@ export
 @import '~keen-ui/src/styles/md-colors'
 
 .gloria-task
-  // color: $md-white
-  // background: $md-blue-600
   background: $md-grey-300
 
   .ui-switch
@@ -126,13 +126,7 @@ export
   }
 
   .ui-collapsible-header
-    // color: $md-white
-    // background: $md-blue
     height: auto
-
-    &:hover:not(.disabled)
-    body[modality="keyboard"] &:focus
-      // background-color: $md-blue-400
 
   .ui-collapsible-header-content
     width: 100%

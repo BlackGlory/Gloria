@@ -1,37 +1,37 @@
 <template>
   <div class="gloria-task-creator">
     <gloria-fab type="mini" @click="showNewDialogCode = true" color="primary" icon="add"></gloria-fab>
-    <ui-modal :show.sync="showNewDialogCode" header="Paste your code" :backdrop-dismissible="false">
+    <ui-modal :show.sync="showNewDialogCode" :header="'PasteYourCode' | i18n" :backdrop-dismissible="false">
       <ui-textbox
-        label="Task Code"
+        :label="'TaskCode' | i18n"
         :multi-line="true"
         icon="code"
         name="code"
         :value.sync="code"
-        placeholder="Paste your fantastic code here"
+        :placeholder="'PasteYourFantasticCodeHere' | i18n"
       ></ui-textbox>
       <div slot="footer">
-        <ui-button @click="switchDialog('showNewDialogCode', 'showNewDialogName')" color="primary">Next</ui-button>
-        <ui-button @click="showNewDialogCode = false">Cancel</ui-button>
+        <ui-button @click="switchDialog('showNewDialogCode', 'showNewDialogName')" color="primary">{{ 'Next' | i18n }}</ui-button>
+        <ui-button @click="showNewDialogCode = false">{{ 'Cancel' | i18n }}</ui-button>
       </div>
     </ui-modal>
-    <ui-modal :show.sync="showNewDialogName" header="Give it a good name" :backdrop-dismissible="false">
-      <ui-textbox name="name" :value.sync="name" label="Task Name" type="text" placeholder="Input a task name"></ui-textbox>
+    <ui-modal :show.sync="showNewDialogName" :header="'GiveItName' | i18n" :backdrop-dismissible="false">
+      <ui-textbox name="name" :value.sync="name" :label="'TaskName' | i18n" type="text" :placeholder="'InputTaskName' | i18n"></ui-textbox>
       <div slot="footer">
-        <ui-button @click="switchDialog('showNewDialogName', 'showNewDialogConfig')" color="primary">Next</ui-button>
-        <ui-button @click="switchDialog('showNewDialogName', 'showNewDialogCode')">Back</ui-button>
+        <ui-button @click="switchDialog('showNewDialogName', 'showNewDialogConfig')" color="primary">{{ 'Next' | i18n }}</ui-button>
+        <ui-button @click="switchDialog('showNewDialogName', 'showNewDialogCode')">{{ 'Back' | i18n }}</ui-button>
       </div>
     </ui-modal>
-    <ui-modal :show.sync="showNewDialogConfig" header="Finally some configuration" :backdrop-dismissible="false">
-      <gloria-slider :value.sync="triggerInterval" label="Trigger interval(minutes)" icon="event"></gloria-slider>
-      <p>Task {{ name }} will trigger every {{ triggerInterval }} {{ triggerInterval | pluralize 'minute' }}.</p>
-      <ui-checkbox v-el:need-interaction :value.sync="needInteraction">Notice need an interaction</ui-checkbox>
+    <ui-modal :show.sync="showNewDialogConfig" :header="'FinalConfiguration' | i18n" :backdrop-dismissible="false">
+      <gloria-slider :value.sync="triggerInterval" :label="'TriggerInterval' | i18n" icon="event"></gloria-slider>
+      <p>{{ 'TaskIntervalDescription' | i18n name triggerInterval }} {{ triggerCount | pluralize 'NounsMinute' | i18n }}.</p>
+      <ui-checkbox v-el:need-interaction :value.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
       <div slot="footer">
-        <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">Finish</ui-button>
-        <ui-button @click="switchDialog('showNewDialogConfig', 'showNewDialogName')">Back</ui-button>
+        <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">{{ 'Finish' | i18n }}</ui-button>
+        <ui-button @click="switchDialog('showNewDialogConfig', 'showNewDialogName')">{{ 'Back' | i18n }}</ui-button>
       </div>
     </ui-modal>
-    <ui-modal :show.sync="showErrorDialog" header="Error">
+    <ui-modal :show.sync="showErrorDialog" :header="'Error' | i18n">
       {{ error }}
     </ui-modal>
   </div>
@@ -78,7 +78,7 @@ export
         @$data.trigger-interval = 5
         @$data.need-interaction = false
       else
-        @$data.error = 'Name, code cannot be empty.'
+        @$data.error = chrome.i18n.get-message 'NameAndCodeRequired'
         @$data.show-error-dialog = true
 </script>
 

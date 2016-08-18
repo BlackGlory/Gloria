@@ -1,0 +1,124 @@
+{
+  "AppDesc": { "message": "A programmable website notifications aggregator in Chrome." }
+, "ActionTitle": { "message": "Gloria options" }
+, "ExtensionInstalledTitle": { "message": "Hello world!" }
+, "ExtensionInstalledMessage": {
+    "message": "Gloria $this_version$ Installed."
+  , "placeholders": {
+      "this_version": { "content": "$1" }
+    }
+  }
+, "ExtensionUpdatedTitle": { "message": "Excited!" }
+, "ExtensionUpdatedMessage": {
+    "message": "Gloria updated from $previous_version$ to $this_version$!"
+  , "placeholders": {
+      "previous_version": { "content": "$1" }
+    , "this_version": { "content": "$2" }
+    }
+  }
+, "TaskInstalledTitle": { "message": "Excited!" }
+, "TaskInstalledMessage": {
+    "message": "New task $task_name$ installed."
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    }
+  }
+, "NotificationContextMessage": {
+    "message": "By $task_name$ $time$"
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    , "time": { "content": "$2" }
+    }
+  }
+, "History": { "message": "History" }
+, "Advanced": { "message": "Advanced" }
+, "Task": { "message": "Task" }
+, "ImportAndExport": { "message": "Import and Export" }
+, "ImportTasks": { "message": "Import Tasks" }
+, "ExportTasks": { "message": "Export Tasks" }
+, "TaskCodeTest": { "message": "Task code test" }
+, "TestCode": { "message": "Test Code" }
+, "PasteYourTestCodeHere": { "message": "Paste your test code here" }
+, "Test": { "message": "Test" }
+, "Clear": { "message": "Clear" }
+, "ClearHistory": { "message": "Clear history" }
+, "ClearHistorySnackbar": { "message": "This will clear all Gloria notifications history." }
+, "ClearHistoryConfirm": {"message": "Are you sure you want to clear history?"}
+, "Cancel": { "message": "Cancel" }
+, "ClearTasks": { "message": "Clear tasks" }
+, "ClearTasksSnackbar": { "message": "This will clear all Gloria tasks." }
+, "ClearTasksConfirm": { "message": "Are you sure you want to clear tasks?" }
+, "ClearStages": { "message": "Clear stages" }
+, "ClearStagesSnackbar": { "message": "This will clear all Gloria stages(an internal component to cache notifications)." }
+, "ClearStagesConfirm": { "message": "Are you sure you want to clear stages?" }
+, "ClearCaches": { "message": "Clear caches" }
+, "ClearCachesSnackbar": { "message": "This will clear all Gloria caches(an internal component to cache network requests)." }
+, "ClearCachesConfirm": { "message": "Are you sure you want to clear caches?" }
+, "Inside": { "message": "Inside" }
+, "StartObserveStateChange": { "message": "Start observe state change" }
+, "StopObserveStateChange": { "message": "Stop observe state change" }
+, "Source": { "message": "Source" }
+, "Edit": { "message": "Edit" }
+, "TriggerInterval": { "message": "Trigger interval(minutes)" }
+, "Delete": { "message": "Delete" }
+, "Editor": { "message": "Editor" }
+, "TaskName": { "message": "Task Name" }
+, "InputTaskName": { "message": "Input a task name" }
+, "TaskCode": { "message": "Task Code" }
+, "PasteYourFantasticCodeHere": { "message": "Paste your fantastic code here" }
+, "Save": { "message": "Save" }
+, "DeleteTask": { "message": "Delete task" }
+, "DeleteTaskConfirm": { "message": "Are you sure you want to delete the task?" }
+, "PasteYourCode": { "message": "Paste your code"}
+, "Next": { "message": "Next" }
+, "GiveItName": { "message": "Give it a good name" }
+, "Back": { "message": "Back" }
+, "FinalConfiguration": { "message": "Finally some configuration" }
+, "InteractionRequired": { "message": "Notice need an interaction" }
+, "Finish": { "message": "Finish" }
+, "Error": { "message": "Error" }
+, "NameAndCodeRequired": { "message": "Name, code cannot be empty." }
+, "TriggerCount": {
+    "message": "Trigged $count$"
+  , "placeholders": {
+      "count": { "content": "$1" }
+    }
+  }
+, "PushCount": {
+    "message": "Pushed $count$"
+  , "placeholders": {
+      "count": { "content": "$1" }
+    }
+  }
+, "NounsTime": {
+    "message": "time"
+  , "description": "singular"
+  }
+, "NounsTimes": {
+    "message": "times"
+  , "description": "plural"
+  }
+, "NounsNotification": {
+    "message": "notification"
+  , "description": "singular"
+  }
+, "NounsNotifications": {
+    "message": "notifications"
+  , "description": "plural"
+  }
+, "TaskIntervalDescription": {
+    "message": "Task $task_name$ will trigger every $trigger_interval$"
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    , "trigger_interval": { "content": "$2" }
+    }
+  }
+, "NounsMinute": {
+    "message": "minute"
+  , "description": "singular"
+  }
+, "NounsMinutes": {
+    "message": "minutes"
+  , "description": "plural"
+  }
+}
