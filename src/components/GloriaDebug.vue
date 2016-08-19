@@ -47,15 +47,7 @@
       <header>{{ 'Clear' | i18n }}</header>
       <article>
         <section class="snackbar-item">
-          <ui-snackbar
-            show
-            persistent
-            @action-clicked="showClearHistoryConfirm = true"
-            action="Clear history"
-            action-color="danger"
-          >
-            {{ 'ClearHistorySnackbar' | i18n }}
-          </ui-snackbar>
+          <ui-button @click="showClearHistoryConfirm = true">{{ 'ClearHistorySnackbar' | i18n }}</ui-button>
 
           <ui-confirm
             :header="'ClearHistory' | i18n"
@@ -73,15 +65,7 @@
         </section>
 
         <section class="snackbar-item">
-          <ui-snackbar
-            show
-            persistent
-            @action-clicked="showClearTasksConfirm = true"
-            :action="'ClearTasks' | i18n"
-            action-color="danger"
-          >
-            {{ 'ClearTasksSnackbar' | i18n }}
-          </ui-snackbar>
+          <ui-button @click="showClearTasksConfirm = true">{{ 'ClearTasksSnackbar' | i18n }}</ui-button>
 
           <ui-confirm
             :header="'ClearTasks' | i18n"
@@ -99,15 +83,7 @@
         </section>
 
         <section class="snackbar-item">
-          <ui-snackbar
-            show
-            persistent
-            @action-clicked="showClearStagesConfirm = true"
-            :action="'ClearStages' | i18n"
-            action-color="danger"
-          >
-            {{ 'ClearStagesSnackbar' | i18n }}
-          </ui-snackbar>
+          <ui-button @click="showClearStagesConfirm = true">{{ 'ClearStagesSnackbar' | i18n }}</ui-button>
 
           <ui-confirm
             :header="'ClearStages' | i18n"
@@ -125,15 +101,7 @@
         </section>
 
         <section class="snackbar-item">
-          <ui-snackbar
-            show
-            persistent
-            @action-clicked="showClearCachesConfirm = true"
-            :action="'ClearCaches' | i18n"
-            action-color="danger"
-          >
-            {{ 'ClearCachesSnackbar' | i18n }}
-          </ui-snackbar>
+          <ui-button @click="showClearCachesConfirm = true">{{ 'ClearCachesSnackbar' | i18n }}</ui-button>
 
           <ui-confirm
             :header="'ClearCaches' | i18n"
@@ -157,7 +125,7 @@
       <article class="inside">
         <ui-button @click="startObserveStateChange" v-show="!unsubscribe">{{ 'StartObserveStateChange' | i18n }}</ui-button>
         <ui-button @click="stopObserveStateChange" v-show="unsubscribe">{{ 'StopObserveStateChange' | i18n }}</ui-button>
-        <div>{{{ state | json | n2br | nbsp }}}</div>
+        <div class="state">{{{ state | json | n2br | nbsp }}}</div>
       </article>
     </section>
   </div>
@@ -263,13 +231,18 @@ export
   .ui-textbox-textarea
     min-height: 200px
 
-  .snackbar-item
+  .snackbar-item:not(:last-child)
     width: 100%
-    margin: 8px
+    margin-bottom: 8px
 
   .ui-alert
     margin-top: 8px
 
   .inside
     word-break: break-all
+
+    .state
+      margin-top: 8px
+      border: 1px solid $md-grey-300
+      padding: 8px
 </style>

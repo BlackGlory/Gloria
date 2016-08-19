@@ -40,20 +40,20 @@
 , "TestCode": { "message": "測試代碼" }
 , "PasteYourTestCodeHere": { "message": "在此處粘貼測試代碼" }
 , "Test": { "message": "測試" }
-, "Clear": { "message": "清除" }
-, "ClearHistory": { "message": "清除歷史記錄" }
-, "ClearHistorySnackbar": { "message": "清除 Gloria 的所有歷史記錄." }
-, "ClearHistoryConfirm": {"message": "確定要清除所有歷史記錄嗎?"}
+, "Clear": { "message": "清理" }
+, "ClearHistory": { "message": "清理歷史記錄" }
+, "ClearHistorySnackbar": { "message": "清理所有歷史記錄" }
+, "ClearHistoryConfirm": {"message": "確定要清理所有歷史記錄嗎?"}
 , "Cancel": { "message": "取消" }
-, "ClearTasks": { "message": "清除任務" }
-, "ClearTasksSnackbar": { "message": "清除 Gloria 的所有任務." }
-, "ClearTasksConfirm": { "message": "確定要清除所有任務嗎?" }
-, "ClearStages": { "message": "清除 Stages" }
-, "ClearStagesSnackbar": { "message": "清除 Gloria 的所有 Stages(一個用於緩存通知的內部組件)." }
-, "ClearStagesConfirm": { "message": "確定要清除所有 Stages 嗎?" }
-, "ClearCaches": { "message": "清除 Caches" }
-, "ClearCachesSnackbar": { "message": "清除 Goria 的所有 Caches(一個用於緩存網絡請求的內部組件)." }
-, "ClearCachesConfirm": { "message": "確定要清除所有 Caches 嗎?" }
+, "ClearTasks": { "message": "清理任務" }
+, "ClearTasksSnackbar": { "message": "清理所有任務" }
+, "ClearTasksConfirm": { "message": "確定要清理所有任務嗎?" }
+, "ClearStages": { "message": "清理 Stages" }
+, "ClearStagesSnackbar": { "message": "清理所有 Stages(一個用於緩存通知的內部組件)" }
+, "ClearStagesConfirm": { "message": "確定要清理所有 Stages 嗎?" }
+, "ClearCaches": { "message": "清理 Caches" }
+, "ClearCachesSnackbar": { "message": "清理所有 Caches(一個用於緩存網絡請求的內部組件)" }
+, "ClearCachesConfirm": { "message": "確定要清理所有 Caches 嗎?" }
 , "Inside": { "message": "內部狀態" }
 , "StartObserveStateChange": { "message": "開始觀察內部狀態變化" }
 , "StopObserveStateChange": { "message": "停止觀察內部狀態變化" }
@@ -121,4 +121,10 @@
     "message": "分鐘"
   , "description": "plural"
   }
+, "EmptyHistoryDescription": { "message": "還沒有通知被推送到這裡" }
+, "EmptyTaskListDescription": { "message": "任務列表現在是空的, 接下來你可以" }
+, "InstallTask​​From": { "message": "從 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安裝一個網友分享的任務" }
+, "Or": { "message": "或者" }
+, "CreateTask": { "message": "創建任務" }
+, "DocumentDescription": { "message": "願這份 <a href=\"https://docs.gloria.pub\" target=\"_blank\">開發文檔</a> 指引你" }
 }

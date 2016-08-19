@@ -42,17 +42,17 @@
 , "Test": { "message": "Test" }
 , "Clear": { "message": "Clear" }
 , "ClearHistory": { "message": "Clear history" }
-, "ClearHistorySnackbar": { "message": "This will clear all Gloria notifications history." }
+, "ClearHistorySnackbar": { "message": "This will clear all Gloria notifications history" }
 , "ClearHistoryConfirm": {"message": "Are you sure you want to clear history?"}
 , "Cancel": { "message": "Cancel" }
 , "ClearTasks": { "message": "Clear tasks" }
-, "ClearTasksSnackbar": { "message": "This will clear all Gloria tasks." }
+, "ClearTasksSnackbar": { "message": "This will clear all Gloria tasks" }
 , "ClearTasksConfirm": { "message": "Are you sure you want to clear tasks?" }
 , "ClearStages": { "message": "Clear stages" }
-, "ClearStagesSnackbar": { "message": "This will clear all Gloria stages(an internal component to cache notifications)." }
+, "ClearStagesSnackbar": { "message": "This will clear all Gloria stages(an internal component to cache notifications)" }
 , "ClearStagesConfirm": { "message": "Are you sure you want to clear stages?" }
 , "ClearCaches": { "message": "Clear caches" }
-, "ClearCachesSnackbar": { "message": "This will clear all Gloria caches(an internal component to cache network requests)." }
+, "ClearCachesSnackbar": { "message": "This will clear all Gloria caches(an internal component to cache network requests)" }
 , "ClearCachesConfirm": { "message": "Are you sure you want to clear caches?" }
 , "Inside": { "message": "Inside" }
 , "StartObserveStateChange": { "message": "Start observe state change" }
@@ -121,4 +121,10 @@
     "message": "minutes"
   , "description": "plural"
   }
+, "EmptyHistoryDescription": { "message": "No notification is pushed to here" }
+, "EmptyTaskListDescription": { "message": "Your task list is empty, you can:" }
+, "InstallTaskFrom": { "message": "Install a task from <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a>" }
+, "Or": { "message": "OR" }
+, "CreateTask": { "message": "Create a task" }
+, "DocumentDescription": { "message": "May the <a href=\"https://docs.gloria.pub\" target=\"_blank\">documents</a> guide your way" }
 }
