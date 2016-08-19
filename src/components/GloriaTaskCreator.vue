@@ -25,7 +25,7 @@
     <ui-modal :show.sync="showNewDialogConfig" :header="'FinalConfiguration' | i18n" :backdrop-dismissible="false">
       <gloria-slider :value.sync="triggerInterval" :label="'TriggerInterval' | i18n" icon="event"></gloria-slider>
       <p>{{ 'TaskIntervalDescription' | i18n name triggerInterval }} {{ triggerCount | pluralize 'NounsMinute' | i18n }}.</p>
-      <ui-checkbox v-el:need-interaction :value.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
+      <ui-checkbox v-el:need-interaction :model.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
       <div slot="footer">
         <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">{{ 'Finish' | i18n }}</ui-button>
         <ui-button @click="switchDialog('showNewDialogConfig', 'showNewDialogName')">{{ 'Back' | i18n }}</ui-button>

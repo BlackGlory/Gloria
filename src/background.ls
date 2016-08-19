@@ -183,8 +183,6 @@ function sync-stages redux-store
           if task
             each ((data) ->
               options = create-notification-options task, data
-              image-url
-              icon-url
               create-notification options
               lazy-actions.push creator.add-notification options
               lazy-actions.push creator.increase-push-count id

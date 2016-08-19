@@ -16,7 +16,7 @@
         <div class="col-xs">
           <gloria-slider :value.sync="triggerInterval" :label="'TriggerInterval' | i18n" icon="event"></gloria-slider>
           <p>{{ 'TaskIntervalDescription' | i18n name triggerInterval }} {{ triggerCount | pluralize 'NounsMinute' | i18n }}.</p>
-          <ui-checkbox v-el:need-interaction :value.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
+          <ui-checkbox v-el:need-interaction :model.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
           <p v-show="origin">{{ 'Source' | i18n }}: <a :href="origin" target="_blank">{{ origin }}</a></p>
         </div>
         <div class="col-xs-3 end-xs">
