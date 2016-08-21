@@ -1,6 +1,6 @@
 'use strict'
 
-require! 'prelude-ls': { unique-by }
+require! 'prelude-ls': { unique-by, reverse }
 require! 'node-uuid': uuid
 require! '../actions/types.ls': types
 
