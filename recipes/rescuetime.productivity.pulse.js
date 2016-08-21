@@ -11,6 +11,7 @@ Promise.all([
     title: `Current productivity pulse: ${productivityScore}`
   , message: `${Math.round((productivityScore - comparison) / comparison * 100)}% from ${comparisonLabel}`
   , iconUrl: 'https://www.rescuetime.com/assets/icons/clock-green.png'
+  , url: 'https://www.rescuetime.com/dashboard'
   }
 })
 .then(commit)
