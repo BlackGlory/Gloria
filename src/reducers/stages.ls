@@ -42,8 +42,6 @@ const actions-map =
               unread: true
             }
 
-        console.log new-stage, next-stage, old-stage, stage-obj
-
         stage-arr = [...new-stage, ...sort-by (.order), last obj-to-lists stage-obj]
         stage-arr.for-each (v) -> delete v.order
 
