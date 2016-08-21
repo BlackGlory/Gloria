@@ -9,7 +9,7 @@ const LIMITED = 100
 const actions-map =
   (types.commit-to-stage): (state, { id, next-stage }) ->
     function generate-key x
-      new MD5!.hex x.title + x.message
+      new MD5!.hex "#{x.title}#{x.message}"
 
     if state.find ((x) -> x.id is id)
       state.map (x) ->
@@ -41,6 +41,8 @@ const actions-map =
               ...v
               unread: true
             }
+
+        console.log new-stage, next-stage, old-stage, stage-obj
 
         stage-arr = [...new-stage, ...sort-by (.order), last obj-to-lists stage-obj]
         stage-arr.for-each (v) -> delete v.order

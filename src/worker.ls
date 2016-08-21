@@ -24,29 +24,24 @@ callable =
         self.post-message message
 
     function fetch url, options = headers: {}, ...args
-      new Promise (resolve, reject) !->
-        call-remote 'getCookies', url
-        .then (cookies) ->
-          data = cookie: cookies
-          data.cookie = options.headers['Cookie'] if options.headers['Cookie']
-          data.origin = options.headers['Origin'] if options.headers['Origin']
-          data.referer = options.headers['Referer'] if options.headers['Referer']
-          data
-        .then (data) !->
-          call-remote 'setSessionStorage', "request.inflate.#{url}", data
-        .then !->
-          options.headers['send-by'] = 'Gloria'
-          self.fetch url, options, ...args
-          .then resolve, reject
-        .catch reject
+      call-remote 'getCookies', url
+      .then (cookies) ->
+        data = cookie: cookies
+        data.cookie = options.headers['Cookie'] if options.headers['Cookie']
+        data.origin = options.headers['Origin'] if options.headers['Origin']
+        data.referer = options.headers['Referer'] if options.headers['Referer']
+        data
+      .then (data) !->
+        call-remote 'setSessionStorage', "request.inflate.#{url}", data
+      .then ->
+        options.headers['send-by'] = 'Gloria'
+        self.fetch url, options, ...args
 
     function import-scripts url
-      new Promise (resolve, reject) !->
-        call-remote 'importScripts', url
-        .then (script) !->
-          window = self
-          resolve eval.call window, script
-        .catch reject
+      call-remote 'importScripts', url
+      .then (script) ->
+        window = self
+        eval.call window, script
 
     new Promise (resolve, reject) !->
       function commit data

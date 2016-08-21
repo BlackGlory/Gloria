@@ -28,6 +28,7 @@ function create-task-timer task
 
       if not is-type 'Array' data-list
         data-list = [data-list]
+
       redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
     .catch (err) ->
       console.log err
@@ -114,7 +115,7 @@ chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response
       send-response { err }
     return true
   | 'clear-caches' =>
-    for key in window.session-storage
+    for key of window.session-storage
       if key.startsWith 'import-cripts.cache.'
         window.session-storage.remove-item key
 
@@ -161,7 +162,7 @@ function sync-stages redux-store
 
   function razor x
     if x.path
-      if (last x.path) in <[unread updatedAt createdAt]>
+      if (last x.path) in <[unread]>
         return false
     true
 
