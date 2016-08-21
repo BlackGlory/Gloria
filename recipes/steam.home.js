@@ -8,6 +8,7 @@ Promise.all([
     return {
       title: $(el).find('.blotter_author_block').text().trim().replace(/\s/g, '')
     , iconUrl: $(el).find('.playerAvatar img').attr('src')
+    , url: 'http://steamcommunity.com/my/home'
     }
   }).get().filter(x => !!x.title)
 })
