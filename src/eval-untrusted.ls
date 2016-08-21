@@ -8,8 +8,24 @@ function get-origin url
   (new URL url).origin
 
 export function inflated-request-headers details
-  name = "request.inflate.#{details.url}"
-  if window.session-storage[name]
+  if window.session-storage["request.id.#{details.request-id}"]
+    cookie-index = false
+    origin-index = false
+    referer-index = false
+
+    for i, header of details.request-headers
+      switch header.name
+      | 'Cookie' => cookie-index = i
+      | 'Origin' => origin-index = i
+      | 'Referer' => referer-index = i
+
+    data = JSON.parse window.session-storage["request.id.#{details.request-id}"]
+    details.request-headers.push name: 'Cookie', value: data.cookie ? '' unless cookie-index
+    details.request-headers.push name: 'Origin', value: data.origin ? get-origin details.url unless origin-index
+    details.request-headers.push name: 'Referer', value: data.referer ? details.url unless referer-index
+
+  else if window.session-storage["request.inflate.#{details.url}"]
+    window.session-storage["request.id.#{details.request-id}"] = window.session-storage["request.inflate.#{details.url}"]
     is-send-by-gloria = false
     cookie-index = false
     origin-index = false
@@ -23,7 +39,7 @@ export function inflated-request-headers details
       | 'Referer' => referer-index = i
 
     if is-send-by-gloria
-      data = JSON.parse window.session-storage[name]
+      data = JSON.parse window.session-storage["request.inflate.#{details.url}"]
       details.request-headers.push name: 'Cookie', value: data.cookie ? '' unless cookie-index
       details.request-headers.push name: 'Origin', value: data.origin ? get-origin details.url unless origin-index
       details.request-headers.push name: 'Referer', value: data.referer ? details.url unless referer-index
