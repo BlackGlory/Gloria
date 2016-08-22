@@ -11,6 +11,6 @@ Promise.all([
     , iconUrl: $(el).find('img.tab_item_cap_img').attr('src')
     , url: $(el).find('a.tab_item_overlay').attr('href')
     }
-  }).get().filter(x => !!x.title)
+  }).get()
 })
 .then(commit)
