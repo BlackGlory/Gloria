@@ -11,7 +11,7 @@ class NavigableNotificationsManager
 
       if target
         chrome.tabs.create { url: target }
-      
+
       chrome.notifications.clear id, (was-cleared) ~>
         if was-cleared
           @remove-target id

@@ -121,6 +121,19 @@
     </section>
 
     <section>
+      <header>{{ 'StorageQuotaUsage' | i18n }}</header>
+      <article class="quota">
+        <ui-progress-linear
+          :show="true"
+          type="determinate"
+          color="primary"
+          :value="bytesInUse / quotaBytes * 100"
+        ></ui-progress-linear>
+        Local Storage: {{ bytesInUse }} bytes / {{ quotaBytes }} bytes = {{ (bytesInUse / quotaBytes * 100).toFixed(2) }}%
+      </article>
+    </section>
+
+    <section>
       <header>{{ 'Inside' | i18n }}</header>
       <article class="inside">
         <ui-button @click="startObserveStateChange" v-show="!unsubscribe">{{ 'StartObserveStateChange' | i18n }}</ui-button>
@@ -149,6 +162,15 @@ export
     test-error: ''
     state: {}
     unsubscribe: null
+    bytesInUse: null
+    quotaBytes: chrome.storage.local.QUOTA_BYTES
+  ready: ->
+    chrome.storage.local.get-bytes-in-use (bytes-in-use) ~>
+      @$data.bytes-in-use = bytes-in-use
+
+    chrome.storage.on-changed.add-listener (callback) ~>
+      chrome.storage.local.get-bytes-in-use (bytes-in-use) ~>
+        @$data.bytes-in-use = bytes-in-use
   methods:
     handle-file-choose: ->
       chooser = @$els.import-file-chooser
@@ -167,9 +189,11 @@ export
           chooser.value = ''
 
         reader.readAsText file
+
     import-tasks: ->
       console.log @$els
       @$els.import-file-chooser.click!
+
     export-tasks: ->
       tasks = store.getState!.tasks.map (task) ->
         new-task = { ...task }
@@ -179,23 +203,30 @@ export
       downloader.href = URL.create-objectURL blob
       downloader.click!
       URL.revoke-objectURL blob
+
     start-observe-state-change: ->
       unless @$data.unsubscribe
         @$data.unsubscribe = store.subscribe ~>
           @$data.state = store.get-state!
+
     stop-observe-state-change: ->
       if @$data.unsubscribe
         @$data.unsubscribe!
         @$data.unsubscribe = null
+
     clear-history: ->
       store.dispatch creator.clear-all-notifications!
+
     clear-tasks: ->
       store.dispatch creator.clear-all-tasks!
       store.dispatch creator.clear-all-stages!
+
     clear-stages: ->
       store.dispatch creator.clear-all-stages!
+
     clear-caches: ->
       chrome.runtime.send-message { type: 'clear-caches' }
+
     eval-test: ->
       @$data.test-error = ''
       @$data.test-result = ''

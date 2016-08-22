@@ -127,4 +127,5 @@
 , "Or": { "message": "OR" }
 , "CreateTask": { "message": "Create a task" }
 , "DocumentDescription": { "message": "May the <a href=\"https://docs.gloria.pub\" target=\"_blank\">documents</a> guide your way" }
+, "StorageQuotaUsage": { "message": "Storage Quota Usage" }
 }

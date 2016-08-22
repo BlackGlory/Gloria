@@ -47,7 +47,12 @@ export
     margin: 0
 
   .col-xs > *
-    word-break: break-all;
+    display: -webkit-box
+    -webkit-box-orient: vertical
+    -webkit-line-clamp: 3
+    overflow: hidden
+    word-break: break-all
+    text-overflow: ellipsis
 
   .pointer
     cursor: pointer
@@ -55,5 +60,10 @@ export
   .image-url
     background-color: #000
     height: 230px
+
+    img
+      width: auto
+      max-height: 230px
+      max-width: 320px
 
 </style>

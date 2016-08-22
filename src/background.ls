@@ -65,7 +65,7 @@ chrome.runtime.on-installed.add-listener (details) ->
 
 chrome.runtime.on-message-external.add-listener (message, sender, send-response) ->
   switch message.type
-  | 'install' =>
+  | 'task.install' =>
     redux-store.dispatch creator.add-task do
       name: message.name
       code: message.code
@@ -78,7 +78,7 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
       message: chrome.i18n.get-message 'TaskInstalledMessage', message.name
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
-  | 'is-exist' =>
+  | 'task.is-exist' =>
     task = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
     if task.length > 0
       if task[0].code is message.code
@@ -87,12 +87,14 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
         send-response 'diff'
     else
       send-response false
-  | 'uninstall' =>
+  | 'task.uninstall' =>
     redux-store.dispatch creator.remove-task-by-origin message.origin
     send-response true
-  | 'update' =>
+  | 'task.update' =>
     redux-store.dispatch creator.update-task-by-origin message.origin, message
     send-response true
+  | 'extension.version' =>
+    send-response chrome.runtime.get-manifest!.version
 
 chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response) !->
   switch type
@@ -129,17 +131,16 @@ function create-notification-options task, data
     context-message: chrome.i18n.get-message 'NotificationContextMessage', [task.name, new Date!to-locale-time-string { hour: '2-digit', minute: '2-digit' }]
     require-interaction: task.need-interaction ? false # default
     image-url: undefined
-    items: undefined
-    progress: undefined
+    items: undefined # just deny
+    progress: undefined # just deny
     buttons: undefined # just deny
+    event-time: undefined # just deny
     is-clickable: !!data.url
     priority: 0 # ranges from -2 to 2, zero is default, keep default
   }
 
-  switch
-  | data.image-url => options <<< type: 'image', image-url: data.image-url.to-string!
-  | data.items => options <<< type: 'list', items: data.items
-  | data.progress => options <<< type: 'progress', progress: data.progress
+  if data.image-url
+    options <<< type: 'image', image-url: data.image-url.to-string!
 
   options.icon-url = 'assets/images/icon-128.png' unless options.icon-url?
   options.message = '' unless options.message?
