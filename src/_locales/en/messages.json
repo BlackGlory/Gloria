@@ -126,6 +126,6 @@
 , "InstallTaskFrom": { "message": "Install a task from <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a>" }
 , "Or": { "message": "OR" }
 , "CreateTask": { "message": "Create a task" }
-, "DocumentDescription": { "message": "May the <a href=\"https://docs.gloria.pub\" target=\"_blank\">documents</a> guide your way" }
+, "DocumentDescription": { "message": "May the <a href=\"http://docs.gloria.pub\" target=\"_blank\">documents</a> guide your way" }
 , "StorageQuotaUsage": { "message": "Storage Quota Usage" }
 }

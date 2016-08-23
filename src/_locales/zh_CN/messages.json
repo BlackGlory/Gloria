@@ -126,6 +126,6 @@
 , "InstallTaskFrom": { "message": "从 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安装一个网友分享的任务" }
 , "Or": { "message": "或者" }
 , "CreateTask": { "message": "创建任务" }
-, "DocumentDescription": { "message": "愿这份 <a href=\"https://docs.gloria.pub\" target=\"_blank\">开发文档</a> 指引你" }
+, "DocumentDescription": { "message": "愿这份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">开发文档</a> 指引你" }
 , "StorageQuotaUsage": { "message": "存储配额使用情况" }
 }

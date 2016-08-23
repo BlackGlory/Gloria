@@ -126,6 +126,6 @@
 , "InstallTask​​From": { "message": "從 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安裝一個網友分享的任務" }
 , "Or": { "message": "或者" }
 , "CreateTask": { "message": "創建任務" }
-, "DocumentDescription": { "message": "願這份 <a href=\"https://docs.gloria.pub\" target=\"_blank\">開發文檔</a> 指引你" }
+, "DocumentDescription": { "message": "願這份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">開發文檔</a> 指引你" }
 , "StorageQuotaUsage": { "message": "存儲配額使用情況" }
 }
