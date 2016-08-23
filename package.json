@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "build": "webpack",

@@ -271,6 +271,10 @@ chrome.web-request.on-before-send-headers.add-listener (details) ->
 , urls: ['<all_urls>']
 , ['blocking', 'requestHeaders']
 
+chrome.web-request.on-completed.add-listener (details) ->
+  window.session-storage.remove-item "request.id.#{details.request-id}"
+, urls: ['<all_urls>']
+
 const redux-store = create-store (enable-batching reducers), { tasks: [], notifications: [], stages: [] }, auto-rehydrate!
 
 sync persist-store redux-store, configure-sync!, ->

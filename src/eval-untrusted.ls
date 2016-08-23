@@ -26,7 +26,17 @@ export function inflated-request-headers details
     details.request-headers.push name: 'Referer', value: data.referer ? details.url unless referer-index
 
   else if window.session-storage["request.inflate.#{details.url}"]
-    window.session-storage["request.id.#{details.request-id}"] = window.session-storage["request.inflate.#{details.url}"]
+    try
+      window.session-storage["request.id.#{details.request-id}"] = window.session-storage["request.inflate.#{details.url}"]
+    catch e
+      if e.name is 'QuotaExceededError'
+        Object.keys(window.session-storage).for-each (key) ->
+          if key isnt "request.id.#{details.request-id}" and key isnt "request.inflate.#{details.url}"
+            window.session-storage.remove-item key
+        window.session-storage["request.id.#{details.request-id}"] = window.session-storage["request.inflate.#{details.url}"]
+      else
+        console.error e
+
     is-send-by-gloria = false
     cookie-index = false
     origin-index = false
@@ -74,7 +84,15 @@ export function eval-untrusted code
         resolve join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies
 
     set-session-storage: (name, data) ->
-      window.session-storage[name] = JSON.stringify data
+      try
+        window.session-storage[name] = JSON.stringify data
+      catch e
+        if e.name is 'QuotaExceededError'
+          window.session-storage.clear!
+          window.session-storage[name] = JSON.stringify data
+        else
+          console.error e
+
       Promise.resolve window.session-storage[name]
 
     import-scripts: (url) ->
@@ -96,7 +114,14 @@ export function eval-untrusted code
                 throw new Error res.status-text
             .then (.text!)
             .then (x) ->
-              window.session-storage[name] = x
+              try
+                window.session-storage[name] = x
+              catch e
+                if e.name is 'QuotaExceededError'
+                  window.session-storage.clear!
+                  window.session-storage[name] = x
+                else
+                  console.error e
               x
             .then resolve
             .catch ({ message, stack }) ->
