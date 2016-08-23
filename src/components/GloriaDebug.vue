@@ -268,6 +268,7 @@ export
 
   .ui-alert
     margin-top: 8px
+    word-break: break-all
 
   .inside
     word-break: break-all

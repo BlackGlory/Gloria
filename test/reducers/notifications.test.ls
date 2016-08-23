@@ -8,17 +8,17 @@ describe 'notifications reducer', (...) !->
     .to.eql []
 
   it 'should handle add-notification', ->
-    state = notifications [{ options: { message: i } } for i in [1 to 50]], do
+    state = notifications [{ options: { message: i } } for i in [1 to 100]], do
       type: types.add-notification
       options: { message: 'test' }
 
-    expect(state.length).to.be.equal(50)
+    expect(state.length).to.be.equal(100)
     expect(state[0]).to.be.an('object')
     expect(state[0].id).to.be.an('string')
     expect(state[0].options).to.eql { message: 'test' }
     expect(state[1].options).to.eql { message: 1 }
-    expect(state[49].options).to.eql { message: 49 }
-    expect(state[50]).to.equal undefined
+    expect(state[99].options).to.eql { message: 99 }
+    expect(state[100]).to.equal undefined
 
   it 'should handle clear-all-notifications', ->
     expect notifications [{ options: 'test' }], do

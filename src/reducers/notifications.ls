@@ -3,13 +3,15 @@
 require! 'node-uuid': uuid
 require! '../actions/types.ls': types
 
+const LIMITED = 100
+
 const actions-map =
   (types.add-notification): (state, { options }) ->
     result = [{ id: uuid.v4!, options }, ...state]
-    if result.length >= 50
-      result = result[0 til 50]
+    if result.length > LIMITED
+      result = result[0 til LIMITED]
     result
-    
+
   (types.clear-all-notifications): -> []
 
 module.exports = (state = [], action) ->

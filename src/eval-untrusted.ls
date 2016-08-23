@@ -3,6 +3,7 @@
 require! 'prelude-ls': { map, join }
 require! 'node-uuid': uuid
 require! 'worker!./worker.ls': EvalWorker
+require! 'raw!gloria-utils': gloria-utils
 
 function get-origin url
   (new URL url).origin
@@ -77,26 +78,29 @@ export function eval-untrusted code
       Promise.resolve window.session-storage[name]
 
     import-scripts: (url) ->
-      name = "import-scripts.cache.#{url}"
-      cache = window.session-storage[name]
-
-      if cache
-        Promise.resolve cache
+      if url is 'gloria-utils'
+        Promise.resolve gloria-utils
       else
-        new Promise (resolve, reject) !->
-          fetch url
-          .then (res) ->
-            if 200 <= res.status < 300
-              res
-            else
-              throw new Error res.status-text
-          .then (.text!)
-          .then (x) ->
-            window.session-storage[name] = x
-            x
-          .then resolve
-          .catch ({ message, stack }) ->
-            reject error: { message, stack }
+        name = "import-scripts.cache.#{url}"
+        cache = window.session-storage[name]
+
+        if cache
+          Promise.resolve cache
+        else
+          new Promise (resolve, reject) !->
+            fetch url
+            .then (res) ->
+              if 200 <= res.status < 300
+                res
+              else
+                throw new Error res.status-text
+            .then (.text!)
+            .then (x) ->
+              window.session-storage[name] = x
+              x
+            .then resolve
+            .catch ({ message, stack }) ->
+              reject error: { message, stack }
 
   eval-worker = new EvalWorker!
   call-remote = bind-call-remote eval-worker
