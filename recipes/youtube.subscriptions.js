@@ -1,8 +1,8 @@
 Promise.all([
-  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
+  importScripts('gloria-utils')
 , fetch('https://www.youtube.com/feed/subscriptions?flow=2').then(res => res.text())
 ])
-.then(([cheerio, html]) => {
+.then(([{ cheerio }, html]) => {
   let $ = cheerio.load(html)
   return $('.item-section').map((i, el) => {
     return {

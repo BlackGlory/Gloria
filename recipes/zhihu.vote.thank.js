@@ -1,12 +1,11 @@
 Promise.all([
-  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
+  importScripts('gloria-utils')
 , fetch('https://www.zhihu.com/noti7/stack/vote_thank?limit=10').then(res => res.json())
 ])
-.then(([cheerio, { msg }]) => {
+.then(([{ cheerio }, { msg }]) => {
   let $ = cheerio.load(msg)
-    , notifications = []
-  $('.zm-noti7-content-item').each((i, el) => {
-    let notification = {
+  return $('.zm-noti7-content-item').map((i, el) => {
+    return {
       iconUrl: 'https://pic1.zhimg.com/2e33f063f1bd9221df967219167b5de0_m.jpg'
     , message: $(el).text().trim().replace(/\n/g, '')
     , url: ((base, href) => {
@@ -20,7 +19,6 @@ Promise.all([
         return href
       })('http://www.zhihu.com', $(el).find('a.question_link, a.post-link').attr('href'))
     }
-    notifications.push(notification)
-  })
-  commit(notifications)
+  }).get()
 })
+.then(commit)

@@ -1,15 +1,14 @@
 Promise.all([
-  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
+  importScripts('gloria-utils')
 , fetch('http://www.xiami.com/notice/head').then(res => res.text())
 ])
-.then(([cheerio, body]) => {
+.then(([{ cheerio }, body]) => {
   let $ = cheerio.load(body)
-    , notifications = []
-  $('.content_block ul li:not(.fence):not(.read)').each((i, el) => {
+  return $('.content_block ul li:not(.fence):not(.read)').map((i, el) => {
     if (!$(el).find('a').attr('href')) {
       return
     }
-    notifications.push({
+    return {
       iconUrl: 'http://img.xiami.net/images/group_photo/logo/47/12940146_3.png'
     , message: $(el).text().trim()
     , url: ((base, href) => {
@@ -22,7 +21,7 @@ Promise.all([
         }
         return href
       })('http://www.xiami.com', $(el).find('a').attr('href'))
-    })
-  })
-  commit(notifications)
+    }
+  }).get().filter(x => !!x)
 })
+.then(commit)

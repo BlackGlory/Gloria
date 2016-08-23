@@ -1,8 +1,8 @@
 Promise.all([
-  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
+  importScripts('gloria-utils')
 , fetch('http://steamcn.com/forum.php?mod=forumdisplay&fid=271&filter=author&orderby=dateline').then(res => res.arrayBuffer())
 ])
-.then(([cheerio, html]) => {
+.then(([{ cheerio }, html]) => {
   html = new TextDecoder('gbk').decode(html)
   let $ = cheerio.load(html)
 

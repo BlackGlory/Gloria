@@ -1,8 +1,8 @@
 Promise.all([
-  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
+  importScripts('gloria-utils')
 , fetch('http://www.pixiv.net/bookmark_new_illust.php').then(res => res.text())
 ])
-.then(([cheerio, html]) => {
+.then(([{ cheerio }, html]) => {
   let $ = cheerio.load(html)
     , user_ids = $('.image-item').map((i, el) => $(el).find('[data-user_id]').attr('data-user_id')).get()
   return fetch(`http://www.pixiv.net/rpc/get_profile.php?user_ids=${user_ids.join(',')}`)

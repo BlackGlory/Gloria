@@ -1,8 +1,8 @@
 Promise.all([
-  importScripts('http://bundle.gloria.pub/cheerio-0.20.0-bundle.js')
+  importScripts('gloria-utils')
 , fetch('https://www.v2ex.com/go/jobs').then(res => res.text())
 ])
-.then(([cheerio, body]) => {
+.then(([{ cheerio }, body]) => {
   let $ = cheerio.load(body)
   return $('#TopicsNode .cell').map((i, el) => {
     return {
