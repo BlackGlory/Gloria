@@ -26,7 +26,7 @@ Promise.all([
         if (x.action === 'at_article_comment_level2') {
           return {
             title: `${x.publisher_user.name} @了您`
-          , message: underscoreString.stripTags(x.article_comment_level2.content)
+          , message: x.article_comment_level2.content
           , iconUrl: x.publisher_user.avatar
           , updateAt: x.update_time
           , url: `https://cowlevel.net/article/${x.article.id}`
@@ -79,8 +79,8 @@ Promise.all([
       })
   return [...comment, ...follow, ...vote].filter(x => !!x).map(x => {
     return Object.assign({}, x, {
-      title: x.title.trim()
-    , message: x.message.trim()
+      title: underscoreString.stripTags(x.title).trim()
+    , message: underscoreString.stripTags(x.message).trim()
     })
   })
 })
