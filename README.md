@@ -5,7 +5,7 @@
 A programmable website notifications aggregator in Chrome.
 
 * [Chrome Web Store](https://chrome.google.com/webstore/detail/gloria/cnelmenogjgobndnoddckekbojgginbn)
-* [Tasks share site](https://gloria.pub/)
+* [Tasks Sharing](https://gloria.pub/)
 * [Usage / Document](http://docs.gloria.pub/) (Chinese Version only, English Version WIP)
 
 ## Related Projects
