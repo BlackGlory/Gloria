@@ -1,16 +1,12 @@
 # Gloria [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/cnelmenogjgobndnoddckekbojgginbn.svg?maxAge=2592000)](https://chrome.google.com/webstore/detail/gloria/cnelmenogjgobndnoddckekbojgginbn) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/BlackGlory/Gloria/master/LICENSE)
 
-<p align="center">
-<a href="https://chrome.google.com/webstore/detail/gloria/cnelmenogjgobndnoddckekbojgginbn"><img src="https://raw.githubusercontent.com/BlackGlory/Gloria/master/src/assets/images/icon-128.png" /></a>
-</p>
+[![Gloria](https://raw.githubusercontent.com/BlackGlory/Gloria/master/src/assets/images/icon-128.png)](https://chrome.google.com/webstore/detail/gloria/cnelmenogjgobndnoddckekbojgginbn)
 
 A programmable website notifications aggregator in Chrome.
 
-[Chrome Web Store](https://chrome.google.com/webstore/detail/gloria/cnelmenogjgobndnoddckekbojgginbn)
-
-[Tasks Share Site](https://gloria.pub/)
-
-[Usage / Document](http://docs.gloria.pub/) (Chinese Version only, English Version WIP)
+* [Chrome Web Store](https://chrome.google.com/webstore/detail/gloria/cnelmenogjgobndnoddckekbojgginbn)
+* [Tasks share site](https://gloria.pub/)
+* [Usage / Document](http://docs.gloria.pub/) (Chinese Version only, English Version WIP)
 
 ## Related Projects
 
