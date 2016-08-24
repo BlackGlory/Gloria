@@ -1,7 +1,7 @@
 fetch('https://duoshuo.com/api/users/unreadNotifications.json')
 .then(res => res.json())
 .then(json => {
-  commit(json.response.map(x => {
+  return json.response.map(x => {
     return {
       message: x.content
     , url: ((content) => {
@@ -12,5 +12,6 @@ fetch('https://duoshuo.com/api/users/unreadNotifications.json')
         return undefined
       })(x.content)
     }
-  }))
+  })
 })
+.then(commit)

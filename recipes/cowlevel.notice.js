@@ -48,5 +48,6 @@ fetch('https://cowlevel.net/user/notify/check?is_detail=1')
           }
         }
       })
-  commit([...comment, ...follow, ...vote])
+  return [...comment, ...follow, ...vote]
 })
+.then(commit)
