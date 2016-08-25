@@ -128,4 +128,17 @@
 , "CreateTask": { "message": "創建任務" }
 , "DocumentDescription": { "message": "願這份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">開發文檔</a> 指引你" }
 , "StorageQuotaUsage": { "message": "存儲配額使用情況" }
+, "FindNewVersion": {
+    "message": "任務 $task_name$ 有新版本"
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    }
+  }
+, "Unsynchronized": { "message": "不再檢查此任務更新(切斷來源)" }
+, "GotoSource": { "message": "打開來源頁面手動更新" }
+, "AutoCheckContextMessage": { "message": "出於安全考慮, Gloria 不會自動更新任務代碼." }
+, "CutOffSource": { "message": "切斷與任務來源的聯繫" }
+, "CutOffSourceConfirm": { "message": "確定要切斷與任務來源的聯繫嗎?" }
+, "CutOff": { "message": "切斷" }
+, "Local": { "message": "本地" }
 }

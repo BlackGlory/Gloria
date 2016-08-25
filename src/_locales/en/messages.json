@@ -128,4 +128,17 @@
 , "CreateTask": { "message": "Create a task" }
 , "DocumentDescription": { "message": "May the <a href=\"http://docs.gloria.pub\" target=\"_blank\">documents</a> guide your way" }
 , "StorageQuotaUsage": { "message": "Storage Quota Usage" }
+, "FindNewVersion": {
+    "message": "Find a new version of $task_name$"
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    }
+  }
+, "Unsynchronized": { "message": "Never sync this task" }
+, "GotoSource": { "message": "Go to source and update manually" }
+, "AutoCheckContextMessage": { "message": "For security reasons, Gloria does not automatically update the code." }
+, "CutOffSource": { "message": "Cut off the link of source" }
+, "CutOffSourceConfirm": { "message": "Are you sure you want to cut off the link of source?" }
+, "CutOff": { "message": "Cut off" }
+, "Local": { "message": "Local" }
 }

@@ -128,4 +128,17 @@
 , "CreateTask": { "message": "创建任务" }
 , "DocumentDescription": { "message": "愿这份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">开发文档</a> 指引你" }
 , "StorageQuotaUsage": { "message": "存储配额使用情况" }
+, "FindNewVersion": {
+    "message": "任务 $task_name$ 有新版本"
+  , "placeholders": {
+      "task_name": { "content": "$1" }
+    }
+  }
+, "Unsynchronized": { "message": "不再检查此任务更新(切断来源)" }
+, "GotoSource": { "message": "打开来源页面手动更新" }
+, "AutoCheckContextMessage": { "message": "出于安全考虑, Gloria 不会自动更新任务代码." }
+, "CutOffSource": { "message": "切断与任务来源的联系" }
+, "CutOffSourceConfirm": { "message": "确定要切断与任务来源的联系吗?" }
+, "CutOff": { "message": "切断" }
+, "Local": { "message": "本地" }
 }
