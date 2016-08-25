@@ -50,6 +50,9 @@ export clear-all-tasks = ->
 export merge-tasks = (new-tasks)->
   { type: types.merge-tasks, new-tasks }
 
+export remove-origin = (id) ->
+  { type: types.remove-origin, id }
+
 # notifications
 
 export add-notification = (options) ->

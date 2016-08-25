@@ -13,6 +13,7 @@ const tasks =
   increase-push-count: Symbol \increase-push-count
   clear-all-tasks: Symbol \clear-all-tasks
   merge-tasks: Symbol \merge-tasks
+  remove-origin: Symbol \remove-origin
 
 const notifications =
   add-notification: Symbol \add-notification

@@ -191,7 +191,6 @@ export
         reader.readAsText file
 
     import-tasks: ->
-      console.log @$els
       @$els.import-file-chooser.click!
 
     export-tasks: ->

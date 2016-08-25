@@ -163,3 +163,15 @@ describe 'tasks reducer', (...) !->
       { id: '2', name: 'TestName2After' }
       { id: '3', name: 'TestName3' }
     ]
+
+  it 'should handle remove-origin', ->
+    expect tasks [
+      { id: '1', origin: 'TestOrigin' }
+      { id: '2', origin: 'TestOrigin' }
+    ], do
+      type: types.remove-origin
+      id: '2'
+    .to.eql [
+      { id: '1', origin: 'TestOrigin' }
+      { id: '2' }
+    ]

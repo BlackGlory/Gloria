@@ -1,6 +1,7 @@
 'use strict'
 
 require! 'node-uuid': uuid
+require! 'rx': Rx
 
 callable =
   eval: (code) ->
@@ -49,9 +50,13 @@ callable =
         self.close!
 
       try
-        do ->
+        result = do ->
           var callable, bind-call-remote, call-remote, self, close
           eval code
+        if Rx.helpers.is-promise result
+          result.catch ({ message, stack })->
+            reject { message, stack }
+            self.close!
       catch { message, stack }
         reject { message, stack }
         self.close!

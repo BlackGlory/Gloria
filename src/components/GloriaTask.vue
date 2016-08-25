@@ -17,14 +17,28 @@
           <gloria-slider :value.sync="triggerInterval" :label="'TriggerInterval' | i18n" icon="event"></gloria-slider>
           <p>{{ 'TaskIntervalDescription' | i18n name triggerInterval }} {{ triggerCount | pluralize 'NounsMinute' | i18n }}.</p>
           <ui-checkbox v-el:need-interaction :model.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
-          <p v-show="origin">{{ 'Source' | i18n }}: <a :href="origin" target="_blank">{{ origin }}</a></p>
+          <p>{{ 'Source' | i18n }}: <a v-show="origin" :href="origin" target="_blank">{{ origin }}</a><span v-show="!origin">{{ 'Local' | i18n }}</span></p>
         </div>
         <div class="col-xs-3 end-xs">
+          <ui-icon-button v-show="origin" @click="showRemoveOriginConfirm = true" icon="content_cut" type="flat" :tooltip="'CutOffSource' | i18n"></ui-icon-button>
           <ui-icon-button @click="showEditDialog = true" icon="edit" type="flat" :tooltip="'Edit' | i18n"></ui-icon-button>
-          <ui-icon-button @click="showDeleteConfirm = true" icon="delete" type="flat" :tooltip="'Delete' | i18n"></ui-icon-button>
+          <ui-icon-button @click="showDeleteConfirm = true" icon="delete_forever" type="flat" :tooltip="'Delete' | i18n"></ui-icon-button>
         </div>
       </div>
     </ui-collapsible>
+    <ui-confirm
+      :header="'CutOffSource' | i18n"
+      type="warning"
+      :confirm-button-text="'CutOff' | i18n"
+      :deny-button-text="'Cancel' | i18n"
+      confirm-button-icon="content_cut"
+      @confirmed="(removeOrigin(), showRemoveOriginConfirm = false)"
+      @denied="showRemoveOriginConfirm = false"
+      :show.sync="showRemoveOriginConfirm"
+      close-on-confirm
+    >
+      {{ 'CutOffSourceConfirm' | i18n }}
+    </ui-confirm>
     <ui-modal @opened="setEditDialog" @closed="setEditDialog" :show.sync="showEditDialog" :header="'Editor' | i18n">
       <ui-textbox name="editableName" :value.sync="editableName" :label="'TaskName' | i18n" type="text" :placeholder="'InputTaskName' | i18n"></ui-textbox>
       <ui-textbox
@@ -45,7 +59,7 @@
       type="danger"
       :confirm-button-text="'Delete' | i18n"
       :deny-button-text="'Cancel' | i18n"
-      confirm-button-icon="delete"
+      confirm-button-icon="delete_forever"
       @confirmed="(removeTask(), showDeleteConfirm = false)"
       @denied="showDeleteConfirm = false"
       :show.sync="showDeleteConfirm"
@@ -70,6 +84,7 @@ export
   }
   data: ->
     show-delete-confirm: false
+    show-remove-origin-confirm: false
     show-edit-dialog: false
     editable-name: ''
     editable-code: ''
@@ -82,6 +97,8 @@ export
     remove-task: ->
       store.dispatch creator.remove-task @id
       store.dispatch creator.clear-stage @id
+    remove-origin: ->
+      store.dispatch creator.remove-origin @id
   watch:
     trigger-interval: ->
       store.dispatch creator.set-trigger-interval @id, @trigger-interval

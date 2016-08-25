@@ -18,7 +18,7 @@ require! './NavigableNotificationsManager.ls': NavigableNotificationsManager
 alarms-manager = new IntervalAlarmsManager!
 notifications-manager = new NavigableNotificationsManager!
 
-function create-task-timer task
+function create-task-timer task, immediately = false
   function run
     redux-store.dispatch creator.increase-trigger-count task.id
     eval-untrusted task.code
@@ -31,10 +31,10 @@ function create-task-timer task
 
       redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
     .catch (err) ->
-      console.log err
+      console.error err
 
   alarms-manager.add task.id, task.trigger-interval, run
-  run!
+  run! if immediately
 
 function reset-task-timer task
   alarms-manager.remove task.id, ->
@@ -118,7 +118,7 @@ chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response
     return true
   | 'clear-caches' =>
     for key of window.session-storage
-      if key.startsWith 'import-cripts.cache.'
+      if key.starts-with 'import-cripts.cache.'
         window.session-storage.remove-item key
 
 function create-notification-options task, data
@@ -155,7 +155,6 @@ function create-notification-options task, data
 
 function sync-stages redux-store
   stages = redux-store.get-state!stages
-  lazy-actions = []
 
   stages-source = Rx.Observable.create (observer) ->
     redux-store.subscribe ->
@@ -167,10 +166,9 @@ function sync-stages redux-store
         return false
     true
 
-  function stop-lazy
+  function stop-lazy lazy-actions
     if not empty lazy-actions
       redux-store.dispatch batch-actions lazy-actions
-      lazy-actions := []
 
   function change-handler new-stages
     differences = diff stages, new-stages
@@ -179,6 +177,8 @@ function sync-stages redux-store
       stages := new-stages
 
       if not empty differences.filter razor
+        lazy-actions = []
+
         each (({ id, stage }) ->
           task = redux-store.get-state!tasks.find (.id is id)
 
@@ -189,10 +189,10 @@ function sync-stages redux-store
               lazy-actions.push creator.add-notification options
               lazy-actions.push creator.increase-push-count id
             ), filter (.unread), stage
-            lazy-actions.push creator.mark-stage-read id
+            redux-store.dispatch creator.mark-stage-read id
         ), new-stages
 
-        stop-lazy!
+        stop-lazy lazy-actions
 
   stages-source.subscribe change-handler, (err) -> console.log "Error: #{err}"
 
@@ -206,7 +206,7 @@ function sync-tasks redux-store
 
   function razor x
     if x.path
-      if (last x.path) in <[triggerCount pushCount]>
+      if (last x.path) in <[triggerCount pushCount origin]>
         return false
     true
 
@@ -218,22 +218,22 @@ function sync-tasks redux-store
 
   function new-handler task
     if task.is-enable
-      create-task-timer task
+      create-task-timer task, true
 
   function delete-handler task
     remove-task-timer task
     lazy-actions.push creator.clear-stage task.id
 
-  function stop-lazy
+  function stop-lazy lazy-actions
     if not empty lazy-actions
       redux-store.dispatch batch-actions lazy-actions
-      lazy-actions := []
 
   function change-handler new-tasks
     differences = diff tasks, new-tasks
 
     if differences
       tasks := new-tasks
+
       each ((x) ->
         switch x.kind
         | 'A' => # Array
@@ -243,11 +243,12 @@ function sync-tasks redux-store
             | 'D' => delete-handler x.lhs # Deleted
         | 'E' => edit-handler new-tasks[first x.path] # Edited
       ), filter razor, differences
-      stop-lazy!
+
+      stop-lazy lazy-actions
 
   tasks-source.subscribe change-handler, (err) -> console.log "Error: #{err}"
 
-  each ((task) -> create-task-timer task), filter (.is-enable), tasks
+  each ((task) -> create-task-timer task, true), filter (.is-enable), tasks
 
 chrome.web-request.on-before-send-headers.add-listener inflated-request-headers
 , urls: ['<all_urls>']
@@ -275,8 +276,38 @@ chrome.web-request.on-completed.add-listener (details) ->
   window.session-storage.remove-item "request.id.#{details.request-id}"
 , urls: ['<all_urls>']
 
+chrome.notifications.on-button-clicked.add-listener (notification-id, button-index) ->
+  try
+    { id, name, origin } = JSON.parse notification-id
+    if button-index is 0 # Go to source
+      chrome.tabs.create { url: origin }
+    else if button-index is 1 # Never sync
+      redux-store.dispatch creator.remove-origin id
+  catch e
+    console.error e
+  finally
+    chrome.notifications.clear notification-id
+
 const redux-store = create-store (enable-batching reducers), { tasks: [], notifications: [], stages: [] }, auto-rehydrate!
 
 sync persist-store redux-store, configure-sync!, ->
   sync-stages redux-store
   sync-tasks redux-store
+
+  alarms-manager.add 'autocheck-origin-update', 60, ->
+    remote-tasks = redux-store.get-state!tasks.filter (x) -> x.origin
+
+    remote-tasks.for-each (task) ->
+      if /:\/\/gloria.pub\/task\/([\w\d]+)/.test task.origin
+        [, remote-id] = /:\/\/gloria.pub\/task\/([\w\d]+)/.exec task.origin
+        fetch "https://api.gloria.pub/task/#{remote-id}"
+        .then (res) -> res.json!
+        .then ({ code }) ->
+          if code isnt task.code
+            chrome.notifications.create JSON.stringify({ id: task.id, name: task.name, origin: task.origin }), do
+              type: 'basic'
+              title: chrome.i18n.get-message 'FindNewVersion', [task.name]
+              message: chrome.i18n.get-message 'AutoCheckContextMessage'
+              icon-url: 'assets/images/icon-128.png'
+              require-interaction: true
+              buttons: [{ title: chrome.i18n.get-message 'GotoSource' }, { title: chrome.i18n.get-message 'Unsynchronized' }]

@@ -81,7 +81,7 @@ export function eval-untrusted code
     get-cookies: (url) ->
       new Promise (resolve, reject) !->
         cookies <-! chrome.cookies.get-all { url }
-        resolve join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies
+        resolve join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies || []
 
     set-session-storage: (name, data) ->
       try

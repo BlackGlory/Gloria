@@ -94,6 +94,12 @@ describe 'tasks action creator', (...) !->
       type: types.merge-tasks
       new-tasks: []
 
+  it 'should create remove-origin', ->
+    expect creator.remove-origin 'TestId'
+    .to.eql do
+      type: types.remove-origin
+      id: 'TestId'
+
 describe 'notifications action creator', (...) !->
   it 'should create add-notification', ->
     expect creator.add-notification {}

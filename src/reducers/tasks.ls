@@ -89,6 +89,13 @@ const actions-map =
     new-state = reverse new-state
     new-state
 
+  (types.remove-origin): (state, { id }) ->
+    state.map (x) ->
+      return x if x.id isnt id
+      result = { ...x }
+      delete result.origin
+      result
+
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]
   if reduce-fn then reduce-fn state, action else state
