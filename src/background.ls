@@ -44,24 +44,30 @@ function remove-task-timer task
   alarms-manager.remove task.id
 
 function create-notification options
-  window.session-storage["request.image.#{options.icon-url}"] = JSON.stringify referer: options.icon-url
-  window.session-storage["request.image.#{options.image-url}"] = JSON.stringify referer: options.image-url
+  if options.url
+    window.session-storage["request.image.#{options.icon-url}"] = JSON.stringify referer: options.url
+    window.session-storage["request.image.#{options.image-url}"] = JSON.stringify referer: options.url
+  else
+    window.session-storage["request.image.#{options.icon-url}"] = JSON.stringify referer: options.icon-url
+    window.session-storage["request.image.#{options.image-url}"] = JSON.stringify referer: options.image-url
   notifications-manager.add options
 
 chrome.runtime.on-installed.add-listener (details) ->
   this-version = chrome.runtime.get-manifest!.version
   if details.reason is 'install'
-    chrome.notifications.create do
+    chrome.notifications.create {
       title: chrome.i18n.get-message 'ExtensionInstalledTitle'
       message: chrome.i18n.get-message 'ExtensionInstalledMessage', this-version
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
+    }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
   else if details.reason is 'update' and details.previous-version isnt this-version
-    chrome.notifications.create do
+    chrome.notifications.create {
       title: chrome.i18n.get-message 'ExtensionUpdatedTitle'
       message: chrome.i18n.get-message 'ExtensionUpdatedMessage', [details.previous-version, this-version]
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
+    }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
 
 chrome.runtime.on-message-external.add-listener (message, sender, send-response) ->
   switch message.type
@@ -73,11 +79,12 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
       need-interaction: false
       origin: message.origin
     send-response true
-    chrome.notifications.create do
+    chrome.notifications.create {
       title: chrome.i18n.get-message 'TaskInstalledTitle'
       message: chrome.i18n.get-message 'TaskInstalledMessage', message.name
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
+    }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
   | 'task.is-exist' =>
     task = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
     if task.length > 0
@@ -156,9 +163,10 @@ function create-notification-options task, data
 function sync-stages redux-store
   stages = redux-store.get-state!stages
 
-  stages-source = Rx.Observable.create (observer) ->
+  stages-source = Rx.Observable.create((observer) ->
     redux-store.subscribe ->
       observer.on-next redux-store.get-state!stages
+  ).debounce(1000)
 
   function razor x
     if x.path
@@ -189,20 +197,21 @@ function sync-stages redux-store
               lazy-actions.push creator.add-notification options
               lazy-actions.push creator.increase-push-count id
             ), filter (.unread), stage
-            redux-store.dispatch creator.mark-stage-read id
+            lazy-actions.push creator.mark-stage-read id
         ), new-stages
 
         stop-lazy lazy-actions
 
-  stages-source.subscribe change-handler, (err) -> console.log "Error: #{err}"
+  stages-source.subscribe change-handler, (err) -> console.error err
 
 function sync-tasks redux-store
   tasks = redux-store.get-state!tasks
   lazy-actions = []
 
-  tasks-source = Rx.Observable.create (observer) ->
+  tasks-source = Rx.Observable.create((observer) ->
     redux-store.subscribe ->
       observer.on-next redux-store.get-state!tasks
+  ).debounce(1000)
 
   function razor x
     if x.path
@@ -246,7 +255,7 @@ function sync-tasks redux-store
 
       stop-lazy lazy-actions
 
-  tasks-source.subscribe change-handler, (err) -> console.log "Error: #{err}"
+  tasks-source.subscribe change-handler, (err) -> console.error err
 
   each ((task) -> create-task-timer task, true), filter (.is-enable), tasks
 
@@ -311,3 +320,4 @@ sync persist-store redux-store, configure-sync!, ->
               icon-url: 'assets/images/icon-128.png'
               require-interaction: true
               buttons: [{ title: chrome.i18n.get-message 'GotoSource' }, { title: chrome.i18n.get-message 'Unsynchronized' }]
+            , (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError

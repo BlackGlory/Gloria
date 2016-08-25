@@ -18,10 +18,10 @@ class IntervalAlarmsManager
     if period-in-minutes < 1
       period-in-minutes = 1
     @add-job "#{name}", job
-    chrome.alarms.create "#{name}", { period-in-minutes }
 
   remove: (name, callback) ->
     chrome.alarms.clear "#{name}", ~>
+      console.error chrome.runtime.lastError if chrome.runtime.lastError
       @remove-job "#{name}"
       callback?!
 

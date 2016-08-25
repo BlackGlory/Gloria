@@ -11,7 +11,7 @@ const actions-map =
     function generate-key x
       new MD5!.hex "#{x.title}#{x.message}"
 
-    if state.find ((x) -> x.id is id)
+    if state.find((x) -> x.id is id)
       state.map (x) ->
         return x if x.id isnt id
 

@@ -13,6 +13,7 @@ class NavigableNotificationsManager
         chrome.tabs.create { url: target }
 
       chrome.notifications.clear id, (was-cleared) ~>
+        console.error chrome.runtime.lastError if chrome.runtime.lastError
         if was-cleared
           @remove-target id
 
@@ -31,6 +32,8 @@ class NavigableNotificationsManager
           result[k] = v
 
       result
+
+    console.error chrome.runtime.lastError if chrome.runtime.lastError
 
     if options.url
       @add-target id, options.url
