@@ -2,7 +2,7 @@ Promise.all([
   importScripts('gloria-utils')
 , fetch('https://cowlevel.net/user/notify/check?is_detail=1').then(res => res.json())
 ])
-.then(([{ underscoreString }, json]) => {
+.then(([{ underscoreString: { stripTags } }, json]) => {
   let msg = json.data.msg
     , comment = msg.comment.map(x => {
         if (x.action === 'answer_question_followed') {
@@ -79,8 +79,8 @@ Promise.all([
       })
   return [...comment, ...follow, ...vote].filter(x => !!x).map(x => {
     return Object.assign({}, x, {
-      title: underscoreString.stripTags(x.title).trim()
-    , message: underscoreString.stripTags(x.message).trim()
+      title: stripTags(x.title).trim()
+    , message: stripTags(x.message).trim()
     })
   })
 })
