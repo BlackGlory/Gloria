@@ -1,6 +1,6 @@
 'use strict'
 
-require! 'prelude-ls': { sort-by, take, map, lists-to-obj, obj-to-lists, last }
+require! 'prelude-ls': { sort-by, take, map, lists-to-obj, obj-to-lists, last, each, filter, find }
 require! 'jshashes': { MD5 }
 require! '../actions/types.ls': types
 
@@ -11,8 +11,8 @@ const actions-map =
     function generate-key x
       new MD5!.hex "#{x.title}#{x.message}"
 
-    if state.find((x) -> x.id is id)
-      state.map (x) ->
+    if find ((x) -> x.id is id), state
+      return map ((x) ->
         return x if x.id isnt id
 
         old-stage = x.stage.map (v, i) ->
@@ -43,35 +43,39 @@ const actions-map =
             }
 
         stage-arr = [...new-stage, ...sort-by (.order), last obj-to-lists stage-obj]
-        stage-arr.for-each (v) -> delete v.order
+        each ((v) -> delete v.order), stage-arr
 
         if stage-arr.length > LIMITED
           stage-arr = take LIMITED, stage-arr
 
-        {
+        return {
           id
           stage: stage-arr
         }
+      ), state
     else
       if next-stage.length > LIMITED
         next-stage = take LIMITED, next-stage
 
-      [...state, {
+      stage = map ((x) ->
+        {
+          ...x
+          unread: false
+        }
+      ), next-stage
+
+      return [...state, {
         id
-        stage: next-stage.map (x) ->
-          {
-            ...x
-            unread: false
-          }
+        stage
       }]
 
   (types.clear-stage): (state, { id }) ->
-    state.filter (x) -> x.id isnt id
+    filter ((x) -> x.id isnt id), state
 
   (types.clear-all-stages): -> []
 
   (types.mark-stage-read): (state, { id }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
 
       {
@@ -82,6 +86,7 @@ const actions-map =
             unread: false
           }
       }
+    ), state
 
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]

@@ -1,6 +1,6 @@
 'use strict'
 
-require! 'prelude-ls': { unique-by, reverse }
+require! 'prelude-ls': { unique-by, reverse, map, filter }
 require! 'node-uuid': uuid
 require! '../actions/types.ls': types
 
@@ -19,67 +19,74 @@ const actions-map =
     }]
 
   (types.update-task): (state, { id, name, code }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
       {
         ...x
         name
         code
       }
+    ), state
 
   (types.update-task-by-origin): (state, { origin, code }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.origin isnt origin
       {
         ...x
         code
       }
+    ), state
 
   (types.remove-task): (state, { id }) ->
-    state.filter (x) -> x.id isnt id
+    filter ((x) -> x.id isnt id), state
 
   (types.remove-task-by-origin): (state, { origin }) ->
-    state.filter (x) -> x.origin isnt origin
+    filter ((x) -> x.origin isnt origin), state
 
   (types.set-trigger-interval): (state, { id, trigger-interval }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
       {
         ...x
         trigger-interval
       }
+    ), state
 
   (types.set-need-interaction): (state, { id, need-interaction }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
       {
         ...x
         need-interaction
       }
+    ), state
 
   (types.set-is-enable): (state, { id, is-enable }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
       {
         ...x
         is-enable
       }
+    ), state
 
   (types.increase-trigger-count): (state, { id }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
       {
         ...x
         trigger-count: x.trigger-count + 1
       }
+    ), state
 
   (types.increase-push-count): (state, { id }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
       {
         ...x
         push-count: x.push-count + 1
       }
+    ), state
 
   (types.clear-all-tasks): -> []
 
@@ -90,11 +97,12 @@ const actions-map =
     new-state
 
   (types.remove-origin): (state, { id }) ->
-    state.map (x) ->
+    map ((x) ->
       return x if x.id isnt id
       result = { ...x }
       delete result.origin
       result
+    ), state
 
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]

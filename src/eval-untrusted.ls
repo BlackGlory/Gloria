@@ -1,6 +1,6 @@
 'use strict'
 
-require! 'prelude-ls': { map, join }
+require! 'prelude-ls': { map, join, each }
 require! 'node-uuid': uuid
 require! 'worker!./worker.ls': EvalWorker
 require! 'raw!gloria-utils': gloria-utils
@@ -30,9 +30,10 @@ export function inflated-request-headers details
       window.session-storage["request.id.#{details.request-id}"] = window.session-storage["request.inflate.#{details.url}"]
     catch e
       if e.name is 'QuotaExceededError'
-        Object.keys(window.session-storage).for-each (key) ->
+        each ((key) ->
           if key isnt "request.id.#{details.request-id}" and key isnt "request.inflate.#{details.url}"
             window.session-storage.remove-item key
+        ), Object.keys window.session-storage
         window.session-storage["request.id.#{details.request-id}"] = window.session-storage["request.inflate.#{details.url}"]
       else
         console.error e

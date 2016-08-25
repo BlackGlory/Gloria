@@ -160,49 +160,45 @@ function create-notification-options task, data
 
   options
 
-function sync-stages redux-store
-  stages = redux-store.get-state!stages
+function check-origin-update redux-store
+  remote-tasks = redux-store.get-state!tasks.filter (x) -> x.origin
 
-  stages-source = Rx.Observable.create((observer) ->
-    redux-store.subscribe ->
-      observer.on-next redux-store.get-state!stages
-  ).debounce(1000)
+  each ((task) ->
+    if /:\/\/gloria.pub\/task\/([\w\d]+)/.test task.origin
+      [, remote-id] = /:\/\/gloria.pub\/task\/([\w\d]+)/.exec task.origin
+      fetch "https://api.gloria.pub/task/#{remote-id}"
+      .then (res) -> res.json!
+      .then ({ code }) ->
+        if code isnt task.code
+          chrome.notifications.create JSON.stringify({ id: task.id, name: task.name, origin: task.origin }), do
+            type: 'basic'
+            title: chrome.i18n.get-message 'FindNewVersion', [task.name]
+            message: chrome.i18n.get-message 'AutoCheckContextMessage'
+            icon-url: 'assets/images/icon-128.png'
+            require-interaction: true
+            buttons: [{ title: chrome.i18n.get-message 'GotoSource' }, { title: chrome.i18n.get-message 'Unsynchronized' }]
+          , (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
+  ), remote-tasks
 
-  function razor x
-    if x.path
-      if (last x.path) in <[unread]>
-        return false
-    true
+function check-stage redux-store
+  { tasks, stages } = redux-store.get-state!
 
-  function stop-lazy lazy-actions
-    if not empty lazy-actions
-      redux-store.dispatch batch-actions lazy-actions
+  lazy-actions = []
 
-  function change-handler new-stages
-    differences = diff stages, new-stages
+  each (({ id, stage }) ->
+    task = tasks.find (.id is id)
 
-    if differences
-      stages := new-stages
+    if task
+      each ((data) ->
+        options = create-notification-options task, data
+        create-notification options
+        lazy-actions.push creator.add-notification options
+        lazy-actions.push creator.increase-push-count id
+      ), filter (.unread), stage
+      lazy-actions.push creator.mark-stage-read id
+  ), stages
 
-      if not empty differences.filter razor
-        lazy-actions = []
-
-        each (({ id, stage }) ->
-          task = redux-store.get-state!tasks.find (.id is id)
-
-          if task
-            each ((data) ->
-              options = create-notification-options task, data
-              create-notification options
-              lazy-actions.push creator.add-notification options
-              lazy-actions.push creator.increase-push-count id
-            ), filter (.unread), stage
-            lazy-actions.push creator.mark-stage-read id
-        ), new-stages
-
-        stop-lazy lazy-actions
-
-  stages-source.subscribe change-handler, (err) -> console.error err
+  redux-store.dispatch batch-actions lazy-actions
 
 function sync-tasks redux-store
   tasks = redux-store.get-state!tasks
@@ -300,24 +296,8 @@ chrome.notifications.on-button-clicked.add-listener (notification-id, button-ind
 const redux-store = create-store (enable-batching reducers), { tasks: [], notifications: [], stages: [] }, auto-rehydrate!
 
 sync persist-store redux-store, configure-sync!, ->
-  sync-stages redux-store
   sync-tasks redux-store
-
-  alarms-manager.add 'autocheck-origin-update', 60, ->
-    remote-tasks = redux-store.get-state!tasks.filter (x) -> x.origin
-
-    remote-tasks.for-each (task) ->
-      if /:\/\/gloria.pub\/task\/([\w\d]+)/.test task.origin
-        [, remote-id] = /:\/\/gloria.pub\/task\/([\w\d]+)/.exec task.origin
-        fetch "https://api.gloria.pub/task/#{remote-id}"
-        .then (res) -> res.json!
-        .then ({ code }) ->
-          if code isnt task.code
-            chrome.notifications.create JSON.stringify({ id: task.id, name: task.name, origin: task.origin }), do
-              type: 'basic'
-              title: chrome.i18n.get-message 'FindNewVersion', [task.name]
-              message: chrome.i18n.get-message 'AutoCheckContextMessage'
-              icon-url: 'assets/images/icon-128.png'
-              require-interaction: true
-              buttons: [{ title: chrome.i18n.get-message 'GotoSource' }, { title: chrome.i18n.get-message 'Unsynchronized' }]
-            , (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
+  check-stage redux-store
+  check-origin-update redux-store
+  alarms-manager.add 'autocheck-stage', 1, -> check-stage redux-store
+  alarms-manager.add 'autocheck-origin-update', 60, -> check-origin-update redux-store

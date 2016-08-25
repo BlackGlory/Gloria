@@ -138,9 +138,8 @@ export
   .ui-switch
     z-index: 1
 
-  .ui-collapsible {
+  .ui-collapsible
     margin-bottom: inherit
-  }
 
   .ui-collapsible-header
     height: auto

@@ -149,6 +149,7 @@
 
 require! '../store.ls': store
 require! '../actions/creator.ls': creator
+require! 'prelude-ls': { each }
 
 export
   name: 'gloria-debug'
@@ -174,9 +175,7 @@ export
   methods:
     handle-file-choose: ->
       chooser = @$els.import-file-chooser
-      Array
-      .from(chooser.files)
-      .for-each (file) ->
+      each ((file) ->
         reader = new FileReader!
         reader.onload = (evt) ->
           new-tasks = []
@@ -189,6 +188,7 @@ export
           chooser.value = ''
 
         reader.readAsText file
+      ), chooser.files
 
     import-tasks: ->
       @$els.import-file-chooser.click!
