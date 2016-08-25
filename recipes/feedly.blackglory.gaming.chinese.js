@@ -7,7 +7,7 @@ fetch('https://feedly.com/v3/streams/contents?streamId=user%2Fa6bcdcfc-6fc2-4660
     , message: item.summary.content.replace(/(<([^>]+)>)/ig, '')
     , url: item.originId
     }
-    if (item.visual && item.visual.url) {
+    if (item.visual && item.visual.url && item.visual.url !== 'none') {
       notification.imageUrl = item.visual.url
     }
     return notification
