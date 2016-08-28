@@ -139,4 +139,7 @@ export function eval-untrusted code
       .catch (error) ->
         eval-worker.post-message id: id, type: 'error', error: error
 
+  eval-worker.add-event-listener 'error', (error) ->
+    console.error error
+
   call-remote 'eval', code

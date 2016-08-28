@@ -6,11 +6,15 @@ class NavigableNotificationsManager
     chrome.notifications.on-closed.add-listener (id) ~>
       @remove-target id
 
-    chrome.notifications.on-clicked.add-listener (id) ~>
+    chrome.notifications.on-clicked.add-listener (id) !~>
       target = @targets[id]
 
       if target
-        chrome.tabs.create { url: target }
+        chrome.tabs.query url: target, (tabs) ->
+          if tabs[0]
+            chrome.tabs.highlight window-id: tabs[0].windowId, tabs: tabs[0].index
+          else
+            chrome.tabs.create url: target
 
       chrome.notifications.clear id, (was-cleared) ~>
         console.error chrome.runtime.lastError if chrome.runtime.lastError

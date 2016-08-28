@@ -23,7 +23,7 @@
         </div>
       </ui-tab>
       <ui-tab icon="settings" :header="'Advanced' | i18n">
-        <gloria-debug></gloria-debug>
+        <gloria-debug :config="config"></gloria-debug>
       </ui-tab>
     </ui-tabs>
   </div>
@@ -53,6 +53,7 @@ export
   data: ->
     tasks: @$select 'tasks'
     notifications: @$select 'notifications'
+    config: @$select 'config'
 </script>
 
 <style lang="stylus">

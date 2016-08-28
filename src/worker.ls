@@ -66,3 +66,6 @@ self.add-event-listener 'message', ({ data: { id, type, function-name, function-
     callable[function-name](...function-arguments)
     .then (result) -> self.post-message id: id, type: 'return', function-result: result
     .catch (error) -> self.post-message id: id, type: 'error', error: error
+
+self.add-event-listener 'error', (error) ->
+  console.error error

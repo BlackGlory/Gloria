@@ -141,4 +141,7 @@
 , "CutOffSourceConfirm": { "message": "确定要切断与任务来源的联系吗?" }
 , "CutOff": { "message": "切断" }
 , "Local": { "message": "本地" }
+, "NotificationReducer": { "message": "通知 Reducer" }
+, "ReducerCode": { "message": "Reducer 代码" }
+, "PasteYourReducerCodeHere": { "message": "在此处粘贴 Reducer 代码" }
 }

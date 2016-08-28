@@ -74,3 +74,11 @@ export clear-all-stages = ->
 
 export mark-stage-read = (id) ->
   { type: types.mark-stage-read, id }
+
+# config
+
+export set-config = (name, value) ->
+  { type: types.set-config, name, value }
+
+export clear-all-configs = ->
+  { type: types.clear-all-configs }

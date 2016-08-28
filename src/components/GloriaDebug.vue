@@ -22,18 +22,18 @@
       <header>{{ 'TaskCodeTest' | i18n }}</header>
       <article>
         <ui-textbox
-          :label="'TestCode' | i18n"
-          :multi-line="true"
           icon="code"
           name="code"
+          :label="'TestCode' | i18n"
+          :multi-line="true"
           :value.sync="testCode"
           :placeholder="'PasteYourTestCodeHere' | i18n"
         ></ui-textbox>
         <ui-button @click="evalTest">{{ 'Test' | i18n }}</ui-button>
         <ui-alert
-            :dismissible="false"
-            v-show="testError"
-            type="error"
+          type="error"
+          :dismissible="false"
+          v-show="testError"
         >
           {{{ testError | n2br | nbsp }}}
         </ui-alert>
@@ -44,21 +44,36 @@
     </section>
 
     <section>
+      <header>{{ 'NotificationReducer' | i18n }}</header>
+      <article>
+        <ui-textbox
+          icon="code"
+          name="code"
+          :label="'ReducerCode' | i18n"
+          :multi-line="true"
+          :value.sync="notificationReducer"
+          :placeholder="'PasteYourReducerCodeHere' | i18n"
+        ></ui-textbox>
+        <ui-button @click="setNotificationReducer">{{ 'Save' | i18n }}</ui-button>
+      </article>
+    </section>
+
+    <section>
       <header>{{ 'Clear' | i18n }}</header>
       <article>
         <section class="snackbar-item">
           <ui-button @click="showClearHistoryConfirm = true">{{ 'ClearHistorySnackbar' | i18n }}</ui-button>
 
           <ui-confirm
-            :header="'ClearHistory' | i18n"
             type="danger"
             confirm-button-icon="delete"
+            close-on-confirm
+            :header="'ClearHistory' | i18n"
             :confirm-button-text="'Clear' | i18n"
             :deny-button-text="'Cancel' | i18n"
+            :show.sync="showClearHistoryConfirm"
             @confirmed="(clearHistory(), showClearHistoryConfirm = false)"
             @denied="showClearHistoryConfirm = false"
-            :show.sync="showClearHistoryConfirm"
-            close-on-confirm
           >
             {{ 'ClearHistoryConfirm' | i18n }}
           </ui-confirm>
@@ -68,15 +83,15 @@
           <ui-button @click="showClearTasksConfirm = true">{{ 'ClearTasksSnackbar' | i18n }}</ui-button>
 
           <ui-confirm
-            :header="'ClearTasks' | i18n"
             type="danger"
+            confirm-button-icon="delete"
+            close-on-confirm
+            :header="'ClearTasks' | i18n"
             :confirm-button-text="'Clear' | i18n"
             :deny-button-text="'Cancel' | i18n"
-            confirm-button-icon="delete"
+            :show.sync="showClearTasksConfirm"
             @confirmed="(clearTasks(), showClearTasksConfirm = false)"
             @denied="showClearTasksConfirm = false"
-            :show.sync="showClearTasksConfirm"
-            close-on-confirm
           >
             {{ 'ClearTasksConfirm' | i18n }}
           </ui-confirm>
@@ -86,15 +101,16 @@
           <ui-button @click="showClearStagesConfirm = true">{{ 'ClearStagesSnackbar' | i18n }}</ui-button>
 
           <ui-confirm
-            :header="'ClearStages' | i18n"
             type="danger"
+            confirm-button-icon="delete"
+            close-on-confirm
+            :header="'ClearStages' | i18n"
             :confirm-button-text="'Clear' | i18n"
             :deny-button-text="'Cancel' | i18n"
-            confirm-button-icon="delete"
+            :show.sync="showClearStagesConfirm"
             @confirmed="(clearStages(), showClearStagesConfirm = false)"
             @denied="showClearStagesConfirm = false"
-            :show.sync="showClearStagesConfirm"
-            close-on-confirm
+
           >
             {{ 'ClearStagesConfirm' | i18n }}
           </ui-confirm>
@@ -104,15 +120,15 @@
           <ui-button @click="showClearCachesConfirm = true">{{ 'ClearCachesSnackbar' | i18n }}</ui-button>
 
           <ui-confirm
-            :header="'ClearCaches' | i18n"
             type="danger"
+            confirm-button-icon="delete"
+            close-on-confirm
+            :header="'ClearCaches' | i18n"
             :confirm-button-text="'Clear' | i18n"
             :deny-button-text="'Cancel' | i18n"
-            confirm-button-icon="delete"
+            :show.sync="showClearCachesConfirm"
             @confirmed="(clearCaches(), showClearCachesConfirm = false)"
             @denied="showClearCachesConfirm = false"
-            :show.sync="showClearCachesConfirm"
-            close-on-confirm
           >
             {{ 'ClearCachesConfirm' | i18n }}
           </ui-confirm>
@@ -124,9 +140,9 @@
       <header>{{ 'StorageQuotaUsage' | i18n }}</header>
       <article class="quota">
         <ui-progress-linear
-          :show="true"
           type="determinate"
           color="primary"
+          :show="true"
           :value="bytesInUse / quotaBytes * 100"
         ></ui-progress-linear>
         Local Storage: {{ bytesInUse }} bytes / {{ quotaBytes }} bytes = {{ (bytesInUse / quotaBytes * 100).toFixed(2) }}%
@@ -161,10 +177,15 @@ export
     test-code: ''
     test-result: ''
     test-error: ''
+    notification-reducer: ''
     state: {}
     unsubscribe: null
     bytesInUse: null
     quotaBytes: chrome.storage.local.QUOTA_BYTES
+  props:
+    config:
+      type: Object
+      default: {}
   ready: ->
     chrome.storage.local.get-bytes-in-use (bytes-in-use) ~>
       @$data.bytes-in-use = bytes-in-use
@@ -172,6 +193,10 @@ export
     chrome.storage.on-changed.add-listener (callback) ~>
       chrome.storage.local.get-bytes-in-use (bytes-in-use) ~>
         @$data.bytes-in-use = bytes-in-use
+
+    @$watch 'config.NotificationReducer', ((val) ~>
+      @$data.notification-reducer = val
+    ), immediate: true
   methods:
     handle-file-choose: ->
       chooser = @$els.import-file-chooser
@@ -194,7 +219,7 @@ export
       @$els.import-file-chooser.click!
 
     export-tasks: ->
-      tasks = store.getState!.tasks.map (task) ->
+      tasks = store.get-state!tasks.map (task) ->
         new-task = { ...task }
         new-task
       blob = new Blob [JSON.stringify(tasks, null, 2)], { type: 'application/json' }
@@ -236,6 +261,9 @@ export
         else
           console.log result
           @$data.test-result = result
+
+    set-notification-reducer: ->
+      store.dispatch creator.set-config 'NotificationReducer', @$data.notification-reducer
 </script>
 
 <style lang="stylus">
