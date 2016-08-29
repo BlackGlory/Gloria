@@ -7,7 +7,7 @@ Promise.all([
   return items.map(item => {
     let notification = {
       title: item.title
-    , message: stripTags(item.summary.content).trim()
+    , message: stripTags((item.summary && item.summary.content) || item.content).trim()
     , url: item.originId
     }
     if (item.visual && item.visual.url && item.visual.url !== 'none') {
