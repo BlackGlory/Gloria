@@ -10,11 +10,16 @@ class NavigableNotificationsManager
       target = @targets[id]
 
       if target
-        chrome.tabs.query url: target, (tabs) ->
-          if tabs[0]
-            chrome.tabs.highlight window-id: tabs[0].windowId, tabs: tabs[0].index
-          else
-            chrome.tabs.create url: target
+        try
+          target = (new URL target).href
+        catch error
+          console.error error
+        finally
+          chrome.tabs.query url: target, (tabs) ->
+            if not chrome.runtime.lastError and tabs[0]
+              chrome.tabs.highlight window-id: tabs[0].windowId, tabs: tabs[0].index
+            else
+              chrome.tabs.create url: target
 
       chrome.notifications.clear id, (was-cleared) ~>
         console.error chrome.runtime.lastError if chrome.runtime.lastError
