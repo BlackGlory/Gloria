@@ -26,8 +26,19 @@ export
   name: 'gloria-notification'
   methods:
     open: ->
-      if @options.url
-        chrome.tabs.create { url: @options.url }
+      target = @options.url
+      if target
+        try
+          target = (new URL target).href
+        catch error
+          console.error error
+        finally
+          chrome.tabs.query url: target.replace(/^https?/, '*'), (tabs) ->
+            if not chrome.runtime.lastError and tabs[0]
+              chrome.tabs.highlight window-id: tabs[0].windowId, tabs: tabs[0].index
+            else
+              chrome.tabs.create url: target
+
   props:
     options:
       type: Object

@@ -15,7 +15,7 @@ class NavigableNotificationsManager
         catch error
           console.error error
         finally
-          chrome.tabs.query url: target, (tabs) ->
+          chrome.tabs.query url: target.replace(/^https?/, '*'), (tabs) ->
             if not chrome.runtime.lastError and tabs[0]
               chrome.tabs.highlight window-id: tabs[0].windowId, tabs: tabs[0].index
             else
