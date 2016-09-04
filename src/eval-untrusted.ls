@@ -16,8 +16,8 @@ export function inflated-request-headers details
 
     for i, header of details.request-headers
       switch header.name
-      | 'Cookie' => cookie-index = i
-      | 'Origin' => origin-index = i
+      | 'Cookie'  => cookie-index = i
+      | 'Origin'  => origin-index = i
       | 'Referer' => referer-index = i
 
     data = JSON.parse window.session-storage["request.id.#{details.request-id}"]
@@ -46,8 +46,8 @@ export function inflated-request-headers details
     for i, header of details.request-headers
       switch header.name
       | 'send-by' => is-send-by-gloria = true if header.value is 'Gloria'
-      | 'Cookie' => cookie-index = i
-      | 'Origin' => origin-index = i
+      | 'Cookie'  => cookie-index = i
+      | 'Origin'  => origin-index = i
       | 'Referer' => referer-index = i
 
     if is-send-by-gloria

@@ -17,6 +17,7 @@ require! './actions/creator.ls': creator
 require! './eval-untrusted.ls': { eval-untrusted, inflated-request-headers }
 require! './IntervalAlarmsManager.ls': IntervalAlarmsManager
 require! './NavigableNotificationsManager.ls': NavigableNotificationsManager
+require! './StateReconciler.ls': { state-reconciler }
 
 alarms-manager = new IntervalAlarmsManager!
 notifications-manager = new NavigableNotificationsManager!
@@ -120,9 +121,12 @@ function check-origin-update redux-store
   ), remote-tasks
 
 function check-stage redux-store
-  { tasks, stages } = redux-store.get-state!
+  { tasks, stages, config } = redux-store.get-state!
 
-  lazy-actions = []
+  lazy-actions = [creator.set-config 'LastActiveTime', new Date!toString!]
+  if config?['LastActiveTime']? and new Date! - new Date(config['LastActiveTime']) > 24h * 60m * 60s * 1000ms
+    console.log config.LastActiveTime
+    lazy-actions.push creator.clear-all-stages!
 
   each (({ id, stage }) ->
     task = tasks.find (.id is id)
@@ -182,12 +186,13 @@ function sync-tasks redux-store
 
       each ((x) ->
         switch x.kind
-        | 'A' => # Array
+        case 'A' # Array
           let x = x.item
             switch x.kind
             | 'N' => new-handler x.rhs # New
             | 'D' => delete-handler x.lhs # Deleted
-        | 'E' => edit-handler new-tasks[first x.path] # Edited
+        case 'E'
+          edit-handler new-tasks[first x.path] # Edited
       ), filter razor, differences
 
       stop-lazy lazy-actions
@@ -206,6 +211,7 @@ chrome.runtime.on-installed.add-listener (details) ->
       type: 'basic'
     }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
   else if details.reason is 'update' and details.previous-version isnt this-version
+    set-timeout (-> redux-store.dispatch creator.clear-all-stages!), 0
     chrome.notifications.create {
       title: chrome.i18n.get-message 'ExtensionUpdatedTitle'
       message: chrome.i18n.get-message 'ExtensionUpdatedMessage', [details.previous-version, this-version]
@@ -215,11 +221,11 @@ chrome.runtime.on-installed.add-listener (details) ->
 
 chrome.runtime.on-message-external.add-listener (message, sender, send-response) ->
   switch message.type
-  | 'task.install' =>
+  case 'task.install'
     redux-store.dispatch creator.add-task do
       name: message.name
       code: message.code
-      trigger-interval: 5
+      trigger-interval: 5m
       need-interaction: false
       origin: message.origin
     send-response true
@@ -229,7 +235,7 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
       icon-url: 'assets/images/icon-128.png'
       type: 'basic'
     }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
-  | 'task.is-exist' =>
+  case 'task.is-exist'
     task = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
     if task.length > 0
       if task[0].code is message.code
@@ -238,18 +244,18 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
         send-response 'diff'
     else
       send-response false
-  | 'task.uninstall' =>
+  case 'task.uninstall'
     redux-store.dispatch creator.remove-task-by-origin message.origin
     send-response true
-  | 'task.update' =>
+  case 'task.update'
     redux-store.dispatch creator.update-task-by-origin message.origin, message
     send-response true
-  | 'extension.version' =>
+  case 'extension.version'
     send-response chrome.runtime.get-manifest!.version
 
 chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response) !->
   switch type
-  | 'test-code' =>
+  case 'test-code'
     eval-untrusted message
     .then (result) ->
       console.log result
@@ -267,7 +273,7 @@ chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response
       console.log err
       send-response { err }
     return true
-  | 'clear-caches' =>
+  case 'clear-caches'
     for key of window.session-storage
       if key.starts-with 'import-cripts.cache.'
         window.session-storage.remove-item key
@@ -324,13 +330,13 @@ const redux-store = do ->
     stages: []
     config: {}
   if process.env.NODE_ENV is 'production'
-    create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware create-action-buffer REHYDRATE
+    create-store enable-batching(reducers), init-state, compose auto-rehydrate(config: { state-reconciler }), apply-middleware create-action-buffer REHYDRATE
   else
-    create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
+    create-store enable-batching(reducers), init-state, compose auto-rehydrate(config: { state-reconciler }), apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
 
 sync persist-store redux-store, configure-sync!, ->
   sync-tasks redux-store
   check-stage redux-store
   check-origin-update redux-store
-  alarms-manager.add 'autocheck-stage', 1, -> check-stage redux-store
-  alarms-manager.add 'autocheck-origin-update', 60, -> check-origin-update redux-store
+  alarms-manager.add 'autocheck-stage', 1m, -> check-stage redux-store
+  alarms-manager.add 'autocheck-origin-update', 60m, -> check-origin-update redux-store

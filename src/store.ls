@@ -9,6 +9,7 @@ require! 'redux-action-buffer': create-action-buffer
 require! 'redux-logger': create-logger
 require! 'browser-redux-sync': { configure-sync, sync }
 require! './reducers/index.ls': reducers
+require! './StateReconciler.ls': { state-reconciler }
 
 const logger = create-logger do
   duration: true
@@ -24,9 +25,9 @@ const redux-store = do ->
     stages: []
     config: {}
   if process.env.NODE_ENV is 'production'
-    create-store reducers, init-state, compose auto-rehydrate!, apply-middleware create-action-buffer REHYDRATE
+    create-store reducers, init-state, compose auto-rehydrate(config: { state-reconciler }), apply-middleware create-action-buffer REHYDRATE
   else
-    create-store reducers, init-state, compose auto-rehydrate!, apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
+    create-store reducers, init-state, compose auto-rehydrate(config: { state-reconciler }), apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
 
 persistor = persist-store redux-store, configure-sync!
 sync persistor

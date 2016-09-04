@@ -11,6 +11,6 @@ const actions-map =
 
   (types.clear-all-configs): -> {}
 
-module.exports = (state = [], action) ->
+module.exports = (state = {}, action) ->
   const reduce-fn = actions-map[action.type]
   if reduce-fn then reduce-fn state, action else state

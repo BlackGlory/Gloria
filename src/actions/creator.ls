@@ -11,8 +11,8 @@ export add-task = ({ name, code, trigger-interval, need-interaction, origin = ''
     code
     trigger-interval
     need-interaction
-    trigger-count: 0
-    push-count: 0
+    trigger-count: 0m
+    push-count: 0time
     is-enable: true
     origin
   }
@@ -75,7 +75,7 @@ export clear-all-stages = ->
 export mark-stage-read = (id) ->
   { type: types.mark-stage-read, id }
 
-# config
+# configs
 
 export set-config = (name, value) ->
   { type: types.set-config, name, value }

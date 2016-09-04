@@ -15,8 +15,8 @@ class IntervalAlarmsManager
     delete @jobs["#{name}"]
 
   add: (name, period-in-minutes, job) ->
-    if period-in-minutes < 1
-      period-in-minutes = 1
+    if period-in-minutes < 1m
+      period-in-minutes = 1m
     @add-job "#{name}", job
     chrome.alarms.create "#{name}", { period-in-minutes }
 

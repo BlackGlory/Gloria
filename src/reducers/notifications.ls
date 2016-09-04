@@ -3,7 +3,7 @@
 require! 'node-uuid': uuid
 require! '../actions/types.ls': types
 
-const LIMITED = 100
+const LIMITED = 100items
 
 const actions-map =
   (types.add-notification): (state, { options }) ->

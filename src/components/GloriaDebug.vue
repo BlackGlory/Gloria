@@ -222,7 +222,7 @@ export
       tasks = store.get-state!tasks.map (task) ->
         new-task = { ...task }
         new-task
-      blob = new Blob [JSON.stringify(tasks, null, 2)], { type: 'application/json' }
+      blob = new Blob [JSON.stringify(tasks, null, 2indents)], { type: 'application/json' }
       downloader = @$els.downloader
       downloader.href = URL.create-objectURL blob
       downloader.click!

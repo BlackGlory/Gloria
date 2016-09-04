@@ -58,7 +58,7 @@ export
     show-error-dialog: false
     code: ''
     name: ''
-    trigger-interval: 5
+    trigger-interval: 5m
     need-interaction: false
     error: ''
   methods:
@@ -70,12 +70,12 @@ export
         store.dispatch creator.add-task {
           name: @$data.name
           code: @$data.code
-          trigger-interval: @$data.trigger-interval ? 5
+          trigger-interval: @$data.trigger-interval ? 5m
           need-interaction: @$data.need-interaction ? false
         }
         @$data.code = ''
         @$data.name = ''
-        @$data.trigger-interval = 5
+        @$data.trigger-interval = 5m
         @$data.need-interaction = false
       else
         @$data.error = chrome.i18n.get-message 'NameAndCodeRequired'

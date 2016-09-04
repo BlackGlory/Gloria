@@ -78,7 +78,7 @@ describe 'stages reducer', (...) !->
     expect(new-state[1].stage[1]).to.eql({ message: 'test1', unread: false })
     expect(new-state[1].stage[2]).to.eql({ message: 'test2', unread: false })
 
-  it 'should handle commit-to-stage mixin new stage(large)', ->
+  it 'should handle commit-to-stage mixin new stage(large stage)', ->
     state = [
       { id: '1', stage: [{ message: 'test1', unread: true }] }
       { id: '2', stage: [{ message: "test#{i}", unread: true } for i in [1 to 100]]}
@@ -106,6 +106,29 @@ describe 'stages reducer', (...) !->
     expect(new-state[1].stage[1]).to.eql({ message: 'test99', unread: false })
     expect(new-state[1].stage[2]).to.eql({ message: 'test100', unread: false })
     expect(new-state[1].stage[99]).to.eql({ message: 'test97', unread: true})
+
+  it 'should handle commit-to-stage mixin new stage(large insert)', ->
+    state = [
+      { id: '1', stage: [{ message: 'test1', unread: true }] }
+      { id: '2', stage: [{ message: 'test1', unread: true }] }
+    ]
+
+    new-state = stages state, do
+      type: types.commit-to-stage
+      id: '2'
+      next-stage: [{ message: "test#{i}", unread: true } for i in [1 to 101]]
+
+    # [{ message: 'test1', unread: true }]
+    # to
+    # [{ message: 'test2', unread: true }, ..., { message: 'test101', unread: true }]
+
+    expect(new-state.length).to.be.equal(2)
+    expect(new-state[1].id).to.be.equal('2')
+    expect(new-state[1].stage).to.be.an('array')
+    expect(new-state[1].stage.length).to.be.equal(100)
+
+    expect(new-state[1].stage[0]).to.eql({ message: 'test2', unread: true })
+    expect(new-state[1].stage[99]).to.eql({ message: 'test101', unread: true })
 
   it 'should handle clear-stage', ->
     expect stages [{ id: '1' }, { id: '2' }, { id: '3' }], do

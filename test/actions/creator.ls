@@ -7,16 +7,16 @@ describe 'tasks action creator', (...) !->
     expect creator.add-task do
       name: 'TestName'
       code: 'TestCode'
-      trigger-interval: 1
+      trigger-interval: 1m
       need-interaction: false
     .to.eql do
       type: types.add-task
       name: 'TestName'
       code: 'TestCode'
-      trigger-interval: 1
+      trigger-interval: 1m
       need-interaction: false
-      trigger-count: 0
-      push-count: 0
+      trigger-count: 0time
+      push-count: 0time
       is-enable: true
       origin: ''
 
@@ -136,3 +136,16 @@ describe 'stages action creator', (...) !->
     .to.eql do
       type: types.mark-stage-read
       id: 'TestId'
+
+describe 'configs action creator', (...) !->
+  it 'should set-config', ->
+    expect creator.set-config 'TestName', 'TestValue'
+    .to.eql do
+      type: types.set-config
+      name: 'TestName'
+      value: 'TestValue'
+
+  it 'should clear-all-configs', ->
+    expect creator.clear-all-configs!
+    .to.eql do
+      type: types.clear-all-configs

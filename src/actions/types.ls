@@ -25,7 +25,7 @@ const stages =
   clear-all-stages: Symbol \clear-all-stages
   mark-stage-read: Symbol \mark-stage-read
 
-const config =
+const configs =
   set-config: Symbol \set-config
   clear-all-configs: Symbol \clear-all-configs
 
@@ -33,7 +33,7 @@ const types = {
   ...tasks
   ...notifications
   ...stages
-  ...config
+  ...configs
 }
 
 module.exports = types

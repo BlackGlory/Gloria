@@ -32,10 +32,10 @@ export
     ...UiSlider.props
     min:
       type: Number
-      default: 1
+      default: 1m
     max:
       type: Number
-      default: 100
+      default: 100m
     value:
       type: Number
       required: true
