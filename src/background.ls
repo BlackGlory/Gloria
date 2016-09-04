@@ -74,6 +74,7 @@ function create-notification-options task, data
     message: ''
     icon-url: 'assets/images/icon-128.png'
     type: 'basic'
+    id: ''
     ...data
     context-message: chrome.i18n.get-message 'NotificationContextMessage', [task.name, new Date!to-locale-time-string { hour: '2-digit', minute: '2-digit' }]
     require-interaction: task.need-interaction ? false # default
