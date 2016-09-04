@@ -70,7 +70,7 @@ const actions-map =
       }]
 
   (types.clear-stage): (state, { id }) ->
-    filter ((notification) -> notification.id isnt id), state
+    filter ((container) -> container.id isnt id), state
 
   (types.clear-all-stages): -> []
 
@@ -87,6 +87,7 @@ const actions-map =
           }
       }
     ), state
+
 
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]

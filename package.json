@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
@@ -45,7 +45,7 @@
     "jshashes": "^1.0.5",
     "keen-ui": "^0.8.9",
     "later": "^1.2.0",
-    "material-design-icons": "^2.2.3",
+    "material-design-icons": "^3.0.1",
     "node-uuid": "^1.4.7",
     "normalize.css": "^4.2.0",
     "redux": "^3.5.2",

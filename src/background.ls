@@ -126,7 +126,6 @@ function check-stage redux-store
 
   lazy-actions = [creator.set-config 'LastActiveTime', new Date!toString!]
   if config?['LastActiveTime']? and new Date! - new Date(config['LastActiveTime']) > 24h * 60m * 60s * 1000ms
-    console.log config.LastActiveTime
     lazy-actions.push creator.clear-all-stages!
 
   each (({ id, stage }) ->
@@ -237,9 +236,9 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
       type: 'basic'
     }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
   case 'task.is-exist'
-    task = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
-    if task.length > 0
-      if task[0].code is message.code
+    tasks = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
+    if tasks.length > 0
+      if tasks[0].code is message.code
         send-response true
       else
         send-response 'diff'
@@ -249,7 +248,10 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
     redux-store.dispatch creator.remove-task-by-origin message.origin
     send-response true
   case 'task.update'
-    redux-store.dispatch creator.update-task-by-origin message.origin, message
+    tasks = redux-store.get-state!tasks.filter ({ origin }) -> origin is message.origin
+    lazy-actions = map (({ id }) -> creator.clear-stage id), tasks
+    lazy-actions.push creator.update-task-by-origin message.origin, message
+    redux-store.dispatch batch-actions lazy-actions
     send-response true
   case 'extension.version'
     send-response chrome.runtime.get-manifest!.version

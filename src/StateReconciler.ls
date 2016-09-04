@@ -1,5 +1,7 @@
+# No effect until redux-persist 3.6 release
+
 require! 'prelude-ls': { each, is-type }
-require! 'lodash': { is-plain-object }
+require! 'lodash': { is-plain-object, merge }
 
 export function is-state-plain-enough a
   # isPlainObject + duck type not immutable
@@ -32,7 +34,7 @@ export function state-reconciler state, inbound-state, reduced-state, log
 
     # otherwise take the inbound-state
     if is-state-plain-enough inbound-state[key] and is-state-plain-enough state[key]
-      newState[key] = { ...state[key], ...inbound-state[key] } # shallow merge
+      newState[key] = merge state[key], inbound-state[key] # deep merge
     else
       newState[key] = inbound-state[key] # hard set
 
