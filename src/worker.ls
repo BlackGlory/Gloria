@@ -24,7 +24,11 @@ callable =
         self.add-event-listener 'message', listener
         self.post-message message
 
-    function fetch url, options = headers: {}, ...args
+    function fetch url, options = {}, ...args
+      options = {
+        headers: {}
+        ...options
+      }
       call-remote 'getCookies', url
       .then (cookies) ->
         data = cookie: cookies

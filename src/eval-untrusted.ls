@@ -15,15 +15,19 @@ export function inflated-request-headers details
     referer-index = false
 
     for i, header of details.request-headers
-      switch header.name
-      | 'Cookie'  => cookie-index = i
-      | 'Origin'  => origin-index = i
-      | 'Referer' => referer-index = i
+      switch header.name.to-lower-case!
+      | 'cookie'  => cookie-index = i
+      | 'origin'  => origin-index = i
+      | 'referer' => referer-index = i
 
     data = JSON.parse window.session-storage["request.id.#{details.request-id}"]
     details.request-headers.push name: 'Cookie', value: data.cookie ? '' unless cookie-index
-    details.request-headers.push name: 'Origin', value: data.origin ? get-origin details.url unless origin-index
     details.request-headers.push name: 'Referer', value: data.referer ? details.url unless referer-index
+    if origin-index
+      if details.request-headers[origin-index].value is 'null'
+        details.request-headers[origin-index].value = data.origin ? get-origin details.url
+    else
+      details.request-headers.push name: 'Origin', value: data.origin ? get-origin details.url unless origin-index
 
   else if window.session-storage["request.inflate.#{details.url}"]
     try
@@ -44,17 +48,21 @@ export function inflated-request-headers details
     referer-index = false
 
     for i, header of details.request-headers
-      switch header.name
+      switch header.name.to-lower-case!
       | 'send-by' => is-send-by-gloria = true if header.value is 'Gloria'
-      | 'Cookie'  => cookie-index = i
-      | 'Origin'  => origin-index = i
-      | 'Referer' => referer-index = i
+      | 'cookie'  => cookie-index = i
+      | 'origin'  => origin-index = i
+      | 'referer' => referer-index = i
 
     if is-send-by-gloria
       data = JSON.parse window.session-storage["request.inflate.#{details.url}"]
       details.request-headers.push name: 'Cookie', value: data.cookie ? '' unless cookie-index
-      details.request-headers.push name: 'Origin', value: data.origin ? get-origin details.url unless origin-index
       details.request-headers.push name: 'Referer', value: data.referer ? details.url unless referer-index
+      if origin-index
+        if details.request-headers[origin-index].value is 'null'
+          details.request-headers[origin-index].value = data.origin ? get-origin details.url
+      else
+        details.request-headers.push name: 'Origin', value: data.origin ? get-origin details.url unless origin-index
 
   request-headers: details.request-headers
 
