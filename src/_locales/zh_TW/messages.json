@@ -24,7 +24,7 @@
     }
   }
 , "NotificationContextMessage": {
-    "message": "由 $task_name$ 在 $time$ 推送"
+    "message": "$task_name$ $time$"
   , "placeholders": {
       "task_name": { "content": "$1" }
     , "time": { "content": "$2" }
