@@ -4,11 +4,11 @@ require! './rollbar.ls': Rollbar
 require! 'prelude-ls': { map, join, each, filter, is-type, empty, last, first }
 require! 'redux': { create-store, apply-middleware, compose }
 require! 'redux-persist': { persist-store, auto-rehydrate }
-require! 'redux-persist/constants': { REHYDRATE }
+require! 'redux-persist/constants': { REHYDRATE, KEY_PREFIX }
 require! 'redux-action-buffer': create-action-buffer
 require! 'redux-batched-actions': { batch-actions, enable-batching }
 require! 'redux-logger': create-logger
-require! 'browser-redux-sync': { configure-sync, sync }
+require! 'lodash/lang/isEqual': is-equal
 require! 'rx': Rx
 require! 'deep-diff': { diff }
 
@@ -17,7 +17,6 @@ require! './actions/creator.ls': creator
 require! './eval-untrusted.ls': { eval-untrusted, inflated-request-headers }
 require! './IntervalAlarmsManager.ls': IntervalAlarmsManager
 require! './NavigableNotificationsManager.ls': NavigableNotificationsManager
-require! './StateReconciler.ls': { state-reconciler }
 
 alarms-manager = new IntervalAlarmsManager!
 notifications-manager = new NavigableNotificationsManager!
@@ -201,6 +200,19 @@ function sync-tasks redux-store
 
   each ((task) -> create-task-timer task, true), filter (.is-enable), tasks
 
+function sync persistor, config = {}
+  const blacklist = config.blacklist ? false
+  const whitelist = config.whitelist ? false
+
+  window.add-event-listener 'storage', ({ key, new-value }) ->
+    if key and key.starts-with KEY_PREFIX
+      const keyspace = key.substr KEY_PREFIX.length
+      if whitelist and not whitelist.includes keyspace
+        return
+      if blacklist and blacklist.includes keyspace
+        return
+      persistor.rehydrate "#{keyspace}": JSON.parse new-value
+
 chrome.runtime.on-installed.add-listener (details) ->
   this-version = chrome.runtime.get-manifest!.version
   if details.reason is 'install'
@@ -333,11 +345,11 @@ const redux-store = do ->
     stages: []
     config: {}
   if process.env.NODE_ENV is 'production'
-    create-store enable-batching(reducers), init-state, compose auto-rehydrate(config: { state-reconciler }), apply-middleware create-action-buffer REHYDRATE
+    create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware create-action-buffer REHYDRATE
   else
-    create-store enable-batching(reducers), init-state, compose auto-rehydrate(config: { state-reconciler }), apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
+    create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
 
-sync persist-store redux-store, configure-sync!, ->
+sync persist-store redux-store, {}, ->
   sync-tasks redux-store
   check-stage redux-store
   check-origin-update redux-store
