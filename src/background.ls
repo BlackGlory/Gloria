@@ -22,7 +22,7 @@ alarms-manager = new IntervalAlarmsManager!
 notifications-manager = new NavigableNotificationsManager!
 
 function reduce-notification-options options
-  reducer = redux-store.get-state!config['NotificationReducer']
+  reducer = redux-store.get-state!configs['NotificationReducer']
   if reducer?.trim!
     try
       reducer = eval "(function(){return #{reducer}})()"
