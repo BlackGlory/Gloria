@@ -216,16 +216,17 @@ chrome.runtime.on-installed.add-listener (details) ->
       if details.previous-version <= '0.9.6'
         # move persist store from chrome.storage to localStorage
         items <- chrome.storage.local.get null
-        config = items['reduxPersist:config']
+        configs = items['reduxPersist:config']
         notifications = items['reduxPersist:notifications']
         stages = items['reduxPersist:stages']
         tasks = items['reduxPersist:tasks']
         redux-store.dispatch batch-actions [
-          creator.merge-configs config
+          creator.merge-configs configs
           creator.merge-notifications notifications
           creator.merge-stages stages
           creator.merge-tasks tasks
         ]
+        chrome.storage.local.clear!
 
       chrome.notifications.create {
         title: chrome.i18n.get-message 'ExtensionUpdatedTitle'
@@ -346,7 +347,7 @@ const redux-store = do ->
     tasks: []
     notifications: []
     stages: []
-    config: {}
+    configs: {}
   if process.env.NODE_ENV is 'production'
     create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware create-action-buffer REHYDRATE
   else

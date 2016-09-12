@@ -168,11 +168,11 @@ export
     state: {}
     unsubscribe: null
   props:
-    config:
+    configs:
       type: Object
       default: {}
   ready: ->
-    @$watch 'config.NotificationReducer', ((val) ~>
+    @$watch 'configs.NotificationReducer', ((val) ~>
       @$data.notification-reducer = val
     ), immediate: true
   methods:

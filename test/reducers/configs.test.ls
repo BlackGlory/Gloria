@@ -19,3 +19,19 @@ describe 'configs reducer', (...) !->
     expect configs { 'TestName': 'TestValue' }, do
       type: types.clear-all-configs
     .to.eql {}
+
+  it 'should handle merge-configs', ->
+    expect configs {
+      key1: 'value1'
+      key2: 'value2'
+    }, do
+      type: types.merge-configs
+      new-configs: {
+        key2: 'value3'
+        key3: 'value4'
+      }
+    .to.eql {
+      key1: 'value1'
+      key2: 'value3'
+      key3: 'value4'
+    }

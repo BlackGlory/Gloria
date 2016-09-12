@@ -107,45 +107,63 @@ describe 'notifications action creator', (...) !->
       type: types.add-notification
       options: {}
 
-  it 'should clear-all-notifications', ->
+  it 'should create clear-all-notifications', ->
     expect creator.clear-all-notifications!
     .to.eql do
       type: types.clear-all-notifications
 
+  it 'should create merge-notifications', ->
+    expect creator.merge-notifications []
+    .to.eql do
+      type: types.merge-notifications
+      new-notifications: []
+
 describe 'stages action creator', (...) !->
-  it 'should commit-to-stage', ->
+  it 'should create commit-to-stage', ->
     expect creator.commit-to-stage 'TestId', []
     .to.eql do
       type: types.commit-to-stage
       id: 'TestId'
       next-stage: []
 
-  it 'should clear-stage', ->
+  it 'should create clear-stage', ->
     expect creator.clear-stage 'TestId'
     .to.eql do
       type: types.clear-stage
       id: 'TestId'
 
-  it 'should clear-all-stages', ->
+  it 'should create clear-all-stages', ->
     expect creator.clear-all-stages!
     .to.eql do
       type: types.clear-all-stages
 
-  it 'should mark-stage-read', ->
+  it 'should create mark-stage-read', ->
     expect creator.mark-stage-read 'TestId'
     .to.eql do
       type: types.mark-stage-read
       id: 'TestId'
 
+  it 'should create merge-stages', ->
+    expect creator.merge-stages []
+    .to.eql do
+      type: types.merge-stages
+      new-stages: []
+
 describe 'configs action creator', (...) !->
-  it 'should set-config', ->
+  it 'should create set-config', ->
     expect creator.set-config 'TestName', 'TestValue'
     .to.eql do
       type: types.set-config
       name: 'TestName'
       value: 'TestValue'
 
-  it 'should clear-all-configs', ->
+  it 'should create clear-all-configs', ->
     expect creator.clear-all-configs!
     .to.eql do
       type: types.clear-all-configs
+
+  it 'should create merge-configs', ->
+    expect creator.merge-configs []
+    .to.eql do
+      type: types.merge-configs
+      new-configs: []

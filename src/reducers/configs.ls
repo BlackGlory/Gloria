@@ -14,10 +14,10 @@ const actions-map =
   (types.clear-all-configs): -> {}
 
   (types.merge-configs): (state, { new-configs }) ->
-    new-state = reverse [...state, ...new-configs]
-    new-state = unique-by (.id), new-state
-    new-state = reverse new-state
-    new-state
+    {
+      ...state
+      ...new-configs
+    }
 
 module.exports = (state = {}, action) ->
   const reduce-fn = actions-map[action.type]

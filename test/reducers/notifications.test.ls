@@ -24,3 +24,19 @@ describe 'notifications reducer', (...) !->
     expect notifications [{ options: 'test' }], do
       type: types.clear-all-notifications
     .to.eql []
+
+  it 'should handle merge-notifications', ->
+    expect notifications [
+      { id: '1', options: ['Test1'] }
+      { id: '2', options: ['Test2'] }
+    ], do
+      type: types.merge-notifications
+      new-notifications: [
+        { id: '2', options: ['Test3'] }
+        { id: '3', options: ['Test4'] }
+      ]
+    .to.eql [
+      { id: '1', options: ['Test1'] }
+      { id: '2', options: ['Test3'] }
+      { id: '3', options: ['Test4'] }
+    ]

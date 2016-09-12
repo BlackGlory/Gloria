@@ -152,3 +152,19 @@ describe 'stages reducer', (...) !->
       { id: '1', stage: [{ message: 'test1', unread: true }, { message: 'test2', unread: false }]}
       { id: '2', stage: [{ message: 'test1', unread: false }, { message: 'test2', unread: false }]}
     ]
+
+  it 'should handle merge-stages', ->
+    expect stages [
+      { id: '1', stage: ['Test1'] }
+      { id: '2', stage: ['Test2'] }
+    ], do
+      type: types.merge-stages
+      new-stages: [
+        { id: '2', stage: ['Test3'] }
+        { id: '3', stage: ['Test4'] }
+      ]
+    .to.eql [
+      { id: '1', stage: ['Test1'] }
+      { id: '2', stage: ['Test3'] }
+      { id: '3', stage: ['Test4'] }
+    ]

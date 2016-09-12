@@ -22,7 +22,7 @@ const redux-store = do ->
     tasks: []
     notifications: []
     stages: []
-    config: {}
+    configs: {}
   if process.env.NODE_ENV is 'production'
     create-store reducers, init-state, compose auto-rehydrate!, apply-middleware create-action-buffer REHYDRATE
   else
