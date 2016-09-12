@@ -4,11 +4,11 @@ require! './rollbar.ls': Rollbar
 require! 'prelude-ls': { map, join, each, filter, is-type, empty, last, first }
 require! 'redux': { create-store, apply-middleware, compose }
 require! 'redux-persist': { persist-store, auto-rehydrate }
-require! 'redux-persist/constants': { REHYDRATE, KEY_PREFIX }
+require! 'redux-persist/constants': { REHYDRATE }
 require! 'redux-action-buffer': create-action-buffer
 require! 'redux-batched-actions': { batch-actions, enable-batching }
 require! 'redux-logger': create-logger
-require! 'lodash/lang/isEqual': is-equal
+require! 'redux-persist-crosstab': crosstab-sync
 require! 'rx': Rx
 require! 'deep-diff': { diff }
 
@@ -200,19 +200,6 @@ function sync-tasks redux-store
 
   each ((task) -> create-task-timer task, true), filter (.is-enable), tasks
 
-function sync persistor, config = {}
-  const blacklist = config.blacklist ? false
-  const whitelist = config.whitelist ? false
-
-  window.add-event-listener 'storage', ({ key, new-value }) ->
-    if key and key.starts-with KEY_PREFIX
-      const keyspace = key.substr KEY_PREFIX.length
-      if whitelist and not whitelist.includes keyspace
-        return
-      if blacklist and blacklist.includes keyspace
-        return
-      persistor.rehydrate "#{keyspace}": JSON.parse new-value
-
 chrome.runtime.on-installed.add-listener (details) ->
   this-version = chrome.runtime.get-manifest!.version
   if details.reason is 'install'
@@ -224,12 +211,28 @@ chrome.runtime.on-installed.add-listener (details) ->
     }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
   else if details.reason is 'update' and details.previous-version isnt this-version
     set-timeout (-> redux-store.dispatch creator.clear-all-stages!), 0
-    chrome.notifications.create {
-      title: chrome.i18n.get-message 'ExtensionUpdatedTitle'
-      message: chrome.i18n.get-message 'ExtensionUpdatedMessage', [details.previous-version, this-version]
-      icon-url: 'assets/images/icon-128.png'
-      type: 'basic'
-    }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
+
+    if details.previous-version < this-version
+      if details.previous-version <= '0.9.6'
+        # move persist store from chrome.storage to localStorage
+        items <- chrome.storage.local.get null
+        config = items['reduxPersist:config']
+        notifications = items['reduxPersist:notifications']
+        stages = items['reduxPersist:stages']
+        tasks = items['reduxPersist:tasks']
+        redux-store.dispatch batch-actions [
+          creator.merge-configs config
+          creator.merge-notifications notifications
+          creator.merge-stages stages
+          creator.merge-tasks tasks
+        ]
+
+      chrome.notifications.create {
+        title: chrome.i18n.get-message 'ExtensionUpdatedTitle'
+        message: chrome.i18n.get-message 'ExtensionUpdatedMessage', [details.previous-version, this-version]
+        icon-url: 'assets/images/icon-128.png'
+        type: 'basic'
+      }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
 
 chrome.runtime.on-message-external.add-listener (message, sender, send-response) ->
   switch message.type
@@ -349,7 +352,7 @@ const redux-store = do ->
   else
     create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
 
-sync persist-store redux-store, {}, ->
+crosstab-sync persist-store redux-store, {}, ->
   sync-tasks redux-store
   check-stage redux-store
   check-origin-update redux-store

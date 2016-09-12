@@ -1,5 +1,7 @@
 'use strict'
 
+require! 'prelude-ls': { unique-by, reverse }
+
 require! 'node-uuid': uuid
 require! '../actions/types.ls': types
 
@@ -13,6 +15,12 @@ const actions-map =
     result
 
   (types.clear-all-notifications): -> []
+
+  (types.merge-notifications): (state, { new-notifications }) ->
+    new-state = reverse [...state, ...new-notifications]
+    new-state = unique-by (.id), new-state
+    new-state = reverse new-state
+    new-state
 
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]

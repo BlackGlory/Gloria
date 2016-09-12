@@ -137,19 +137,6 @@
     </section>
 
     <section>
-      <header>{{ 'StorageQuotaUsage' | i18n }}</header>
-      <article class="quota">
-        <ui-progress-linear
-          type="determinate"
-          color="primary"
-          :show="true"
-          :value="bytesInUse / quotaBytes * 100"
-        ></ui-progress-linear>
-        Local Storage: {{ bytesInUse }} bytes / {{ quotaBytes }} bytes = {{ (bytesInUse / quotaBytes * 100).toFixed(2) }}%
-      </article>
-    </section>
-
-    <section>
       <header>{{ 'Inside' | i18n }}</header>
       <article class="inside">
         <ui-button @click="startObserveStateChange" v-show="!unsubscribe">{{ 'StartObserveStateChange' | i18n }}</ui-button>
@@ -180,20 +167,11 @@ export
     notification-reducer: ''
     state: {}
     unsubscribe: null
-    bytesInUse: null
-    quotaBytes: chrome.storage.local.QUOTA_BYTES
   props:
     config:
       type: Object
       default: {}
   ready: ->
-    chrome.storage.local.get-bytes-in-use (bytes-in-use) ~>
-      @$data.bytes-in-use = bytes-in-use
-
-    chrome.storage.on-changed.add-listener (callback) ~>
-      chrome.storage.local.get-bytes-in-use (bytes-in-use) ~>
-        @$data.bytes-in-use = bytes-in-use
-
     @$watch 'config.NotificationReducer', ((val) ~>
       @$data.notification-reducer = val
     ), immediate: true

@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
@@ -38,7 +38,6 @@
     "worker-loader": "^0.7.1"
   },
   "dependencies": {
-    "browser-redux-sync": "git://github.com/BlackGlory/browser-redux-sync.git",
     "deep-diff": "^0.3.4",
     "flexboxgrid": "^6.3.1",
     "gloria-utils": "^1.1.0",
@@ -53,6 +52,7 @@
     "redux-batched-actions": "^0.1.2",
     "redux-logger": "^2.6.1",
     "redux-persist": "^3.5.0",
+    "redux-persist-crosstab": "^3.5.2",
     "revue": "^2.2.0",
     "rollbar-browser": "^1.9.1",
     "rx": "^4.1.0",

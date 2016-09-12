@@ -18,16 +18,19 @@ const tasks =
 const notifications =
   add-notification: Symbol \add-notification
   clear-all-notifications: Symbol \clear-all-notifications
+  merge-notifications: Symbol \merge-notifications
 
 const stages =
   commit-to-stage: Symbol \commit-to-stage
   clear-stage: Symbol \clear-stage
   clear-all-stages: Symbol \clear-all-stages
   mark-stage-read: Symbol \mark-stage-read
+  merge-stages: Symbol \merge-stages
 
 const configs =
   set-config: Symbol \set-config
   clear-all-configs: Symbol \clear-all-configs
+  merge-configs: Symbol \merge-configs
 
 const types = {
   ...tasks

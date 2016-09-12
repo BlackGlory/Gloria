@@ -1,16 +1,16 @@
 'use strict'
 
-require! 'prelude-ls': { sort-by, take, map, lists-to-obj, obj-to-lists, last, each, filter, find }
+require! 'prelude-ls': { unique-by, reverse, sort-by, take, map, lists-to-obj, obj-to-lists, last, each, filter, find }
 require! 'jshashes': { MD5 }
 require! '../actions/types.ls': types
 
 const LIMITED = 100items
 
+function generate-key notification
+  new MD5!.hex "#{notification.title}#{notification.message}#{notification.id}"
+
 const actions-map =
   (types.commit-to-stage): (state, { id, next-stage }) ->
-    function generate-key notification
-      new MD5!.hex "#{notification.title}#{notification.message}#{notification.id}"
-
     if find ((container) -> container.id is id), state
       return map ((container) ->
         return container if container.id isnt id
@@ -88,6 +88,11 @@ const actions-map =
       }
     ), state
 
+  (types.merge-stages): (state, { new-stages }) ->
+    new-state = reverse [...state, ...new-stages]
+    new-state = unique-by (.id), new-state
+    new-state = reverse new-state
+    new-state
 
 module.exports = (state = [], action) ->
   const reduce-fn = actions-map[action.type]

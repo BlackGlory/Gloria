@@ -61,6 +61,9 @@ export add-notification = (options) ->
 export clear-all-notifications = ->
   { type: types.clear-all-notifications }
 
+export merge-notifications = (new-notifications)->
+  { type: types.merge-notifications, new-notifications }
+
 # stages
 
 export commit-to-stage = (id, next-stage) ->
@@ -75,6 +78,9 @@ export clear-all-stages = ->
 export mark-stage-read = (id) ->
   { type: types.mark-stage-read, id }
 
+export merge-stages = (new-stages)->
+  { type: types.merge-stages, new-stages }
+
 # configs
 
 export set-config = (name, value) ->
@@ -82,3 +88,6 @@ export set-config = (name, value) ->
 
 export clear-all-configs = ->
   { type: types.clear-all-configs }
+
+export merge-configs = (new-configs)->
+  { type: types.merge-configs, new-configs }
