@@ -1,19 +1,23 @@
 <template>
   <div class="gloria-app">
+
     <ui-tabs
       type="icon-and-text"
       fullwidth
       raised
     >
+
       <ui-tab icon="format_list_bulleted" :header="'Task' | i18n">
         <template v-if="tasks.length > 0">
           <gloria-task-list :tasks="tasks"></gloria-task-list>
           <gloria-task-creator></gloria-task-creator>
         </template>
+
         <template v-if="tasks.length === 0">
           <gloria-tutorial></gloria-tutorial>
         </template>
       </ui-tab>
+
       <ui-tab icon="history" :header="'History' | i18n">
         <template v-if="notifications.length > 0">
           <gloria-notification-list :notifications="notifications"></gloria-notification-list>
@@ -22,10 +26,13 @@
           {{ 'EmptyHistoryDescription' | i18n }}
         </div>
       </ui-tab>
+
       <ui-tab icon="settings" :header="'Advanced' | i18n">
         <gloria-debug :configs="configs"></gloria-debug>
       </ui-tab>
+
     </ui-tabs>
+
   </div>
 </template>
 

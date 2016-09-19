@@ -1,6 +1,8 @@
 <template>
   <div class="gloria-task-creator">
+
     <gloria-fab type="mini" @click="showNewDialogCode = true" color="primary" icon="add"></gloria-fab>
+
     <ui-modal :show.sync="showNewDialogCode" :header="'PasteYourCode' | i18n" :backdrop-dismissible="false">
       <ui-textbox
         :label="'TaskCode' | i18n"
@@ -15,6 +17,7 @@
         <ui-button @click="showNewDialogCode = false">{{ 'Cancel' | i18n }}</ui-button>
       </div>
     </ui-modal>
+
     <ui-modal :show.sync="showNewDialogName" :header="'GiveItName' | i18n" :backdrop-dismissible="false">
       <ui-textbox name="name" :value.sync="name" :label="'TaskName' | i18n" type="text" :placeholder="'InputTaskName' | i18n"></ui-textbox>
       <div slot="footer">
@@ -22,34 +25,45 @@
         <ui-button @click="switchDialog('showNewDialogName', 'showNewDialogCode')">{{ 'Back' | i18n }}</ui-button>
       </div>
     </ui-modal>
+
     <ui-modal :show.sync="showNewDialogConfig" :header="'FinalConfiguration' | i18n" :backdrop-dismissible="false">
-      <gloria-slider :value.sync="triggerInterval" :label="'TriggerInterval' | i18n" icon="event"></gloria-slider>
-      <p>{{ 'TaskIntervalDescription' | i18n name triggerInterval }} {{ triggerCount | pluralize 'NounsMinute' | i18n }}.</p>
+      <gloria-numberbox
+        icon="event"
+        name="triggerInterval"
+        :label="'TriggerInterval' | i18n"
+        :min="1"
+        :max="60 * 24"
+        :value.sync="triggerInterval"
+        :help-text="helpText"
+      ></gloria-numberbox>
       <ui-checkbox v-el:need-interaction :model.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
       <div slot="footer">
         <ui-button @click="(showNewDialogConfig = false, createTask())" color="primary">{{ 'Finish' | i18n }}</ui-button>
         <ui-button @click="switchDialog('showNewDialogConfig', 'showNewDialogName')">{{ 'Back' | i18n }}</ui-button>
       </div>
     </ui-modal>
+
     <ui-modal :show.sync="showErrorDialog" :header="'Error' | i18n">
       {{ error }}
     </ui-modal>
+
   </div>
 </template>
 
 <script lang="livescript">
 'use strict'
 
+require! 'vue': Vue
 require! '../store.ls': store
 require! '../actions/creator.ls': creator
 require! './GloriaFab.vue': GloriaFab
-require! './GloriaSlider.vue': GloriaSlider
+require! './GloriaNumberbox.vue': GloriaNumberbox
 
 export
   name: 'gloria-task-creator'
   components: {
     GloriaFab
-    GloriaSlider
+    GloriaNumberbox
   }
   data: ->
     show-new-dialog-code: false
@@ -61,6 +75,9 @@ export
     trigger-interval: 5m
     need-interaction: false
     error: ''
+  computed:
+    help-text: ->
+      Vue.filter('i18n')('TaskIntervalDescription', @name, @trigger-interval) + ' ' + Vue.filter('i18n')(Vue.filter('pluralize')(@trigger-count, 'NounsMinute'))
   methods:
     switch-dialog: (current, next) ->
       @$data[current] = false

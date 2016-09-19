@@ -1,31 +1,47 @@
 <template>
   <div class="gloria-task">
     <ui-collapsible :hide-icon="true">
+
       <div slot="header">
         <div class="row middle-xs">
+
           <div class="col-xs">
             <p><span>{{ name }}</span>
             <p>{{ 'TriggerCount' | i18n triggerCount }} {{ triggerCount | pluralize 'NounsTime' | i18n }}, {{ 'PushCount' | i18n pushCount }} {{ pushCount | pluralize 'NounsNotification' | i18n }}</p>
           </div>
+
           <div>
             <ui-switch :value.sync="isEnable"></ui-switch>
           </div>
+
         </div>
       </div>
+
       <div class="row middle-xs">
+
         <div class="col-xs">
-          <gloria-slider :value.sync="triggerInterval" :label="'TriggerInterval' | i18n" icon="event"></gloria-slider>
-          <p>{{ 'TaskIntervalDescription' | i18n name triggerInterval }} {{ triggerCount | pluralize 'NounsMinute' | i18n }}</p>
+          <gloria-numberbox
+            icon="event"
+            name="triggerInterval"
+            :label="'TriggerInterval' | i18n"
+            :min="1"
+            :max="60 * 24"
+            :value.sync="triggerInterval"
+            :help-text="helpText"
+          ></gloria-numberbox>
           <ui-checkbox v-el:need-interaction :model.sync="needInteraction">{{ 'InteractionRequired' | i18n }}</ui-checkbox>
           <p>{{ 'Source' | i18n }}: <a v-show="origin" :href="origin" target="_blank">{{ origin }}</a><span v-show="!origin">{{ 'Local' | i18n }}</span></p>
         </div>
+
         <div class="col-xs-3 end-xs">
           <ui-icon-button v-show="origin" @click="showRemoveOriginConfirm = true" icon="content_cut" type="flat" :tooltip="'CutOffSource' | i18n"></ui-icon-button>
           <ui-icon-button @click="showEditDialog = true" icon="edit" type="flat" :tooltip="'Edit' | i18n"></ui-icon-button>
           <ui-icon-button @click="showDeleteConfirm = true" icon="delete_forever" type="flat" :tooltip="'Delete' | i18n"></ui-icon-button>
         </div>
+
       </div>
     </ui-collapsible>
+
     <ui-confirm
       :header="'CutOffSource' | i18n"
       type="warning"
@@ -39,6 +55,7 @@
     >
       {{ 'CutOffSourceConfirm' | i18n }}
     </ui-confirm>
+
     <ui-modal @opened="setEditDialog" @closed="setEditDialog" :show.sync="showEditDialog" :header="'Editor' | i18n">
       <ui-textbox name="editableName" :value.sync="editableName" :label="'TaskName' | i18n" type="text" :placeholder="'InputTaskName' | i18n"></ui-textbox>
       <ui-textbox
@@ -54,6 +71,7 @@
         <ui-button @click="showEditDialog = false">{{ 'Cancel' | i18n }}</ui-button>
       </div>
     </ui-modal>
+
     <ui-confirm
       :header="'DeleteTask' | i18n"
       type="danger"
@@ -67,27 +85,32 @@
     >
       {{ 'DeleteTaskConfirm' | i18n }}
     </ui-confirm>
+
   </div>
 </template>
 
 <script lang="livescript">
 'use strict'
 
+require! 'vue': Vue
 require! '../store.ls': store
 require! '../actions/creator.ls': creator
-require! './GloriaSlider.vue': GloriaSlider
+require! './GloriaNumberbox.vue': GloriaNumberbox
 
 export
   name: 'gloria-task'
-  components: {
-    GloriaSlider
-  }
   data: ->
     show-delete-confirm: false
     show-remove-origin-confirm: false
     show-edit-dialog: false
     editable-name: ''
     editable-code: ''
+  components: {
+    GloriaNumberbox
+  }
+  computed:
+    help-text: ->
+      Vue.filter('i18n')('TaskIntervalDescription', @name, @triggerInterval) + ' ' + Vue.filter('i18n')(Vue.filter('pluralize')(@triggerCount, 'NounsMinute'))
   methods:
     set-edit-dialog: ->
       @$data.editable-code = @code
