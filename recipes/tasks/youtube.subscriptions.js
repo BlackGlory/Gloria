@@ -12,6 +12,6 @@ Promise.all([
     , imageUrl: $(el).find('.expanded-shelf img').data('thumb') || $(el).find('.expanded-shelf img').attr('src')
     , iconUrl: $(el).find('.shelf-title-table img').attr('src')
     }
-  }).get()
+  }).get().slice(0, 30)
 })
 .then(commit)
