@@ -9,7 +9,7 @@ Promise.all([
       title: $('#tab_newreleases_content_trigger').text() + ': ' + $(el).find('.tab_item_name').text()
     , message: $(el).find('.tab_item_top_tags').text()
     , iconUrl: $(el).find('img.tab_item_cap_img').attr('src')
-    , url: $(el).find('a.tab_item_overlay').attr('href')
+    , url: $(el).attr('href')
     }
   }).get()
 })
