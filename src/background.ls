@@ -18,6 +18,8 @@ require! './eval-untrusted.ls': { eval-untrusted, inflated-request-headers }
 require! './IntervalAlarmsManager.ls': IntervalAlarmsManager
 require! './NavigableNotificationsManager.ls': NavigableNotificationsManager
 
+const DEFAULT_ICON_URL = 'assets/images/icon-128.png'
+
 alarms-manager = new IntervalAlarmsManager!
 notifications-manager = new NavigableNotificationsManager!
 
@@ -42,9 +44,10 @@ function create-task-timer task, immediately = false
         return
 
       if not is-type 'Array' data-list
-        data-list = [data-list]
-
-      redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
+        data = data-list
+        redux-store.dispatch creator.commit-single-to-stage task.id, data
+      else
+        redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
     .catch (err) ->
       console.error err
 
@@ -71,7 +74,7 @@ function create-notification-options task, data
   options = {
     title: ''
     message: ''
-    icon-url: 'assets/images/icon-128.png'
+    icon-url: DEFAULT_ICON_URL
     type: 'basic'
     id: ''
     ...data
@@ -89,7 +92,7 @@ function create-notification-options task, data
   if data.image-url
     options <<< type: 'image', image-url: data.image-url.to-string!
 
-  options.icon-url = 'assets/images/icon-128.png' unless options.icon-url?
+  options.icon-url = DEFAULT_ICON_URL unless options.icon-url?
   options.message = '' unless options.message?
   options.title = '' unless options.title?
   options.type = 'basic' unless options.type?
@@ -114,7 +117,7 @@ function check-origin-update redux-store
             type: 'basic'
             title: chrome.i18n.get-message 'FindNewVersion', [task.name]
             message: chrome.i18n.get-message 'AutoCheckContextMessage'
-            icon-url: 'assets/images/icon-128.png'
+            icon-url: DEFAULT_ICON_URL
             require-interaction: true
             buttons: [{ title: chrome.i18n.get-message 'GotoSource' }, { title: chrome.i18n.get-message 'Unsynchronized' }]
           , (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
@@ -131,14 +134,22 @@ function check-stage redux-store
     task = tasks.find (.id is id)
 
     if task
-      each ((data) ->
-        options = create-notification-options task, data
-        options = reduce-notification-options options
-        if options
-          create-notification options
-          lazy-actions.push creator.add-notification options
-        lazy-actions.push creator.increase-push-count id
-      ), filter (.unread), stage
+      if Array.is-array stage
+        each ((data) ->
+          options = create-notification-options task, data
+          options = reduce-notification-options options
+          if options
+            create-notification options
+            lazy-actions.push creator.add-notification options
+          lazy-actions.push creator.increase-push-count id
+        ), filter (.unread), stage
+      else
+        if stage.unread
+          options = create-notification-options task, stage
+          options = reduce-notification-options options
+          if options
+            create-notification options
+            lazy-actions.push creator.add-notification options
       lazy-actions.push creator.mark-stage-read id
   ), stages
 
@@ -155,7 +166,7 @@ function sync-tasks redux-store
 
   function razor x
     if x.path
-      if (last x.path) in <[triggerCount pushCount origin]>
+      if (last x.path) in <[triggerCount pushDate pushCount origin]>
         return false
     true
 
@@ -206,7 +217,7 @@ chrome.runtime.on-installed.add-listener (details) ->
     chrome.notifications.create {
       title: chrome.i18n.get-message 'ExtensionInstalledTitle'
       message: chrome.i18n.get-message 'ExtensionInstalledMessage', this-version
-      icon-url: 'assets/images/icon-128.png'
+      icon-url: DEFAULT_ICON_URL
       type: 'basic'
     }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
   else if details.reason is 'update' and details.previous-version isnt this-version
@@ -228,10 +239,23 @@ chrome.runtime.on-installed.add-listener (details) ->
         ]
         chrome.storage.local.clear!
 
+      if '0.9.6' < details.previous-version <= '0.9.8'
+        # update data format
+        configs = JSON.parse local-storage['reduxPersist:configs']
+        notifications = JSON.parse local-storage['reduxPersist:notifications']
+        stages = JSON.parse local-storage['reduxPersist:stages']
+        tasks = JSON.parse local-storage['reduxPersist:tasks']
+        redux-store.dispatch batch-actions [
+          creator.merge-configs configs
+          creator.merge-notifications notifications
+          creator.merge-stages stages
+          creator.merge-tasks tasks
+        ]
+
       chrome.notifications.create {
         title: chrome.i18n.get-message 'ExtensionUpdatedTitle'
         message: chrome.i18n.get-message 'ExtensionUpdatedMessage', [details.previous-version, this-version]
-        icon-url: 'assets/images/icon-128.png'
+        icon-url: DEFAULT_ICON_URL
         type: 'basic'
       }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
 
@@ -248,7 +272,7 @@ chrome.runtime.on-message-external.add-listener (message, sender, send-response)
     chrome.notifications.create {
       title: chrome.i18n.get-message 'TaskInstalledTitle'
       message: chrome.i18n.get-message 'TaskInstalledMessage', message.name
-      icon-url: 'assets/images/icon-128.png'
+      icon-url: DEFAULT_ICON_URL
       type: 'basic'
     }, (notification-id) -> console.error chrome.runtime.lastError if chrome.runtime.lastError
   case 'task.is-exist'
@@ -327,7 +351,12 @@ chrome.notifications.on-button-clicked.add-listener (notification-id, button-ind
   try
     { id, name, origin } = JSON.parse notification-id
     if button-index is 0 # Go to source
-      chrome.tabs.create { url: origin }
+      chrome.windows.getCurrent windowTypes: ['normal'], (window) ->
+        if not chrome.runtime.lastError and window
+          chrome.tabs.create url: origin
+        else
+          chrome.windows.create (window) ->
+            chrome.tabs.create url: origin, windowId: window.id
     else if button-index is 1 # Never sync
       redux-store.dispatch creator.remove-origin id
   catch e

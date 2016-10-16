@@ -1,5 +1,6 @@
 class NavigableNotificationsManager
   allowed-options = <[type iconUrl appIconMaskUrl title message contextMessage eventTime requireInteraction imageUrl items progress buttons isClickable priority]>
+
   ->
     @targets = {}
 
@@ -19,7 +20,12 @@ class NavigableNotificationsManager
             if not chrome.runtime.lastError and tabs[0]
               chrome.tabs.highlight window-id: tabs[0].windowId, tabs: tabs[0].index
             else
-              chrome.tabs.create url: target
+              chrome.windows.getCurrent windowTypes: ['normal'], (window) ->
+                if not chrome.runtime.lastError and window
+                  chrome.tabs.create url: target
+                else
+                  chrome.windows.create (window) ->
+                    chrome.tabs.create url: target, windowId: window.id
 
       chrome.notifications.clear id, (was-cleared) ~>
         console.error chrome.runtime.lastError if chrome.runtime.lastError

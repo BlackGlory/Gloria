@@ -79,11 +79,12 @@ const actions-map =
       }
     ), state
 
-  (types.increase-push-count): (state, { id }) ->
+  (types.increase-push-count): (state, { id, date }) ->
     map ((x) ->
       return x if x.id isnt id
       {
         ...x
+        push-date: date
         push-count: x.push-count + 1
       }
     ), state

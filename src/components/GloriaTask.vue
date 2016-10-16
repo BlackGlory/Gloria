@@ -7,7 +7,10 @@
 
           <div class="col-xs">
             <p><span>{{ name }}</span>
-            <p>{{ 'TriggerCount' | i18n triggerCount }} {{ triggerCount | pluralize 'NounsTime' | i18n }}, {{ 'PushCount' | i18n pushCount }} {{ pushCount | pluralize 'NounsNotification' | i18n }}</p>
+            <div class="row between-xs">
+              <p>{{ 'TriggerCount' | i18n triggerCount }} {{ triggerCount | pluralize 'NounsTime' | i18n }}, {{ 'PushCount' | i18n pushCount }} {{ pushCount | pluralize 'NounsNotification' | i18n }}</p>
+              <p v-if="pushDate">{{ 'PushDate' | i18n pushDate }}</p>
+            </div>
           </div>
 
           <div>
@@ -140,6 +143,8 @@ export
       type: String
     trigger-count:
       type: Number
+    push-date:
+      type: String
     push-count:
       type: Number
     trigger-interval:
@@ -173,4 +178,7 @@ export
   .ui-collapsible-body
     border: inherit
     width: auto
+
+  .between-xs
+    margin: 0
 </style>

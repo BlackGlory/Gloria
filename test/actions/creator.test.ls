@@ -102,10 +102,19 @@ describe 'tasks action creator', (...) !->
 
 describe 'notifications action creator', (...) !->
   it 'should create add-notification', ->
-    expect creator.add-notification {}
+    expect creator.add-notification do
+      title: 'TEST_TITLE'
+      extra-argument: 'SHOULD_REMOVED'
     .to.eql do
       type: types.add-notification
-      options: {}
+      options:
+        type: 'basic'
+        title: 'TEST_TITLE'
+        message: ''
+        context-message: undefined
+        image-url: undefined
+        icon-url: creator.DEFAULT_ICON_URL
+        url: undefined
 
   it 'should create clear-all-notifications', ->
     expect creator.clear-all-notifications!
@@ -119,6 +128,13 @@ describe 'notifications action creator', (...) !->
       new-notifications: []
 
 describe 'stages action creator', (...) !->
+  it 'should create commit-single-to-stage', ->
+    expect creator.commit-single-to-stage 'TestId', {}
+    .to.eql do
+      type: types.commit-single-to-stage
+      id: 'TestId'
+      next-stage: {}
+
   it 'should create commit-to-stage', ->
     expect creator.commit-to-stage 'TestId', []
     .to.eql do

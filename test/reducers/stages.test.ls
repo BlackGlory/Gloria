@@ -7,6 +7,43 @@ describe 'stages reducer', (...) !->
     expect stages undefined, {}
     .to.eql []
 
+  it 'should handle commit-single-to-stage insert new stage', ->
+    state = [
+      { id: '1', stage: [{ message: 'test1', unread: true }] }
+    ]
+
+    new-state = stages state, do
+      type: types.commit-single-to-stage
+      id: '2'
+      next-stage: {
+        message: 'test2'
+      }
+
+    expect(new-state.length).to.be.equal(2)
+    expect(new-state[1].id).to.be.equal('2')
+    expect(new-state[1].stage).to.be.an('object')
+    expect(new-state[1].stage).to.eql({ message: 'test2', unread: false })
+
+  it 'should handle commit-single-to-stage mixin new stage', ->
+    state = [
+      { id: '1', stage: [{ message: 'test1', unread: true }] }
+      { id: '2', stage: { message: 'test1', unread: true }}
+    ]
+
+    new-state = stages state, do
+      type: types.commit-single-to-stage
+      id: '2'
+      next-stage: { message: 'test1' }
+
+    expect(new-state[1].stage).to.eql({ message: 'test1', unread: false })
+
+    new-state = stages new-state, do
+      type: types.commit-single-to-stage
+      id: '2'
+      next-stage: { message: 'test2' }
+
+    expect(new-state[1].stage).to.eql({ message: 'test2', unread: true })
+
   it 'should handle commit-to-stage insert new stage', ->
     state = [
       { id: '1', stage: [{ message: 'test1', unread: true }] }

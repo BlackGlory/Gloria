@@ -84,6 +84,12 @@
       "count": { "content": "$1" }
     }
   }
+, "PushDate": {
+    "message": "最近推送於 $count"
+  , "placeholders": {
+      "count": { "content": "$1" }
+    }
+  }
 , "PushCount": {
     "message": "推送 $count$"
   , "placeholders": {

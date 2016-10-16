@@ -22,6 +22,7 @@ const notifications =
 
 const stages =
   commit-to-stage: Symbol \commit-to-stage
+  commit-single-to-stage: Symbol \commit-single-to-stage
   clear-stage: Symbol \clear-stage
   clear-all-stages: Symbol \clear-all-stages
   mark-stage-read: Symbol \mark-stage-read

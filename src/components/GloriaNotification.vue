@@ -1,7 +1,7 @@
 <template>
   <div class="gloria-notification">
     <div @click="open" :class="{ 'pointer': options.url }">
-      
+
       <div class="row">
         <img width="75" height="75" :src="options.iconUrl" />
         <div class="col-xs">
@@ -40,7 +40,12 @@ export
             if not chrome.runtime.lastError and tabs[0]
               chrome.tabs.highlight window-id: tabs[0].windowId, tabs: tabs[0].index
             else
-              chrome.tabs.create url: target
+              chrome.windows.getCurrent windowTypes: ['normal'], (window) ->
+                if not chrome.runtime.lastError and window
+                  chrome.tabs.create url: target, active: false
+                else
+                  chrome.windows.create (window) ->
+                    chrome.tabs.create url: target, windowId: window.id, active: false
 
   props:
     options:

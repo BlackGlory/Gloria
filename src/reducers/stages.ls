@@ -10,6 +10,37 @@ function generate-key notification
   new MD5!.hex "#{notification.title}#{notification.message}#{notification.id}"
 
 const actions-map =
+  (types.commit-single-to-stage): (state, { id, next-stage }) ->
+    if find ((container) -> container.id is id), state
+      return map ((container) ->
+        return container if container.id isnt id
+
+        if generate-key(next-stage) is generate-key(container.stage)
+          return {
+            ...container
+            stage: {
+              ...next-stage
+              unread: false
+            }
+          }
+        else
+          return {
+            ...container
+            stage: {
+              ...next-stage
+              unread: true
+            }
+          }
+      ), state
+    else
+      return [...state, {
+        id
+        stage: {
+          ...next-stage
+          unread: false
+        }
+      }]
+
   (types.commit-to-stage): (state, { id, next-stage }) ->
     if find ((container) -> container.id is id), state
       return map ((container) ->
@@ -78,14 +109,23 @@ const actions-map =
     map ((x) ->
       return x if x.id isnt id
 
-      {
-        id
-        stage: x.stage.map (notification) ->
-          {
-            ...notification
+      if Array.is-array x.stage
+        {
+          id
+          stage: x.stage.map (notification) ->
+            {
+              ...notification
+              unread: false
+            }
+        }
+      else
+        {
+          id
+          stage: {
+            ...x.stage
             unread: false
           }
-      }
+        }
     ), state
 
   (types.merge-stages): (state, { new-stages }) ->

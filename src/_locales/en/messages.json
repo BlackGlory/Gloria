@@ -84,6 +84,12 @@
       "count": { "content": "$1" }
     }
   }
+, "PushDate": {
+    "message": "Last pushed at $count"
+  , "placeholders": {
+      "count": { "content": "$1" }
+    }
+  }
 , "PushCount": {
     "message": "Pushed $count$"
   , "placeholders": {

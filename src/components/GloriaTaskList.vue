@@ -10,6 +10,7 @@
         :trigger-interval="task.triggerInterval"
         :need-interaction="task.needInteraction"
         :trigger-count="task.triggerCount"
+        :push-date="task.pushDate | relativeDate"
         :push-count="task.pushCount"
         :is-enable="task.isEnable"
       ></gloria-task>
