@@ -119,25 +119,19 @@ export mark-stage-read = (id) ->
   { type: types.mark-stage-read, id }
 
 export merge-stages = (stages) ->
-  new-stages = map ((stage) ->
-    notifications = stage.notification
+  new-stages = map ((container) ->
     {
-      ...stage
-      stage: map ((notification) ->
-        options = notification.options
-        {
-          ...notification
-          options:
-            type: options.type ? 'basic'
-            id: options.id
-            title: (options.title ? '').substring 0, MAX_STRING_LENGTH
-            message: (options.message ? '').substring 0, MAX_STRING_LENGTH
-            context-message: options.context-message
-            icon-url: options.icon-url ? DEFAULT_ICON_URL
-            image-url: options.image-url
-            url: options.url
-        }
-      ), notifications
+      ...container
+      stage: map ((options) ->
+        type: options.type ? 'basic'
+        id: options.id
+        title: (options.title ? '').substring 0, MAX_STRING_LENGTH
+        message: (options.message ? '').substring 0, MAX_STRING_LENGTH
+        context-message: options.context-message
+        icon-url: options.icon-url ? DEFAULT_ICON_URL
+        image-url: options.image-url
+        url: options.url
+      ), container.stage
     }
   ), stages
   { type: types.merge-stages, new-stages }
