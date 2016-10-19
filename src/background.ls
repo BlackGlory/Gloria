@@ -243,7 +243,7 @@ chrome.runtime.on-installed.add-listener (details) ->
         ]
         chrome.storage.local.clear!
 
-      if '0.9.6' < details.previous-version <= '0.9.8'
+      if '0.9.6' < details.previous-version <= '0.9.9'
         # update data format
         configs = JSON.parse local-storage['reduxPersist:configs']
         notifications = JSON.parse local-storage['reduxPersist:notifications']
