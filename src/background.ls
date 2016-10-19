@@ -112,7 +112,7 @@ function check-origin-update redux-store
       fetch "https://api.gloria.pub/task/#{remote-id}"
       .then (res) -> res.json!
       .then ({ code }) ->
-        if code isnt task.code
+        if code.trim! isnt task.code.trim!
           chrome.notifications.create JSON.stringify({ id: task.id, name: task.name, origin: task.origin }), do
             type: 'basic'
             title: chrome.i18n.get-message 'FindNewVersion', [task.name]
@@ -126,9 +126,12 @@ function check-origin-update redux-store
 function check-stage redux-store
   { tasks, stages, config } = redux-store.get-state!
 
-  lazy-actions = [creator.set-config 'LastActiveTime', new Date!toString!]
-  if config?['LastActiveTime']? and new Date! - new Date(config['LastActiveTime']) > 24h * 60m * 60s * 1000ms
-    lazy-actions.push creator.clear-all-stages!
+  lazy-actions = [creator.set-config 'LastActiveDate', new Date!toString!]
+
+  each ((task) ->
+    if not task.is-enable and new Date! - new Date(task.trigger-date) > 24h * 60m * 60s * 1000ms
+      lazy-actions.push creator.clear-stage @id
+  ), tasks
 
   each (({ id, stage }) ->
     task = tasks.find (.id is id)
@@ -141,7 +144,7 @@ function check-stage redux-store
           if options
             create-notification options
             lazy-actions.push creator.add-notification options
-          lazy-actions.push creator.increase-push-count id
+            lazy-actions.push creator.increase-push-count id
         ), filter (.unread), stage
       else
         if stage.unread
@@ -150,6 +153,7 @@ function check-stage redux-store
           if options
             create-notification options
             lazy-actions.push creator.add-notification options
+            lazy-actions.push creator.increase-push-count id
       lazy-actions.push creator.mark-stage-read id
   ), stages
 
@@ -166,7 +170,7 @@ function sync-tasks redux-store
 
   function razor x
     if x.path
-      if (last x.path) in <[triggerCount pushDate pushCount origin]>
+      if (last x.path) in <[triggerDate triggerCount pushDate pushCount origin]>
         return false
     true
 
@@ -383,6 +387,11 @@ const redux-store = do ->
     create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
 
 crosstab-sync persist-store redux-store, {}, ->
+  # Clear all stages when last active date to now more than one day
+  config = redux-store.get-state!config
+  if config?['LastActiveDate']? and new Date! - new Date(config['LastActiveDate']) > 24h * 60m * 60s * 1000ms
+    redux-store.dispatch creator.clear-all-stages!
+
   sync-tasks redux-store
   check-stage redux-store
   check-origin-update redux-store

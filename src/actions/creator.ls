@@ -43,7 +43,7 @@ export set-is-enable = (id, is-enable) ->
   { type: types.set-is-enable, id, is-enable }
 
 export increase-trigger-count = (id) ->
-  { type: types.increase-trigger-count, id }
+  { type: types.increase-trigger-count, id, date: new Date }
 
 export increase-push-count = (id) ->
   { type: types.increase-push-count, id, date: new Date }

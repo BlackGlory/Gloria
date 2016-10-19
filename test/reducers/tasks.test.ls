@@ -118,27 +118,35 @@ describe 'tasks reducer', (...) !->
     ]
 
   it 'should handle increase-trigger-count', ->
+    date = new Date!
     expect tasks [
       id: '1'
       trigger-count: 0
-    ], do
+    ], {
       type: types.increase-trigger-count
       id: '1'
+      date
+    }
     .to.eql [
       id: '1'
       trigger-count: 1
+      trigger-date: date
     ]
 
   it 'should handle increase-push-count', ->
+    date = new Date!
     expect tasks [
       id: '1'
       push-count: 0
-    ], do
+    ], {
       type: types.increase-push-count
       id: '1'
+      date
+    }
     .to.eql [
       id: '1'
       push-count: 1
+      push-date: date
     ]
 
   it 'should handle clear-all-tasks', ->

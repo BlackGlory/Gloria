@@ -9,7 +9,7 @@
             <p><span>{{ name }}</span>
             <div class="row between-xs">
               <p>{{ 'TriggerCount' | i18n triggerCount }} {{ triggerCount | pluralize 'NounsTime' | i18n }}, {{ 'PushCount' | i18n pushCount }} {{ pushCount | pluralize 'NounsNotification' | i18n }}</p>
-              <p v-if="pushDate">{{ 'PushDate' | i18n pushDate }}</p>
+              <p v-if="pushDate">{{ 'PushDate' | i18n pushDateRelative }}</p>
             </div>
           </div>
 
@@ -114,6 +114,8 @@ export
   computed:
     help-text: ->
       Vue.filter('i18n')('TaskIntervalDescription', @name, @triggerInterval) + ' ' + Vue.filter('i18n')(Vue.filter('pluralize')(@triggerCount, 'NounsMinute'))
+    push-date-relative: ->
+      Vue.filter('relativeDate') @push-date
   methods:
     set-edit-dialog: ->
       @$data.editable-code = @code

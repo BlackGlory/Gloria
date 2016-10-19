@@ -70,11 +70,12 @@ const actions-map =
       }
     ), state
 
-  (types.increase-trigger-count): (state, { id }) ->
+  (types.increase-trigger-count): (state, { id, date }) ->
     map ((x) ->
       return x if x.id isnt id
       {
         ...x
+        trigger-date: date
         trigger-count: x.trigger-count + 1
       }
     ), state

@@ -72,16 +72,18 @@ describe 'tasks action creator', (...) !->
       is-enable: false
 
   it 'should create increase-trigger-count', ->
-    expect creator.increase-trigger-count 'TestId'
-    .to.eql do
-      type: types.increase-trigger-count
-      id: 'TestId'
+    result = creator.increase-trigger-count 'TestId', false
+
+    expect(result.type).to.be.equal types.increase-trigger-count
+    expect(result.id).to.be.equal 'TestId'
+    expect(result.date).to.be.a 'date'
 
   it 'should create increase-push-count', ->
-    expect creator.increase-push-count 'TestId'
-    .to.eql do
-      type: types.increase-push-count
-      id: 'TestId'
+    result = creator.increase-push-count 'TestId', false
+
+    expect(result.type).to.be.equal types.increase-push-count
+    expect(result.id).to.be.equal 'TestId'
+    expect(result.date).to.be.a 'date'
 
   it 'should create clear-all-tasks', ->
     expect creator.clear-all-tasks!
