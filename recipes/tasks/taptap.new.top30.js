@@ -4,10 +4,10 @@ Promise.all([
 ])
 .then(([{ cheerio }, html]) => {
   let $ = cheerio.load(html)
-  return $('#topList .top-card').map((i, el) => {
+  return $('#topList .taptap-top-card').map((i, el) => {
     return {
-      title: $(el).find('.top-card-middle a h4').text().replace(/\s/g, '')
-    , message: $(el).find('.card-middle-description').text().replace(/\s/g, '')
+      title: $(el).find('.top-card-middle a h4').text().trim().replace(/\s+/g, ' ')
+    , message: $(el).find('.card-middle-description').text().trim().replace(/\s+/g, ' ')
     , url: $(el).find('.top-card-middle a').attr('href')
     , iconUrl: $(el).find('.top-card-left img').attr('src')
     , imageUrl: $(el).find('.card-right-image img').attr('src')
