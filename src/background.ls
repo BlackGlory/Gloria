@@ -130,7 +130,7 @@ function check-stage redux-store
 
   each ((task) ->
     if not task.is-enable and new Date! - new Date(task.trigger-date) > 24h * 60m * 60s * 1000ms
-      lazy-actions.push creator.clear-stage @id
+      lazy-actions.push creator.clear-stage task.id
   ), tasks
 
   each (({ id, stage }) ->
