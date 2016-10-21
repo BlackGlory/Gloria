@@ -7,11 +7,15 @@ Promise.all([
     , productivityScore = $('.productivity-score-chart').data('productivity-score')
     , comparison = $('.productivity-score-chart').data('comparison-productivity-score')
     , comparisonLabel = $('.productivity-score-chart').data('comparison-label')
-  return {
-    title: `Current productivity pulse: ${productivityScore}`
-  , message: `${Math.round((productivityScore - comparison) / comparison * 100)}% from ${comparisonLabel}`
-  , iconUrl: 'https://www.rescuetime.com/assets/icons/clock-green.png'
-  , url: 'https://www.rescuetime.com/dashboard'
+  if (productivityScore) {
+    return {
+      title: `Current productivity pulse: ${productivityScore}`
+    , message: `${Math.round((productivityScore - comparison) / comparison * 100)}% from ${comparisonLabel}`
+    , iconUrl: 'https://www.rescuetime.com/assets/icons/clock-green.png'
+    , url: 'https://www.rescuetime.com/dashboard'
+    }
+  } else {
+    return null
   }
 })
 .then(commit)
