@@ -23,6 +23,7 @@ Promise.all([
     , title: $(el).find('.WB_info a').first().text().trim().replace(/\s+/g, ' ')
     , message: $(el).find('.WB_text').text().trim().replace(/\s+/g, ' ')
     , imageUrl: $(el).find('.WB_media_wrap img').attr('src')
+    , url: 'http://weibo.com'+ $(el).find('.WB_from a').attr('href')
     })).get()
   })
 })
