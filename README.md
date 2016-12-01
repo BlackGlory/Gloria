@@ -13,3 +13,5 @@ A programmable website notifications aggregator in Chrome.
 * [Gloria.Pub: A website to share your Gloria task.](https://github.com/BlackGlory/Gloria.Pub)
 * [gloria-utils: Chrome extension Gloria task utils](https://github.com/BlackGlory/gloria-utils)
 * [webpack-online: webpack online service](https://github.com/BlackGlory/webpack-online)
+* [gloria-recipes: Chrome extension Gloria recipes](https://github.com/BlackGlory/gloria-recipes)
+* [parse-favicon: Parse HTML to get favicon information](https://github.com/BlackGlory/parse-favicon)
