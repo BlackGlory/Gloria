@@ -2,14 +2,14 @@
 
 require! 'prelude-ls': { unique-by, reverse }
 
-require! 'node-uuid': uuid
+require! 'uuid/v4': uuid-v4
 require! '../actions/types.ls': types
 
 const LIMITED = 200items
 
 const actions-map =
   (types.add-notification): (state, { options }) ->
-    result = [{ id: uuid.v4!, options }, ...state]
+    result = [{ id: uuid-v4!, options }, ...state]
     if result.length > LIMITED
       result = result[0 til LIMITED]
     result

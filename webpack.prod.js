@@ -12,6 +12,10 @@ module.exports = {
   , filename: '[name].js'
   }
 , devtool: 'source-map'
+, target: 'web'
+, node: {
+    fs: 'empty'
+  }
 , plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -32,6 +36,7 @@ module.exports = {
     loaders: [
       { test: /\.ls$/, loader: 'livescript' }
     , { test: /\.vue$/, loader: 'vue' }
+    , { test: /\.json$/, loader: 'json' }
     ]
   }
 , vue: {

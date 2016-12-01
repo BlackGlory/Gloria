@@ -1,6 +1,6 @@
 'use strict'
 
-require! 'node-uuid': uuid
+require! 'uuid/v4': uuid-v4
 require! 'rx': Rx
 
 callable =
@@ -8,7 +8,7 @@ callable =
     function call-remote function-name, ...function-arguments
       new Promise (resolve, reject) !->
         message =
-          id: uuid.v4!
+          id: uuid-v4!
           type: 'call'
           function-name: function-name
           function-arguments: function-arguments

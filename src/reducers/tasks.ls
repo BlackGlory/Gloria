@@ -1,13 +1,13 @@
 'use strict'
 
 require! 'prelude-ls': { unique-by, reverse, map, filter }
-require! 'node-uuid': uuid
+require! 'uuid/v4': uuid-v4
 require! '../actions/types.ls': types
 
 const actions-map =
   (types.add-task): (state, { name, code, trigger-interval, need-interaction, trigger-count, push-count, is-enable, origin }) ->
     [...state, {
-      id: uuid.v4!
+      id: uuid-v4!
       name
       code
       trigger-interval

@@ -1,7 +1,7 @@
 'use strict'
 
 require! 'prelude-ls': { map, join, each }
-require! 'node-uuid': uuid
+require! 'uuid/v4': uuid-v4
 require! 'worker!./worker.ls': EvalWorker
 require! 'raw!gloria-utils': gloria-utils
 
@@ -70,7 +70,7 @@ export function bind-call-remote worker
   (function-name, ...function-arguments) ->
     new Promise (resolve, reject) !->
       message =
-        id: uuid.v4!
+        id: uuid-v4!
         type: 'call'
         function-name: function-name
         function-arguments: function-arguments
