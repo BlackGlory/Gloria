@@ -6,7 +6,7 @@ A programmable website notifications aggregator in Chrome.
 
 * [Chrome Web Store](https://chrome.google.com/webstore/detail/gloria/cnelmenogjgobndnoddckekbojgginbn)
 * [Tasks Sharing](https://gloria.pub/)
-* [Usage / Document](http://docs.gloria.pub/) (Chinese Version only, English Version WIP)
+* [Usage / Document](http://docs.gloria.pub/) (Chinese version only temporarily)
 
 ## Related Projects
 
@@ -15,3 +15,4 @@ A programmable website notifications aggregator in Chrome.
 * [webpack-online: webpack online service](https://github.com/BlackGlory/webpack-online)
 * [gloria-recipes: Chrome extension Gloria recipes](https://github.com/BlackGlory/gloria-recipes)
 * [parse-favicon: Parse HTML to get favicon information](https://github.com/BlackGlory/parse-favicon)
+* [enhanced-notification: A OOP encapsulation of chrome.notifications, with more features.](https://github.com/BlackGlory/enhanced-notification)
