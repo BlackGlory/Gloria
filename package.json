@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "deep-diff": "^0.3.4",
-    "enhanced-notification": "^0.1.1",
+    "enhanced-notification": "^0.1.4",
     "flexboxgrid": "^6.3.1",
     "gloria-utils": "^1.3.0",
     "jshashes": "^1.0.6",
