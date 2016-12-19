@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
@@ -59,6 +59,7 @@
     "revue": "^2.2.0",
     "rollbar-browser": "^1.9.2",
     "rx": "^4.1.0",
+    "semver": "^5.3.0",
     "uuid": "^3.0.1",
     "vue": "^1.0.26"
   }

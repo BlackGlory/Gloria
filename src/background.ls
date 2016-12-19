@@ -11,6 +11,7 @@ require! 'redux-logger': create-logger
 require! 'redux-persist-crosstab': crosstab-sync
 require! 'rx': Rx
 require! 'deep-diff': { diff }
+require! 'semver': semver
 
 require! './reducers/index.ls': reducers
 require! './actions/creator.ls': creator
@@ -227,8 +228,8 @@ chrome.runtime.on-installed.add-listener (details) ->
   else if details.reason is 'update' and details.previous-version isnt this-version
     set-timeout (-> redux-store.dispatch creator.clear-all-stages!), 0
 
-    if details.previous-version < this-version
-      if details.previous-version <= '0.9.6'
+    if semver.lt details.previous-version, this-version
+      if semver.lte details.previous-version, '0.9.6'
         # move persist store from chrome.storage to localStorage
         items <- chrome.storage.local.get null
         configs = items['reduxPersist:config']
@@ -243,7 +244,7 @@ chrome.runtime.on-installed.add-listener (details) ->
         ]
         chrome.storage.local.clear!
 
-      if '0.9.6' < details.previous-version <= '0.9.9'
+      if semver.gte(details.previous-version, '0.9.6') && semver.lte(details.previous-version, '0.9.9')
         # update data format
         configs = JSON.parse local-storage['reduxPersist:configs']
         notifications = JSON.parse local-storage['reduxPersist:notifications']
