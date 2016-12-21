@@ -90,6 +90,8 @@ export function eval-untrusted code
     get-cookies: (url) ->
       new Promise (resolve, reject) !->
         cookies <-! chrome.cookies.get-all { url }
+        if chrome.runtime.last-error
+          console.error chrome.runtime.last-error
         resolve join '; ' map (cookie) -> "#{cookie.name}=#{cookie.value}", cookies || []
 
     set-session-storage: (name, data) ->

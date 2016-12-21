@@ -39,18 +39,20 @@ function reduce-notification-options options
 function create-task-timer task, immediately = false
   function run
     redux-store.dispatch creator.increase-trigger-count task.id
-    eval-untrusted task.code
-    .then (data-list) ->
-      if (not data-list) or (is-type 'Undefined' data-list) or ((is-type 'Array' data-list) and empty data-list)
-        return
+    set-timeout (->
+      eval-untrusted task.code
+      .then (data-list) ->
+        if (not data-list) or (is-type 'Undefined' data-list) or ((is-type 'Array' data-list) and empty data-list)
+          return
 
-      if not is-type 'Array' data-list
-        data = data-list
-        redux-store.dispatch creator.commit-single-to-stage task.id, data
-      else
-        redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
-    .catch (err) ->
-      console.error err
+        if not is-type 'Array' data-list
+          data = data-list
+          redux-store.dispatch creator.commit-single-to-stage task.id, data
+        else
+          redux-store.dispatch creator.commit-to-stage task.id, data-list.filter (x) -> !!x
+      .catch (err) ->
+        console.error err
+    ), 0
 
   alarms-manager.add task.id, task.trigger-interval, run
   run! if immediately
