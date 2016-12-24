@@ -7,8 +7,10 @@ const DEFAULT_ICON_URL = 'assets/images/icon-128.png'
 class NavigableNotificationsManager
   add: (options) ->
     notification = do ->
-      if options.url and options.iconUrl is DEFAULT_ICON_URL and not options.detectIcon
-        options.detectIcon = true
+      options.default-icon-url = DEFAULT_ICON_URL
+
+      if options.url and options.icon-url is DEFAULT_ICON_URL and not options.detect-icon
+        options.detect-icon = true
 
       if options.type === 'basic'
         new BasicNotification options

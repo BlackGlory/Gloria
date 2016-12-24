@@ -53,23 +53,31 @@ callable =
         resolve data
         self.close!
 
-      try
-        result = do ->
-          var callable, bind-call-remote, call-remote, self, close
-          eval code
-        if Rx.helpers.is-promise result
-          result.catch ({ message, stack })->
-            reject { message, stack }
-            self.close!
-      catch { message, stack }
-        reject { message, stack }
+      function error-handler err
+        reject err
         self.close!
+
+      self.add-event-listener 'error', error-handler
+      self.add-event-listener 'rejectionhandled', error-handler
+      self.add-event-listener 'unhandledrejection', error-handler
+
+      result = do ->
+        var callable, bind-call-remote, call-remote, self, close, resolve, reject, error-handler
+        eval code
+
+      if result.then and result.catch
+        result.catch error-handler
 
 self.add-event-listener 'message', ({ data: { id, type, function-name, function-arguments } }) ->
   if type is 'call'
     callable[function-name](...function-arguments)
-    .then (result) -> self.post-message id: id, type: 'return', function-result: result
-    .catch (error) -> self.post-message id: id, type: 'error', error: error
-
-self.add-event-listener 'error', (error) ->
-  console.error error
+    .then (result) ->
+      self.post-message id: id, type: 'return', function-result: result
+    .catch (error) ->
+      try
+        self.post-message id: id, type: 'error', error: error
+      catch err
+        plain-object = {}
+        for key in Object.get-own-property-names error
+          plain-object[key] = error[key]
+        self.post-message id: id, type: 'error', error: plain-object
