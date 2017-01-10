@@ -24,6 +24,7 @@
     "page": "options.html"
   , "chrome_style": false
   }
+, "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy3nade03E4YF+rqs88mzIoNoK2MNjv+Im1QmQw9wixhS+UKUyoPZqz81yQzFgjDqAjtrCU+2bpK0eo2vWN+Gj2yfnkPYgLIx411UEg8liKsD/GgLhWStqszN8GPIbVRupXMuJPDSBuR8TydFzXYRAb8RNpbMbp7VYjEhiKaBONcct8VL9vD3InNMVEUA2wuxkb15APaXt+tzeKtUkkULFVZF2b0tBHQHtrkvpO1ppYvEZCZnxqj+0PRcBid+vu0y1SJaxheswih8fcvGqQ3iZ6gqS1y7YnMEhQrhyLJOp/cliAsptnbOEHvposmdlH5cZcSQYiJ5+grvjBnBVx1k2QIDAQAB"
 , "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 , "permissions": [
     "cookies"
