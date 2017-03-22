@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
@@ -42,7 +42,7 @@
     "deep-diff": "^0.3.4",
     "enhanced-notification": "^0.2.8",
     "flexboxgrid": "^6.3.1",
-    "gloria-utils": "^1.3.0",
+    "gloria-sandbox": "^0.1.3",
     "jshashes": "^1.0.6",
     "keen-ui": "^0.8.9",
     "later": "^1.2.0",
