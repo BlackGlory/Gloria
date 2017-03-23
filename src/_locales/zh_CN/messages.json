@@ -24,7 +24,7 @@
     }
   }
 , "NotificationContextMessage": {
-    "message": "$task_name$ $time$"
+    "message": "$time$ $task_name$"
   , "placeholders": {
       "task_name": { "content": "$1" }
     , "time": { "content": "$2" }
