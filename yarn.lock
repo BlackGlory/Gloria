@@ -976,9 +976,9 @@ css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
 
-css-loader@^0.27.3:
-  version "0.27.3"
-  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.27.3.tgz#69ab6f47b69bfb1b5acee61bac2aab14302ff0dc"
+css-loader@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.28.0.tgz#417cfa9789f8cde59a30ccbf3e4da7a806889bad"
   dependencies:
     babel-code-frame "^6.11.0"
     css-selector-tokenizer "^0.7.0"
@@ -1521,12 +1521,12 @@ globals@^9.0.0:
   version "9.12.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.12.0.tgz#992ce90828c3a55fa8f16fada177adb64664cf9d"
 
-gloria-sandbox@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/gloria-sandbox/-/gloria-sandbox-0.1.4.tgz#50248823b3547d612d8eabc3227b34b1c854d708"
+gloria-sandbox@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/gloria-sandbox/-/gloria-sandbox-0.1.5.tgz#457ee0deb9e9f8d8e6b3c965d878404ec17ac9eb"
   dependencies:
     gloria-utils "^1.4.0"
-    worker-sandbox "^0.1.5"
+    worker-sandbox "^0.1.7"
 
 gloria-utils@^1.4.0:
   version "1.4.0"
@@ -3235,9 +3235,9 @@ strip-json-comments@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-1.0.4.tgz#1e15fbcac97d3ee99bf2d73b4c656b082bbafb91"
 
-style-loader@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.16.0.tgz#5f001a9bf58fff9fd40f8aa3b9738ab99d4000c7"
+style-loader@^0.16.1:
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.16.1.tgz#50e325258d4e78421dd9680636b41e8661595d10"
   dependencies:
     loader-utils "^1.0.2"
 
@@ -3630,9 +3630,9 @@ wordwrap@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
 
-worker-sandbox@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/worker-sandbox/-/worker-sandbox-0.1.5.tgz#e86298daacb7347e4bcc9820923de4dbd2ecbb78"
+worker-sandbox@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/worker-sandbox/-/worker-sandbox-0.1.7.tgz#44f5773ab61e442d517c356025b5f91250cc3087"
   dependencies:
     babel-runtime "^6.23.0"
     circular-json "^0.3.1"

@@ -72,8 +72,8 @@ export function eval-untrusted code
         reject detail
       sandbox.add-event-listener 'commit', ({ detail }) ->
         resolve detail
-        sandbox.destory!
+        sandbox.destroy!
       sandbox.execute code, 1000ms * 60s
       .catch (err) ->
         reject err
-        sandbox.destory!
+        sandbox.destroy!
