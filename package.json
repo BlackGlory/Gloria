@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
@@ -37,17 +37,17 @@
     "webpack": "^1.14.0"
   },
   "dependencies": {
-    "deep-diff": "^0.3.4",
+    "deep-diff": "^0.3.8",
     "enhanced-notification": "^0.2.8",
     "flexboxgrid": "^6.3.1",
-    "gloria-sandbox": "^0.1.5",
+    "gloria-sandbox": "^0.2.7",
     "jshashes": "^1.0.6",
     "keen-ui": "^0.8.9",
     "later": "^1.2.0",
     "material-design-icons": "^3.0.1",
     "moment": "^2.18.1",
-    "normalize.css": "^5.0.0",
-    "parse-favicon": "^1.1.6",
+    "normalize.css": "^7.0.0",
+    "parse-favicon": "^1.2.8",
     "redux": "^3.6.0",
     "redux-action-buffer": "^1.0.1",
     "redux-batched-actions": "^0.1.5",
@@ -58,7 +58,7 @@
     "rollbar-browser": "^1.9.4",
     "rx": "^4.1.0",
     "semver": "^5.3.0",
-    "uuid": "^3.0.1",
+    "uuid": "^3.1.0",
     "vue": "^1.0.26"
   }
 }

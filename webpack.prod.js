@@ -15,6 +15,7 @@ module.exports = {
 , target: 'web'
 , node: {
     fs: 'empty'
+  , net: 'empty'
   }
 , plugins: [
     new webpack.DefinePlugin({
