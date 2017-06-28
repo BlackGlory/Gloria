@@ -1,22 +1,22 @@
 {
   "AppDesc​​": { "message": "Chrome 上的可編程網站通知聚合器." }
 , "ActionTitle": { "message": "Gloria 選項" }
-, "ExtensionInstalledTitle": { "message": "你好世界!" }
+, "ExtensionInstalledTitle": { "message": "Gloria 消息" }
 , "ExtensionInstalledMessage": {
-    "message": "Gloria $this_version$ 安裝完畢."
+    "message": "Gloria $this_version$ 開始工作."
   , "placeholders": {
       "this_version": { "content": "$1" }
     }
   }
-, "ExtensionUpdatedTitle": { "message": "Excited!" }
+, "ExtensionUpdatedTitle": { "message": "Gloria 消息" }
 , "ExtensionUpdatedMessage": {
-    "message": "Gloria 已經從 $previous_version$ 升級至 $this_version$!"
+    "message": "Gloria 已從 $previous_version$ 升級至 $this_version$."
   , "placeholders": {
       "previous_version": { "content": "$1" }
     , "this_version": { "content": "$2" }
     }
   }
-, "TaskInstalledTitle": { "message": "Excited!" }
+, "TaskInstalledTitle": { "message": "Gloria 消息" }
 , "TaskInstalledMessage": {
     "message": "新的任務 $task_name$ 安裝完畢."
   , "placeholders": {
@@ -45,27 +45,27 @@
 , "ClearHistorySnackbar": { "message": "清理所有歷史記錄" }
 , "ClearHistoryConfirm": {"message": "確定要清理所有歷史記錄嗎?"}
 , "Cancel": { "message": "取消" }
-, "ClearTasks": { "message": "清理任務" }
-, "ClearTasksSnackbar": { "message": "清理所有任務" }
-, "ClearTasksConfirm": { "message": "確定要清理所有任務嗎?" }
+, "ClearTasks": { "message": "清除任務" }
+, "ClearTasksSnackbar": { "message": "清除所有任務" }
+, "ClearTasksConfirm": { "message": "確定要清除所有任務嗎?" }
 , "ClearStages": { "message": "清理 Stages" }
 , "ClearStagesSnackbar": { "message": "清理所有 Stages(一個用於緩存通知的內部組件)" }
 , "ClearStagesConfirm": { "message": "確定要清理所有 Stages 嗎?" }
 , "ClearCaches": { "message": "清理 Caches" }
 , "ClearCachesSnackbar": { "message": "清理所有 Caches(一個用於緩存網絡請求的內部組件)" }
 , "ClearCachesConfirm": { "message": "確定要清理所有 Caches 嗎?" }
-, "Inside": { "message": "內部狀態" }
+, "Inside": { "message": "內部狀態(調試功能)" }
 , "StartObserveStateChange": { "message": "開始觀察內部狀態變化" }
 , "StopObserveStateChange": { "message": "停止觀察內部狀態變化" }
 , "Source": { "message": "來源" }
 , "Edit": { "message": "編輯" }
-, "TriggerInterval": { "message": "觸發間隔(分鐘)" }
+, "TriggerInterval": { "message": "執行間隔(分鐘)" }
 , "Delete": { "message": "刪除" }
 , "Editor": { "message": "編輯器" }
 , "TaskName": { "message": "任務名稱" }
 , "InputTaskName": { "message": "輸入一個任務名稱" }
 , "TaskCode": { "message": "任務代碼" }
-, "PasteYourFantasticCodeHere": { "message": "在此處粘貼超棒的任務代碼" }
+, "PasteYourFantasticCodeHere": { "message": "在此處粘貼任務代碼" }
 , "Save": { "message": "保存" }
 , "DeleteTask": { "message": "刪除任務" }
 , "DeleteTaskConfirm": { "message": "確定要刪除這個任務?" }
@@ -74,12 +74,12 @@
 , "GiveItName": { "message": "起個好名字吧" }
 , "Back": { "message": "返回" }
 , "FinalConfiguration": { "message": "還差一點點配置" }
-, "InteractionRequired": { "message": "彈出的通知需要用戶交互" }
+, "InteractionRequired": { "message": "彈出的通知需要手動關閉" }
 , "Finish": { "message": "完成" }
 , "Error": { "message": "錯誤" }
 , "NameAndCodeRequired": { "message": "任務名稱和代碼不能為空." }
 , "TriggerCount": {
-    "message": "觸發 $count$"
+    "message": "執行 $count$"
   , "placeholders": {
       "count": { "content": "$1" }
     }
@@ -105,18 +105,19 @@
   , "description": "plural"
   }
 , "NounsNotification": {
-    "message": "個通知"
+    "message": "條通知"
   , "description": "singular"
   }
 , "NounsNotifications": {
-    "message": "個通知"
+    "message": "條通知"
   , "description": "plural"
   }
 , "TaskIntervalDescription": {
-    "message": "任務 $task_name$ 的觸發間隔是 $trigger_interval$"
+    "message": "任務 $task_name$ 每過$trigger_interval$$unit_minute$會執行一次"
   , "placeholders": {
       "task_name": { "content": "$1" }
     , "trigger_interval": { "content": "$2" }
+    , "unit_minute": { "content": "$3" }
     }
   }
 , "NounsMinute": {
@@ -129,10 +130,10 @@
   }
 , "EmptyHistoryDescription": { "message": "還沒有通知被推送到這裡" }
 , "EmptyTaskListDescription": { "message": "任務列表現在是空的, 接下來你可以" }
-, "InstallTask​​From": { "message": "從 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安裝一個網友分享的任務" }
+, "InstallTask​​From": { "message": "從 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安裝網友分享的任務" }
 , "Or": { "message": "或者" }
 , "CreateTask": { "message": "創建任務" }
-, "DocumentDescription": { "message": "願這份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">開發文檔</a> 指引你" }
+, "DocumentDescription": { "message": "試試閱讀這份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">開發文檔</a>" }
 , "StorageQuotaUsage": { "message": "存儲配額使用情況" }
 , "FindNewVersion": {
     "message": "任務 $task_name$ 有新版本"
@@ -140,12 +141,12 @@
       "task_name": { "content": "$1" }
     }
   }
-, "Unsynchronized": { "message": "不再檢查此任務更新(切斷來源)" }
-, "GotoSource": { "message": "打開來源頁面手動更新" }
+, "Unsynchronized": { "message": "不再檢查此任務更新" }
+, "GotoSource": { "message": "打開任務頁面手動更新" }
 , "AutoCheckContextMessage": { "message": "出於安全考慮, Gloria 不會自動更新任務代碼." }
-, "CutOffSource": { "message": "切斷與任務來源的聯繫" }
-, "CutOffSourceConfirm": { "message": "確定要切斷與任務來源的聯繫嗎?" }
-, "CutOff": { "message": "切斷" }
+, "CutOffSource": { "message": "停止檢查此任務的遠程更新" }
+, "CutOffSourceConfirm": { "message": "確定要停止檢查此任務的遠程更新嗎?" }
+, "CutOff": { "message": "停止" }
 , "Local": { "message": "本地" }
 , "Notification Reducer": { "message": "通知 Reducer" }
 , "Reducer Code": { "message": "Reducer 代碼" }

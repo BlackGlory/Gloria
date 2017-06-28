@@ -24,8 +24,8 @@ export
 
 <style lang="stylus">
 .gloria-notification-list
-  display: flex;
-  flex-direction: column;
+  display: flex
+  flex-direction: column
   align-items: center
   .gloria-notification:not(:last-child)
     margin-bottom: 8px

@@ -1,22 +1,22 @@
 {
   "AppDesc": { "message": "A programmable website notifications aggregator in Chrome." }
 , "ActionTitle": { "message": "Gloria options" }
-, "ExtensionInstalledTitle": { "message": "Hello world!" }
+, "ExtensionInstalledTitle": { "message": "Gloria Message" }
 , "ExtensionInstalledMessage": {
-    "message": "Gloria $this_version$ Installed."
+    "message": "Gloria $this_version$ start working."
   , "placeholders": {
       "this_version": { "content": "$1" }
     }
   }
-, "ExtensionUpdatedTitle": { "message": "Excited!" }
+, "ExtensionUpdatedTitle": { "message": "Gloria Message" }
 , "ExtensionUpdatedMessage": {
-    "message": "Gloria updated from $previous_version$ to $this_version$!"
+    "message": "Gloria updated from $previous_version$ to $this_version$."
   , "placeholders": {
       "previous_version": { "content": "$1" }
     , "this_version": { "content": "$2" }
     }
   }
-, "TaskInstalledTitle": { "message": "Excited!" }
+, "TaskInstalledTitle": { "message": "Gloria Message" }
 , "TaskInstalledMessage": {
     "message": "New task $task_name$ installed."
   , "placeholders": {
@@ -74,7 +74,7 @@
 , "GiveItName": { "message": "Give it a good name" }
 , "Back": { "message": "Back" }
 , "FinalConfiguration": { "message": "Finally some configuration" }
-, "InteractionRequired": { "message": "Notice need an interaction" }
+, "InteractionRequired": { "message": "Notice need to be closed manually" }
 , "Finish": { "message": "Finish" }
 , "Error": { "message": "Error" }
 , "NameAndCodeRequired": { "message": "Name, code cannot be empty." }
@@ -113,10 +113,11 @@
   , "description": "plural"
   }
 , "TaskIntervalDescription": {
-    "message": "Task $task_name$ will trigger every $trigger_interval$"
+    "message": "Task $task_name$ will run every $trigger_interval$ $unit_minute"
   , "placeholders": {
       "task_name": { "content": "$1" }
     , "trigger_interval": { "content": "$2" }
+    , "unit_minute": { "content": "$3" }
     }
   }
 , "NounsMinute": {
@@ -143,9 +144,9 @@
 , "Unsynchronized": { "message": "Never sync this task" }
 , "GotoSource": { "message": "Go to source and update manually" }
 , "AutoCheckContextMessage": { "message": "For security reasons, Gloria does not automatically update the code." }
-, "CutOffSource": { "message": "Cut off the link of source" }
-, "CutOffSourceConfirm": { "message": "Are you sure you want to cut off the link of source?" }
-, "CutOff": { "message": "Cut off" }
+, "CutOffSource": { "message": "Stop checking for remote updates for this task" }
+, "CutOffSourceConfirm": { "message": "Are you sure you want to stop checking for remote updates for this task?" }
+, "CutOff": { "message": "Stop" }
 , "Local": { "message": "Local" }
 , "NotificationReducer": { "message": "Notifications Reducer" }
 , "ReducerCode": { "message": "Reducer Code" }

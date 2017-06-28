@@ -1,22 +1,22 @@
 {
   "AppDesc": { "message": "Chrome 上的可编程网站通知聚合器." }
 , "ActionTitle": { "message": "Gloria 选项" }
-, "ExtensionInstalledTitle": { "message": "你好世界!" }
+, "ExtensionInstalledTitle": { "message": "Gloria 消息" }
 , "ExtensionInstalledMessage": {
-    "message": "Gloria $this_version$ 安装完毕."
+    "message": "Gloria $this_version$ 开始工作."
   , "placeholders": {
       "this_version": { "content": "$1" }
     }
   }
-, "ExtensionUpdatedTitle": { "message": "一颗赛艇!" }
+, "ExtensionUpdatedTitle": { "message": "Gloria 消息" }
 , "ExtensionUpdatedMessage": {
-    "message": "Gloria 已经从 $previous_version$ 升级至 $this_version$!"
+    "message": "Gloria 已从 $previous_version$ 升级至 $this_version$."
   , "placeholders": {
       "previous_version": { "content": "$1" }
     , "this_version": { "content": "$2" }
     }
   }
-, "TaskInstalledTitle": { "message": "一颗赛艇!" }
+, "TaskInstalledTitle": { "message": "Gloria 消息" }
 , "TaskInstalledMessage": {
     "message": "新的任务 $task_name$ 安装完毕."
   , "placeholders": {
@@ -45,27 +45,27 @@
 , "ClearHistorySnackbar": { "message": "清理所有历史记录" }
 , "ClearHistoryConfirm": {"message": "确定要清理所有历史记录吗?"}
 , "Cancel": { "message": "取消" }
-, "ClearTasks": { "message": "清理任务" }
-, "ClearTasksSnackbar": { "message": "清理所有任务" }
-, "ClearTasksConfirm": { "message": "确定要清理所有任务吗?" }
+, "ClearTasks": { "message": "清除任务" }
+, "ClearTasksSnackbar": { "message": "清除所有任务" }
+, "ClearTasksConfirm": { "message": "确定要清除所有任务吗?" }
 , "ClearStages": { "message": "清理 Stages" }
 , "ClearStagesSnackbar": { "message": "清理所有 Stages(一个用于缓存通知的内部组件)" }
 , "ClearStagesConfirm": { "message": "确定要清理所有 Stages 吗?" }
 , "ClearCaches": { "message": "清理 Caches" }
 , "ClearCachesSnackbar": { "message": "清理所有 Caches(一个用于缓存网络请求的内部组件)" }
 , "ClearCachesConfirm": { "message": "确定要清理所有 Caches 吗?" }
-, "Inside": { "message": "内部状态" }
+, "Inside": { "message": "内部状态(调试功能)" }
 , "StartObserveStateChange": { "message": "开始观察内部状态变化" }
 , "StopObserveStateChange": { "message": "停止观察内部状态变化" }
 , "Source": { "message": "来源" }
 , "Edit": { "message": "编辑" }
-, "TriggerInterval": { "message": "触发间隔(分钟)" }
+, "TriggerInterval": { "message": "执行间隔(分钟)" }
 , "Delete": { "message": "删除" }
 , "Editor": { "message": "编辑器" }
 , "TaskName": { "message": "任务名称" }
 , "InputTaskName": { "message": "输入一个任务名称" }
 , "TaskCode": { "message": "任务代码" }
-, "PasteYourFantasticCodeHere": { "message": "在此处粘贴超棒的任务代码" }
+, "PasteYourFantasticCodeHere": { "message": "在此处粘贴任务代码" }
 , "Save": { "message": "保存" }
 , "DeleteTask": { "message": "删除任务" }
 , "DeleteTaskConfirm": { "message": "确定要删除这个任务?" }
@@ -74,12 +74,12 @@
 , "GiveItName": { "message": "起个好名字吧" }
 , "Back": { "message": "返回" }
 , "FinalConfiguration": { "message": "还差一点点配置" }
-, "InteractionRequired": { "message": "弹出的通知需要用户交互" }
+, "InteractionRequired": { "message": "弹出的通知需要手动关闭" }
 , "Finish": { "message": "完成" }
 , "Error": { "message": "错误" }
 , "NameAndCodeRequired": { "message": "任务名称和代码不能为空." }
 , "TriggerCount": {
-    "message": "触发 $count$"
+    "message": "执行 $count$"
   , "placeholders": {
       "count": { "content": "$1" }
     }
@@ -105,18 +105,19 @@
   , "description": "plural"
   }
 , "NounsNotification": {
-    "message": "个通知"
+    "message": "条通知"
   , "description": "singular"
   }
 , "NounsNotifications": {
-    "message": "个通知"
+    "message": "条通知"
   , "description": "plural"
   }
 , "TaskIntervalDescription": {
-    "message": "任务 $task_name$ 的触发间隔是 $trigger_interval$"
+    "message": "任务 $task_name$ 每过$trigger_interval$$unit_minute$会执行一次"
   , "placeholders": {
       "task_name": { "content": "$1" }
     , "trigger_interval": { "content": "$2" }
+    , "unit_minute": { "content": "$3" }
     }
   }
 , "NounsMinute": {
@@ -129,10 +130,10 @@
   }
 , "EmptyHistoryDescription": { "message": "还没有通知被推送到这里" }
 , "EmptyTaskListDescription": { "message": "任务列表现在是空的, 接下来你可以" }
-, "InstallTaskFrom": { "message": "从 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安装一个网友分享的任务" }
+, "InstallTaskFrom": { "message": "从 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安装网友分享的任务" }
 , "Or": { "message": "或者" }
 , "CreateTask": { "message": "创建任务" }
-, "DocumentDescription": { "message": "愿这份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">开发文档</a> 指引你" }
+, "DocumentDescription": { "message": "试试阅读这份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">开发文档</a>" }
 , "StorageQuotaUsage": { "message": "存储配额使用情况" }
 , "FindNewVersion": {
     "message": "任务 $task_name$ 有新版本"
@@ -140,12 +141,12 @@
       "task_name": { "content": "$1" }
     }
   }
-, "Unsynchronized": { "message": "不再检查此任务更新(切断来源)" }
-, "GotoSource": { "message": "打开来源页面手动更新" }
+, "Unsynchronized": { "message": "不再检查此任务更新" }
+, "GotoSource": { "message": "打开任务页面手动更新" }
 , "AutoCheckContextMessage": { "message": "出于安全考虑, Gloria 不会自动更新任务代码." }
-, "CutOffSource": { "message": "切断与任务来源的联系" }
-, "CutOffSourceConfirm": { "message": "确定要切断与任务来源的联系吗?" }
-, "CutOff": { "message": "切断" }
+, "CutOffSource": { "message": "停止检查此任务的远程更新" }
+, "CutOffSourceConfirm": { "message": "确定要停止检查此任务的远程更新吗?" }
+, "CutOff": { "message": "停止" }
 , "Local": { "message": "本地" }
 , "NotificationReducer": { "message": "通知 Reducer" }
 , "ReducerCode": { "message": "Reducer 代码" }

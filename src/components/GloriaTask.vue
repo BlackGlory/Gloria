@@ -113,7 +113,7 @@ export
   }
   computed:
     help-text: ->
-      Vue.filter('i18n')('TaskIntervalDescription', @name, @triggerInterval) + ' ' + Vue.filter('i18n')(Vue.filter('pluralize')(@triggerCount, 'NounsMinute'))
+      Vue.filter('i18n')('TaskIntervalDescription', @name, @triggerInterval, Vue.filter('i18n')(Vue.filter('pluralize')(@triggerCount, 'NounsMinute')))
     push-date-relative: ->
       Vue.filter('relativeDate') @push-date
   methods:
@@ -183,4 +183,7 @@ export
 
   .between-xs
     margin: 0
+
+  a
+    color: inherit
 </style>
