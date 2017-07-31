@@ -1,6 +1,6 @@
 {
   "name": "Gloria"
-, "version": "0.13.3"
+, "version": "0.13.4"
 , "manifest_version": 2
 , "description": "__MSG_AppDesc__"
 , "default_locale": "en"

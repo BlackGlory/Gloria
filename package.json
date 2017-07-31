@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "description": "A programmable website notifications aggregator in Chrome.",
   "scripts": {
     "precommit": "npm test",
@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "deep-diff": "^0.3.8",
-    "enhanced-notification": "^0.2.8",
+    "enhanced-notification": "^0.2.9",
     "flexboxgrid": "^6.3.1",
     "gloria-sandbox": "^0.2.7",
     "jshashes": "^1.0.6",
