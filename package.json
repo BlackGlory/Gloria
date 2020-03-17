@@ -1,14 +1,7 @@
 {
   "name": "gloria",
-  "version": "0.13.4",
+  "version": "0.13.5",
   "description": "A programmable website notifications aggregator in Chrome.",
-  "scripts": {
-    "precommit": "npm test",
-    "prepush": "npm test",
-    "build": "webpack --config webpack.prod.js",
-    "dev": "webpack -w",
-    "test": "mocha --compilers ls:livescript test/**/*.ls"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/BlackGlory/Gloria.git"
@@ -18,6 +11,17 @@
   },
   "author": "BlackGlory <woshenmedoubuzhidao@blackglory.me>",
   "license": "MIT",
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack -w",
+    "test": "mocha --compilers ls:livescript test/**/*.ls"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test"
+    }
+  },
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
@@ -26,7 +30,7 @@
     "chai": "^3.5.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
-    "husky": "^0.14.1",
+    "husky": "^4.2.3",
     "json-loader": "^0.5.4",
     "livescript-loader": "^0.1.6",
     "mocha": "^3.2.0",
@@ -35,13 +39,13 @@
     "stylus-loader": "^3.0.1",
     "vue-hot-reload-api": "^2.0.6",
     "vue-html-loader": "^1.2.3",
-    "vue-loader": "git://github.com/BlackGlory/vue-loader.git#patch-1",
+    "vue-loader": "file:vue-loader",
     "vue-style-loader": "^1.0.0",
     "webpack": "^1.14.0"
   },
   "dependencies": {
     "deep-diff": "^0.3.8",
-    "enhanced-notification": "^0.2.9",
+    "enhanced-notification": "file:enhanced-notification",
     "flexboxgrid": "^6.3.1",
     "gloria-sandbox": "^0.2.7",
     "jshashes": "^1.0.6",

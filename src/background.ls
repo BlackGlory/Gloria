@@ -330,7 +330,7 @@ chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response
 
 chrome.web-request.on-before-send-headers.add-listener inflated-request-headers
 , urls: ['<all_urls>']
-, ['blocking', 'requestHeaders']
+, ['blocking', 'requestHeaders', 'extraHeaders']
 
 chrome.web-request.on-before-send-headers.add-listener (details) ->
   name = "request.image.#{details.url}"
@@ -348,7 +348,7 @@ chrome.web-request.on-before-send-headers.add-listener (details) ->
   request-headers: details.request-headers
 
 , urls: ['<all_urls>']
-, ['blocking', 'requestHeaders']
+, ['blocking', 'requestHeaders', 'extraHeaders']
 
 chrome.web-request.on-completed.add-listener (details) ->
   window.session-storage.remove-item "request.id.#{details.request-id}"
