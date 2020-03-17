@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="demo.js" defer></script>
+  <style>
+  label, body > div, textarea, pre {
+    display: block;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  body > div {
+    margin-bottom: 1rem;
+  }
+  </style>
+</head>
+<body>
+  <div>
+    <label>Notification Type:</label>
+    <select id="type">
+      <option value="BasicNotification">Basic</option>
+      <option value="ImageNotification">Image</option>
+      <option value="ListNotification">List</option>
+      <option value="ProgressNotification">Progress</option>
+      <option value="VideoNotification">Video</option>
+    </select>
+  </div>
+  <div>
+    <label>Options:</label>
+    <textarea id="options">{}</textarea>
+  </div>
+  <div>
+    <label>Control:</label>
+    <button id="create">Create</button>
+    <button id="update">Update</button>
+    <button id="clear">Clear</button>
+  </div>
+  <div>
+    <label>Output:</label>
+    <textarea id="output"></textarea>
+  </div>
+</body>
+</html>
