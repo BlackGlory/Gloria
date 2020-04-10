@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.13.5",
+  "version": "0.13.6",
   "description": "A programmable website notifications aggregator in Chrome.",
   "repository": {
     "type": "git",
@@ -12,7 +12,8 @@
   "author": "BlackGlory <woshenmedoubuzhidao@blackglory.me>",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
+    "clean": "rm -rf build",
+    "build": "yarn clean && webpack --config webpack.prod.js",
     "dev": "webpack -w",
     "test": "mocha --compilers ls:livescript test/**/*.ls"
   },

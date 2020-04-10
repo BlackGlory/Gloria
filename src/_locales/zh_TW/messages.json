@@ -1,5 +1,5 @@
 {
-  "AppDesc​​": { "message": "Chrome 上的可編程網站通知聚合器." }
+  "AppDesc": { "message": "Chrome 上的可編程網站通知聚合器." }
 , "ActionTitle": { "message": "Gloria 選項" }
 , "ExtensionInstalledTitle": { "message": "Gloria 消息" }
 , "ExtensionInstalledMessage": {
@@ -130,7 +130,7 @@
   }
 , "EmptyHistoryDescription": { "message": "還沒有通知被推送到這裡" }
 , "EmptyTaskListDescription": { "message": "任務列表現在是空的, 接下來你可以" }
-, "InstallTask​​From": { "message": "從 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安裝網友分享的任務" }
+, "InstallTaskFrom": { "message": "從 <a href=\"https://gloria.pub\" target=\"_blank\">Gloria.Pub</a> 安裝網友分享的任務" }
 , "Or": { "message": "或者" }
 , "CreateTask": { "message": "創建任務" }
 , "DocumentDescription": { "message": "試試閱讀這份 <a href=\"http://docs.gloria.pub\" target=\"_blank\">開發文檔</a>" }
@@ -148,7 +148,7 @@
 , "CutOffSourceConfirm": { "message": "確定要停止檢查此任務的遠程更新嗎?" }
 , "CutOff": { "message": "停止" }
 , "Local": { "message": "本地" }
-, "Notification Reducer": { "message": "通知 Reducer" }
-, "Reducer Code": { "message": "Reducer 代碼" }
+, "NotificationReducer": { "message": "通知 Reducer" }
+, "ReducerCode": { "message": "Reducer 代碼" }
 , "PasteYourReducerCodeHere": { "message": "在此處粘貼 Reducer 代碼" }
 }
