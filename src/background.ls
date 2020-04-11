@@ -321,7 +321,12 @@ chrome.runtime.on-message.add-listener ({ type, message }, sender, send-response
       each ((data) !-> create-notification create-notification-options { name: 'Test' }, data), data-list
     .catch (err) ->
       console.log err
-      send-response { err }
+      send-response {
+        err: {
+          message: err.message
+          stack: err.stack
+        }
+      }
     return true
   case 'clear-caches'
     for key of window.session-storage

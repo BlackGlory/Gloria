@@ -234,10 +234,8 @@ export
       @$data.test-result = ''
       chrome.runtime.send-message { type: 'test-code', message: @$data.test-code }, ({ err, result }) ~>
         if err
-          console.log err, chrome.runtime.last-error
-          @$data.test-error = err.stack
+          @$data.test-error = err.message
         else
-          console.log result
           @$data.test-result = result
 
     set-notification-reducer: ->

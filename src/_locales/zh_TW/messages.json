@@ -85,7 +85,7 @@
     }
   }
 , "PushDate": {
-    "message": "最近推送於 $count"
+    "message": "最近推送於 $count$"
   , "placeholders": {
       "count": { "content": "$1" }
     }
