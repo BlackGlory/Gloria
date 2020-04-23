@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.13.7",
+  "version": "0.13.8",
   "description": "A programmable website notifications aggregator in Chrome.",
   "repository": {
     "type": "git",
@@ -20,8 +20,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test",
-      "pre-push": "npm test"
+      "pre-commit": "npm test"
     }
   },
   "devDependencies": {

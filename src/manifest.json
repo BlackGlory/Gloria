@@ -1,6 +1,6 @@
 {
   "name": "Gloria"
-, "version": "0.13.7"
+, "version": "0.13.8"
 , "manifest_version": 2
 , "description": "__MSG_AppDesc__"
 , "default_locale": "en"
@@ -35,6 +35,7 @@
   , "webRequest"
   , "webRequestBlocking"
   , "background"
+  , "unlimitedStorage"
   , "<all_urls>"
   ]
 }
