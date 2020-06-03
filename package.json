@@ -1,6 +1,6 @@
 {
   "name": "gloria",
-  "version": "0.13.9",
+  "version": "0.13.10",
   "description": "A programmable website notifications aggregator in Chrome.",
   "repository": {
     "type": "git",
