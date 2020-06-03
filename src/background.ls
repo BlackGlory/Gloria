@@ -395,11 +395,6 @@ const redux-store = do ->
     create-store enable-batching(reducers), init-state, compose auto-rehydrate!, apply-middleware(create-action-buffer REHYDRATE), apply-middleware logger
 
 crosstab-sync persist-store redux-store, {}, ->
-  # Clear all stages when last active date to now more than one day
-  config = redux-store.get-state!config
-  if config?['LastActiveDate']? and new Date! - new Date(config['LastActiveDate']) > 24h * 60m * 60s * 1000ms
-    redux-store.dispatch creator.clear-all-stages!
-
   sync-tasks redux-store
   check-stage redux-store
   check-origin-update redux-store
