@@ -12,15 +12,17 @@
   "author": "BlackGlory <woshenmedoubuzhidao@blackglory.me>",
   "license": "MIT",
   "scripts": {
-    "clean": "rm -rf build",
+    "test": "mocha --compilers ls:livescript test/**/*.ls",
+    "test:locacles": "yarn valid-locales",
+    "clean": "rimraf build",
     "valid-locales": "node script/valid-locales.js",
-    "build": "yarn clean && webpack --config webpack.prod.js && yarn valid-locales",
-    "dev": "webpack -w",
-    "test": "mocha --compilers ls:livescript test/**/*.ls"
+    "prepublishOnly": "run-s clean build",
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack -w"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test"
+      "pre-commit": "run-s test test:locacles"
     }
   },
   "devDependencies": {
@@ -35,6 +37,8 @@
     "json-loader": "^0.5.4",
     "livescript-loader": "^0.1.6",
     "mocha": "^3.2.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "style-loader": "^0.16.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
