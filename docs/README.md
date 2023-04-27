@@ -188,6 +188,7 @@ Gloria原先是根据Gloria Notification的`MD5(title + message)`作为参考来
 一个标准的Gloria Notification的结构是这样的:
 ```js
 {
+  id: String
   title: String
   message: String
   iconUrl: String
@@ -199,6 +200,7 @@ Gloria原先是根据Gloria Notification的`MD5(title + message)`作为参考来
 该对象的每一个成员都是可选的, 它们的默认值如下:
 ```js
 {
+  id: '',
   title: '',
   message: '',
   iconUrl: 'assets/images/icon-128.png', // Gloria Icon
