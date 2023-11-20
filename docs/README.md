@@ -1,3 +1,5 @@
+项目停止维护, 详见[issue](https://github.com/BlackGlory/Gloria/issues/41).
+
 # Gloria文档
 
 ## 安装Gloria
